@@ -4,6 +4,10 @@
 
 [TOC]
 
+## Docker
+
+docker build -t node-app .
+
 ## Introduction
 This repository is the code representation for Jaliri App Backhand
 
