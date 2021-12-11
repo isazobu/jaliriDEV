@@ -5,7 +5,7 @@
 [TOC]
 
 ## Introduction
-This repository is the code representation for Jaliri App Backend
+This repository is the code representation for Jaliri App Backhand
 
 ## Run
 
