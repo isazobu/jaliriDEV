@@ -182,7 +182,15 @@ List of available routes:
 `PATCH /api/v1/users/:userId` - update user\
 `DELETE /api/v1/users/:userId` - delete user
 
+**Categories routes**:\
+`GET      /api/v1/categories` - get all categories\
+`GET      /api/v1/categories/:id` - get category\
+`POST     /api/v1/categories` - create a category\
+`PUT      /api/v1/categories/:id` - update category\
+`DELETE   /api/v1/categories/:id` - delete category\
 
+
+# TODO
 **Products routes**:\
 `GET /api/v1/products` - get all products\
 `GET      /api/v1/products/:id` - get product\
