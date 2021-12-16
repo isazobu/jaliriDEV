@@ -184,7 +184,6 @@ List of available routes:
 
 
 **Products routes**:\
-
 `GET /api/v1/products` - get all products\
 `GET      /api/v1/products/:id` - get product\
 `POST     /api/v1/products` - create a product\
@@ -196,8 +195,6 @@ List of available routes:
 
 
 **Orders routes**:\
-
-
 `GET      /api/v1/orders` - get all orders\
 `GET      /api/v1/orders/:id` - get order\s
 `POST     /api/v1/orders` - create a order\
