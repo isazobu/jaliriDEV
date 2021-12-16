@@ -11,10 +11,12 @@ router
   .get(validate(categoryValidation.getCategories), categoryController.getCategories)
   .post(auth('manageCategories'), validate(categoryValidation.createCategory), categoryController.createCategory)
   
+  router.route('/:categoryTitle').
+  get(validate(categoryValidation.getCategoryByTitle), categoryController.getCategoryByTitle)
 
  router
    .route('/:categoryId')
-      .get(auth('getCategory'), validate(categoryValidation.getCategory), categoryController.getCategory)
+      .get(validate(categoryValidation.getCategory), categoryController.getCategory)
       .patch(auth('manageCategories'), validate(categoryValidation.updateCategory), categoryController.updateCategory)
       .delete(auth('manageCategories'), validate(categoryValidation.deleteCategory), categoryController.deleteCategory)
 
@@ -137,8 +139,6 @@ module.exports = router;
  *     summary: Get a category
  *     description: Logged in categories can fetch only their own category information. Only admins can fetch other categories.
  *     tags: [Categories]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
