@@ -190,6 +190,7 @@ List of available routes:
 `DELETE   /api/v1/categories/:id` - delete category
 
 
+
 # TODO
 **Products routes**:\
 `GET /api/v1/products` - get all products\
