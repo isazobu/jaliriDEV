@@ -134,6 +134,35 @@ module.exports = router;
 
 /**
  * @swagger
+ * /categories/{title}:
+ *   get:
+ *     summary: Get a category by title
+ *     description: Logged in categories can fetch only their own category information.
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: title
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Category title
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Category'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
+ */
+/**
+ * @swagger
  * /categories/{id}:
  *   get:
  *     summary: Get a category
