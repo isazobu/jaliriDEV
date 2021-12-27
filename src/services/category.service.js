@@ -32,17 +32,16 @@ const queryCategories = async (filter, options) => {
  * @param {ObjectId} id
  * @returns {Promise<Category>}
  */
-const getCategoryById= async (categoryId) => {
+const getCategoryById = async (categoryId) => {
   return Category.findById(categoryId);
-} 
-
+};
 
 /**
  * Get user by email
  * @param {string} title
  * @returns {Promise<Category>}
  */
- const getCategoryByTitle = async (title) => {
+const getCategoryByTitle = async (title) => {
   return Category.findOne({ title });
 };
 
@@ -53,7 +52,7 @@ const getCategoryById= async (categoryId) => {
  * @returns {Promise<Category>}
  */
 
- const updateCategoryById = async (categoryId, updateBody) => {
+const updateCategoryById = async (categoryId, updateBody) => {
   const category = await getCategoryById(categoryId);
   if (!category) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Category not found');
@@ -66,13 +65,12 @@ const getCategoryById= async (categoryId) => {
   return category;
 };
 
-
 /**
  * Delete category by id
  * @param {ObjectId} categoryId
  * @returns {Promise<Category>}
  */
- const deleteCategoryById = async (categoryId) => {
+const deleteCategoryById = async (categoryId) => {
   const category = await getCategoryById(categoryId);
   if (!category) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Category not found');
@@ -81,13 +79,11 @@ const getCategoryById= async (categoryId) => {
   return category;
 };
 
-
-
 module.exports = {
-    createCategory,
-    queryCategories,
-    getCategoryById,
-    getCategoryByTitle,
-    updateCategoryById,
-    deleteCategoryById,
-}
+  createCategory,
+  queryCategories,
+  getCategoryById,
+  getCategoryByTitle,
+  updateCategoryById,
+  deleteCategoryById,
+};

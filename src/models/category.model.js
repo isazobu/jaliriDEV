@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const validator = require('validator');
+// const validator = require('validator');
 const { toJSON, paginate } = require('./plugins');
 
 const categorySchema = Schema(
@@ -13,7 +13,7 @@ const categorySchema = Schema(
       required: [true, 'Category title is required'],
     },
     image: { type: String },
-    isActive: { type: Boolean, required: true, default: false }
+    isActive: { type: Boolean, required: true, default: false },
   },
   { timestamps: true }
 );
@@ -27,11 +27,10 @@ categorySchema.plugin(paginate);
  * @param {ObjectId} [excludeCategoryId] - The id of the user to be excluded
  * @returns {Promise<boolean>}
  */
- categorySchema.statics.isCategoryExist = async function (title, excludeUserId) {
+categorySchema.statics.isCategoryExist = async function (title, excludeUserId) {
   const category = await this.findOne({ title, _id: { $ne: excludeUserId } });
   return !!category;
 };
-
 
 /**
  * @typedef Category
