@@ -9,19 +9,20 @@ const router = express.Router();
 router
   .route('/')
   .get(validate(categoryValidation.getCategories), categoryController.getCategories)
-  .post(auth('manageCategories'), validate(categoryValidation.createCategory), categoryController.createCategory)
-  
-  router.route('/:categoryTitle').
-  get(validate(categoryValidation.getCategoryByTitle), categoryController.getCategoryByTitle)
+  .post(auth('manageCategories'), validate(categoryValidation.createCategory), categoryController.createCategory);
 
- router
-   .route('/:categoryId')
-      .get(validate(categoryValidation.getCategory), categoryController.getCategory)
-      .patch(auth('manageCategories'), validate(categoryValidation.updateCategory), categoryController.updateCategory)
-      .delete(auth('manageCategories'), validate(categoryValidation.deleteCategory), categoryController.deleteCategory)
+//! ADD swagger this route
+router
+  .route('title/:categoryTitle')
+  .get(validate(categoryValidation.getCategoryByTitle), categoryController.getCategoryByTitle);
+
+router
+  .route('/:categoryId')
+  .get(validate(categoryValidation.getCategory), categoryController.getCategory)
+  .patch(auth('manageCategories'), validate(categoryValidation.updateCategory), categoryController.updateCategory)
+  .delete(auth('manageCategories'), validate(categoryValidation.deleteCategory), categoryController.deleteCategory);
 
 module.exports = router;
-
 
 /**
  * @swagger
