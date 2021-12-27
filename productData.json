@@ -1,0 +1,40 @@
+{
+    "title": "Title",
+    "description": "ddsakopıdsaj ıdosajfısadsa mloasdsa",
+    "tags": [
+        "%50",
+        "Best Seller"
+    ],
+    "attr": [
+        {
+            "item": "61c216a28081c8d465fc7c9e",
+            "size": 34,
+            "color": "Blue",
+            "prices": [
+                {
+                    "country": "Turkey",
+                    "price": 350,
+                    "currency": "₺",
+                    "stock": 13,
+                },
+                {
+                    "country": "UAE",
+                    "price": 150,
+                    "currency": "€"
+                },
+                {
+                    "country": "Kuwait",
+                    "price": 220,
+                    "currency": "$"
+                }
+            ]
+        }
+    ],
+    "image": "https://picsum.photos/200/300?random=1",
+    "totalStock": 232,
+    "category": [
+        {
+            "id": "313131"
+        }
+    ]
+}

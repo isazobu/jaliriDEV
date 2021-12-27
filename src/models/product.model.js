@@ -1,18 +1,9 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const validator = require('validator');
+// const validator = require('validator');
 const { toJSON, paginate } = require('./plugins');
 
-// const variantSchema = Schema({
-//   item: { type: Schema.Types.ObjectId, ref = 'Product'},
-//   attr: [
-//     { name: String },
-//     { value: String},
-//   ],
-//   stock: { type: String},
-//   price: { type: Number}
-// })
 const productSchema = Schema(
   {
     title: {
@@ -27,23 +18,22 @@ const productSchema = Schema(
       trim: true,
     },
     tags: [{ type: String }],
-    isVariants: { type: Boolean, default: false },
+    hasVariants: { type: Boolean, default: false },
 
-    brand: { type: String, default: 'Jaliri' },
-    prices: [{ country: String, price: Number, currency: String }],
-    // variants:[variantSchema],
+    brand: { type: String, required: true, trim: true, default: 'X' },
 
+    attr: [{ type: Schema.Types.ObjectId, ref: 'Variant' }],
     image: [{ type: String }],
     isActive: { type: Boolean, default: true },
     discountExist: { type: Boolean, default: false },
-    discounPercent: { type: Number },
-    discountPrice: { type: Number },
+    discounPercent: { type: Number, min: 0, max: 100, default: 0 },
+    discountPrice: { type: Number, min: 0, default: 0 },
     freeShipping: { type: Boolean, default: false },
     hasStock: { type: Boolean }, // virtual
-    totalStock: { type: Number, required: true, min: [0, 'It must be lower than zero'] },
-    url: { type: String }, // virtual
-    // category: {type: String, ref="Category"},
-    // subCategory: {type: String,},
+    totalStock: { type: Number, required: true, min: [0, 'It must be lower than zero'], default: 0 },
+    // url: { type: String }, // virtual
+    category: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+    //  subCategory: { type: String, trim: true },
     // comment: {type: String, ref="Comment"},
     // commentCount: {type: Number,}
     // seller: {type: String, ref="Seller"},
@@ -53,6 +43,17 @@ const productSchema = Schema(
   }
 );
 
+productSchema.plugin(toJSON);
+productSchema.plugin(paginate);
+
+productSchema.virtual('url').get(function () {
+  return `localhost:3000/api/v1/products/${this._id}`;
+});
+
+productSchema.statics.isProductExist = async function (title) {
+  const product = await this.findOne({ title });
+  return !!product;
+};
 /**
  * @typedef Product
  */
