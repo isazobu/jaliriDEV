@@ -35,6 +35,10 @@ const defaultRoutes = [
   //   path: '/orders',
   //   routes: orderRoute,
   // },
+  {
+    path: '/docs',
+    route: docsRoute,
+  },
 ];
 
 const devRoutes = [
