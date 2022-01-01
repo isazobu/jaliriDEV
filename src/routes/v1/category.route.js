@@ -13,7 +13,7 @@ router
 
 //! ADD swagger this route
 router
-  .route('title/:categoryTitle')
+  .route('/title/:categoryTitle')
   .get(validate(categoryValidation.getCategoryByTitle), categoryController.getCategoryByTitle);
 
 router
@@ -135,7 +135,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /categories/{title}:
+ * /categories/title/{title}:
  *   get:
  *     summary: Get a category by title
  *     description: Logged in categories can fetch only their own category information.
