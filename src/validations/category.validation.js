@@ -37,7 +37,7 @@ const updateCategory = {
   }),
   body: Joi.object()
     .keys({
-      title: Joi.string().email(),
+      title: Joi.string(),
       image: Joi.string(),
       isActive: Joi.boolean(),
     })
