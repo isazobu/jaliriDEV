@@ -5,8 +5,13 @@ node_modules
 yarn-error.log
 
 # Environment varibales
-.env*
+# .env*
 !.env*.example
 
 # Code coverage
 coverage
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
