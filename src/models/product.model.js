@@ -19,10 +19,8 @@ const productSchema = Schema(
     },
     tags: [{ type: String }],
     hasVariants: { type: Boolean, default: false },
-
-    brand: { type: String, required: true, trim: true, default: 'X' },
-
-    attr: [{ type: Schema.Types.ObjectId, ref: 'Variant' }],
+    brand: { type: String, required: true, trim: true, default: 'Jaliri' },
+    variants: [{ type: Schema.Types.ObjectId, ref: 'SKU' }],
     image: [{ type: String }],
     isActive: { type: Boolean, default: true },
     discountExist: { type: Boolean, default: false },
@@ -30,7 +28,7 @@ const productSchema = Schema(
     discountPrice: { type: Number, min: 0, default: 0 },
     freeShipping: { type: Boolean, default: false },
     hasStock: { type: Boolean }, // virtual
-    totalStock: { type: Number, required: true, min: [0, 'It must be lower than zero'], default: 0 },
+    totalStock: { type: Number, required: true, min: [0, 'It must not be lower than zero'], default: 0 },
     // url: { type: String }, // virtual
     category: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
     //  subCategory: { type: String, trim: true },
