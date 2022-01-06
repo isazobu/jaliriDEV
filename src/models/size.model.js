@@ -16,6 +16,11 @@ const sizeSchema = Schema({
 
 sizeSchema.plugin(toJSON);
 
+sizeSchema.statics.isSizeExist = async function isSizeExist(size) {
+  const sizeExist = await this.findOne({ size });
+  return sizeExist ? true : false;
+};
+
 /**
  * @typedef Size
  */
