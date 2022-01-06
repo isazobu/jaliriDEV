@@ -8,23 +8,21 @@ const colorSchema = Schema({
   name: {
     type: String,
     trim: true,
-    unique: true,
     required: [true, 'Category title is required'],
   },
-  hexColorCode: { type: String, default: null },
+  hexColorCode: { type: String, default: null, trim: true },
 });
 
 colorSchema.plugin(toJSON);
 
 /**
  * Check if category is already exist
- * @param {string} title - The category's title
- * @param {ObjectId} [excludeCategoryId] - The id of the user to be excluded
+ * @param {string} hexColorCode - The Color's hexColorCode
  * @returns {Promise<boolean>}
  */
 colorSchema.statics.isHexColorCodeExist = async function (hexColorCode) {
-  const hexColorCode = await this.findOne({ hexColorCode });
-  return !!hexColorCode;
+  const code = await this.findOne({ hexColorCode });
+  return !!code;
 };
 
 /**
