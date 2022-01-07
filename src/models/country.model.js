@@ -6,7 +6,7 @@ const { toJSON } = require('./plugins');
 
 // Country schema for e-commerce
 const countrySchema = Schema({
-  country: {
+  name: {
     type: String,
     trim: true,
     unique: true,
@@ -21,7 +21,6 @@ const countrySchema = Schema({
   currency: {
     type: String,
     trim: true,
-    unique: true,
     required: [true, 'Country currency is required'],
   },
   currencySymbol: {
@@ -33,3 +32,20 @@ const countrySchema = Schema({
 });
 
 countrySchema.plugin(toJSON);
+
+/**
+ * Check if country is already exist
+ * @param {string} name - The Country name
+ * @returns {Promise<boolean>}
+ */
+countrySchema.statics.isCountryExist = async function (name) {
+  const country = await this.findOne({ name });
+  return !!country;
+};
+
+/**
+ * @typedef Country
+ */
+const Country = mongoose.model('Country', countrySchema);
+
+module.exports = Country;
