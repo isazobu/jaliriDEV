@@ -61,6 +61,10 @@ const defaultRoutes = [
     path: '/sizes',
     route: sizeRoute,
   },
+  {
+    path: '/skus',
+    route: skuRoute,
+  },
   // {
   //   path: 'skus',
   //   route: skuRoute,
