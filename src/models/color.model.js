@@ -1,8 +1,21 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-// const validator = require('validator');
+const validator = require('validator');
 const { toJSON } = require('./plugins');
+
+function colorValidator(v) {
+  if (v.indexOf('#') == 0) {
+    if (v.length == 7) {
+      // #f0f0f0
+      return true;
+    } else if (v.length == 4) {
+      // #fff
+      return true;
+    }
+  }
+  return COLORS.indexOf(v) > -1;
+}
 
 const colorSchema = Schema({
   name: {
@@ -10,7 +23,7 @@ const colorSchema = Schema({
     trim: true,
     required: [true, 'Category title is required'],
   },
-  hexColorCode: { type: String, default: null, trim: true },
+  hexColorCode: { type: String, trim: true, validate: [colorValidator, 'not a valid hex color code'] },
 });
 
 colorSchema.plugin(toJSON);
@@ -23,6 +36,12 @@ colorSchema.plugin(toJSON);
 colorSchema.statics.isHexColorCodeExist = async function (hexColorCode) {
   const code = await this.findOne({ hexColorCode });
   return !!code;
+};
+
+// Return color by name
+colorSchema.statics.getColorByName = async function (name) {
+  const color = await this.findOne({ name });
+  return color;
 };
 
 /**
