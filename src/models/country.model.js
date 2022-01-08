@@ -43,6 +43,12 @@ countrySchema.statics.isCountryExist = async function (name) {
   return !!country;
 };
 
+// Get country by name
+countrySchema.statics.getCountryByName = async function (name) {
+  const country = await this.findOne({ name });
+  return country;
+};
+
 /**
  * @typedef Country
  */
