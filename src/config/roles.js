@@ -12,6 +12,7 @@ const allRoles = {
     'manageCategories',
     'manageProducts',
     'manageCountries',
+    'manageSkus',
   ],
 };
 
