@@ -8,8 +8,12 @@ module.exports.Order = require('./order.model');
 module.exports.Address = require('./address.model');
 module.exports.Size = require('./size.model');
 module.exports.Color = require('./color.model');
-module.exports.SKU = require('./sku.model');
+module.exports.Sku = require('./sku.model');
 module.exports.Country = require('./country.model');
+module.exports.Price = require('./price.model');
+module.exports.ProductAttr = require('./productAttr.model');
+module.exports.Banner = require('./banner.model');
+
 // module.exports.State = require('./state.model');
 // module.exports.City = require('./city.model');
 // module.exports.Payment = require('./payment.model');

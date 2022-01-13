@@ -20,6 +20,7 @@ const createCategory = async (categoryBody) => {
  * @param {Object} options - Query options
  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
  * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Maximum number of results per page (default = 10)
  * @returns {Promise<QueryResult>}
  */
 const queryCategories = async (filter, options) => {

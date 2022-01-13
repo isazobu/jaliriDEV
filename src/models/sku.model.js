@@ -3,30 +3,62 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const { toJSON, paginate } = require('./plugins');
 
-// SKU schema for e-commerce E COMMERCE STOCK KEEPING UNIT MODEL
 const skuSchema = new Schema(
   {
+    name: { type: String, trim: true, required: [true, 'Name is required'] },
     sku: {
       type: String,
       trim: true,
       unique: true,
+      toUpperCase: true,
       required: [true, 'SKU is required'],
     },
-    barcode: { type: String, trim: true, required: [true, 'Barcode is required'] },
-    // TODO: Add name: size + color attr
-    name: { type: String, trim: true, required: [true, 'Name is required'] },
+    brand: { type: String, trim: true, required: [true, 'Brand is required'] },
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: 'Product',
+      required: [true, 'Product is required'],
+    },
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+      required: [true, 'Category is required'],
+    },
+
+    quantityLimitPerCustomer: {
+      type: Number,
+      default: 0,
+    },
+    quantityOrdered: {
+      type: Number,
+      default: 0,
+    },
+    quantityAvailable: {
+      type: Number,
+      default: 0,
+    },
+
+    barcode: { type: String, trim: true, unique: true, required: [true, 'Barcode is required'] },
+
     color: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Color',
       required: [true, 'Color is required'],
     },
     size: { type: mongoose.Schema.Types.ObjectId, ref: 'Size', required: true },
-    image: [{ type: String, trim: true, required: [true, 'Image is required'] }],
+    dimension: {
+      length: { type: Number, required: true, default: 0 },
+      width: { type: Number, required: true, default: 0 },
+      height: { type: Number, required: true, default: 0 },
+      weight: { type: Number, required: true, default: 0 },
+    },
+    images: [{ type: String, trim: true, required: [true, 'Image is required'] }],
     price: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Price',
       required: [true, 'Price is required'],
     },
+    weight: { type: Number, min: 0, default: 0 },
     freeShipping: { type: Boolean, default: false },
     discountExist: { type: Boolean, default: false },
     discount: { type: Number, default: 0 },
@@ -35,11 +67,66 @@ const skuSchema = new Schema(
       trim: true,
       required: [true, 'SKU quantity is required'],
     },
+    hasStock: {
+      type: Boolean,
+      default: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
     country: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Country',
       required: [true, 'Country is required'],
     },
+
+    // quantityInTransit: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // quantityOnHold: {
+    //   type: Number,
+
+    //   default: 0,
+    // },
+    // quantityBackordered: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // quantityShipped: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // quantityReturned: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // quantityCancelled: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // quantityRefunded: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // quantityAllocated: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // quantityAvailableForSale: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // quantityAvailableForCheckout: {
+    //   type: Number,
+    //   default: 0,
+    // },
+    // quantityAvailableForOrder: {
+    //   type: Number,
+    //   default: 0,
+    // },
   },
   { timestamps: true }
 );

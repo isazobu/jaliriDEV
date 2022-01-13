@@ -2,6 +2,13 @@ const httpStatus = require('http-status');
 const { Product, Variant } = require('../models');
 const ApiError = require('../utils/ApiError');
 
+const createOrReadVariant = async (variant) => {
+  // TODO: Düzelt
+  // const variantExist = await Variant.findOne({});
+  // if (variantExist) return variantExist;
+  return Variant.create(variant);
+};
+
 /**
  * Create a user
  * @param {Object} productBody
@@ -9,9 +16,9 @@ const ApiError = require('../utils/ApiError');
  */
 const createProduct = async (productBody) => {
   const { attr, ...product } = productBody;
-  const newVariant = await Variant.create(attr);
+  const variant = await createOrReadVariant(attr);
 
-  return Product.create({ ...product, attr: newVariant });
+  return Product.create({ ...product, attr: variant });
 };
 
 /**
@@ -65,6 +72,7 @@ const deleteProductById = async (productId) => {
 
 module.exports = {
   createProduct,
+  createOrReadVariant,
   queryProducts,
   getProductById,
   updateProductById,
