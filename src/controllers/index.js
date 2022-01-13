@@ -10,7 +10,7 @@ module.exports.productSizeController = require('./size.controller');
 module.exports.productColorController = require('./color.controller');
 module.exports.productSKUController = require('./sku.controller');
 module.exports.countryController = require('./country.controller');
-
+module.exports.productAttrController = require('./productAttr.controller');
 // module.exports.adminController = require('./admin.controller');
 // module.exports.cartController = require('./cart.controller');
 // module.exports.orderController = require('./order.controller');

@@ -1,31 +1,39 @@
 {
-    "title": "Title",
-    "description": "ddsakopıdsaj ıdosajfısadsa mloasdsa",
+    "title": "2fff2df",
+    "description": "ddsakopıdsafdsfdsj ıdosajfısadsa mloasdsa",
     "tags": [
         "%50",
-        "Best Seller"
+        "Bestffd Seller"
     ],
+    "brand": "FF",
     "attr": [
         {
-            "item": "61c216a28081c8d465fc7c9e",
-            "size": 34,
-            "color": "Blue",
-            "prices": [
+            "variantProperties": [
+                {
+                    "name": "SIZE",
+                    "value": 34
+                },
+                {
+                    "name": "COLOR",
+                    "value": "pink"
+                }
+            ],
+            "stock": 13,
+            "priceInfo": [
                 {
                     "country": "Turkey",
                     "price": 350,
-                    "currency": "₺",
-                    "stock": 13,
+                    "currency": "₺"
                 },
                 {
                     "country": "UAE",
                     "price": 150,
-                    "currency": "€"
+                    "currency": "€",
                 },
                 {
                     "country": "Kuwait",
                     "price": 220,
-                    "currency": "$"
+                    "currency": "$",
                 }
             ]
         }
@@ -34,7 +42,6 @@
     "totalStock": 232,
     "category": [
         {
-            "id": "313131"
+            "_id": "61d2ffeefd606d00216b00ee"
         }
     ]
-}

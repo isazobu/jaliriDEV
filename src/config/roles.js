@@ -13,6 +13,7 @@ const allRoles = {
     'manageProducts',
     'manageCountries',
     'manageSkus',
+    'manageProductAttrs',
   ],
 };
 

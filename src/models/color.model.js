@@ -6,15 +6,11 @@ const { toJSON } = require('./plugins');
 
 function colorValidator(v) {
   if (v.indexOf('#') == 0) {
-    if (v.length == 7) {
-      // #f0f0f0
-      return true;
-    } else if (v.length == 4) {
-      // #fff
+    if (v.length == 7 || v.length == 4) {
       return true;
     }
   }
-  return COLORS.indexOf(v) > -1;
+  return v.indexOf(v) > -1;
 }
 
 const colorSchema = Schema({
@@ -43,6 +39,12 @@ colorSchema.statics.getColorByName = async function (name) {
   const color = await this.findOne({ name });
   return color;
 };
+
+colorSchema.virtual('X').get(function () {
+  return this._id.toHexString();
+});
+
+colorSchema.set(function (newName) {});
 
 /**
  * @typedef Color
