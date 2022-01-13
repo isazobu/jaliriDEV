@@ -11,6 +11,7 @@ module.exports.colorService = require('./color.service');
 module.exports.skuService = require('./sku.service');
 module.exports.countryService = require('./country.service');
 module.exports.productAttrService = require('./productAttr.service');
+module.exports.bannerService = require('./banner.service');
 // module.exports.priceService = require('./price.service');
 // module.exports.stateService = require('./state.service');
 // module.exports.cityService = require('./city.service');

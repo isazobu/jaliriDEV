@@ -1,20 +1,23 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-
+const bannerValidation = require('../../validations/banner.validation');
 const bannerController = require('../../controllers/banner.controller');
 
 const router = express.Router();
 
-router.route('/').get(bannerController.getBanners).post(auth('manageBanners'), bannerController.createBanner);
+router
+  .route('/')
+  .get(validate(bannerValidation.getBanners), bannerController.getBanners)
+  .post(auth('manageBanners'), validate(bannerValidation.createBanner), bannerController.createBanner);
 
-router.route('/title/:bannerTitle').get(bannerController.getBannerByTitle);
+router.route('/title/:bannerTitle').get(validate(bannerValidation.getBannerByTitle), bannerController.getBannerByTitle);
 
 router
   .route('/:bannerId')
-  .get(bannerController.getBanner)
-  .patch(auth('manageBanners'), bannerController.updateBanner)
-  .delete(auth('manageBanners'), bannerController.deleteBanner);
+  .get(validate(bannerValidation.getBanner), bannerController.getBanner)
+  .patch(auth('manageBanners'), validate(bannerValidation.updateBanner), bannerController.updateBanner)
+  .delete(auth('manageBanners'), validate(bannerValidation.deleteBanner), bannerController.deleteBanner);
 
 module.exports = router;
 

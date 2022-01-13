@@ -14,6 +14,7 @@ const allRoles = {
     'manageCountries',
     'manageSkus',
     'manageProductAttrs',
+    'manageBanners',
   ],
 };
 

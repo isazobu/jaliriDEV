@@ -10,7 +10,7 @@ const createBanner = catchAsync(async (req, res) => {
 });
 
 const getBanners = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['title', 'isActive']);
+  const filter = pick(req.query, ['title', 'field', 'target', 'row', 'isActive']);
   const options = pick(req.query, ['sortBy', 'limit']);
   const result = await bannerService.queryBanners(filter, options);
   res.status(httpStatus.OK).send(result);

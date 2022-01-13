@@ -13,13 +13,17 @@ const bannerSchema = Schema(
       unique: true,
       required: [true, 'Banner title is required'],
     },
-    image: { type: String },
-    isActive: { type: Boolean, required: true, default: false },
+    image: { type: String, required: true },
+    url: { type: String, required: true },
+    field: { type: String, required: true },
+    target: { type: String, required: true },
+    row: { type: Number, required: true, unique: true, default: 0 },
+    isActive: { type: Boolean, required: true, default: true },
     // banner slug model
     slug: {
       type: String,
       trim: true,
-      required: [true, 'Banner slug is required'],
+      //required: [true, 'Banner slug is required'],
     },
   },
   { timestamps: true }
