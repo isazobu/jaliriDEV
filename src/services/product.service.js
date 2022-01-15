@@ -1,24 +1,34 @@
 const httpStatus = require('http-status');
-const { Product, Variant } = require('../models');
+const { Product, Attribute, Category, Country } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createOrReadVariant = async (variant) => {
-  // TODO: Düzelt
-  // const variantExist = await Variant.findOne({});
-  // if (variantExist) return variantExist;
-  return Variant.create(variant);
-};
+
+
 
 /**
  * Create a user
  * @param {Object} productBody
  * @returns {Promise<Product>}
  */
-const createProduct = async (productBody) => {
-  const { attr, ...product } = productBody;
-  const variant = await createOrReadVariant(attr);
 
-  return Product.create({ ...product, attr: variant });
+
+const createProduct = async (product) => {
+  const productCountry = await Country.getCountryByCode(product.country);
+
+  if (productCountry) {
+    product.country = productCountry._id;
+  } else {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Country not found');
+  }
+  const productCategory = await Category.findOne({ title: product.category });
+  if (productCategory) {
+    product.category = productCategory._id;
+  } else {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Category not found');
+  }
+
+  return Product.create(product);
+
 };
 
 /**
@@ -40,7 +50,7 @@ const queryProducts = async (filter, options) => {
  * @returns {Promise<Product>}
  */
 const getProductById = async (id) => {
-  return Product.findById(id).populate('category', '-isActive -image').populate('attr');
+  return Product.findById(id).populate('category', 'title').populate('country', 'name').populate('variants.attributes');
 };
 
 const updateProductById = async (productId, updateBody) => {

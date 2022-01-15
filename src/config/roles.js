@@ -13,8 +13,19 @@ const allRoles = {
     'manageProducts',
     'manageCountries',
     'manageSkus',
-    'manageProductAttrs',
-    'manageBanners',
+    'managePrices',
+    'manageAttributes',
+    'manageCoupons',
+    'manageReviews',
+    'manageWishlists',
+    'manageCarts',
+    'manageOrderStatuses',
+    'managePaymentMethods',
+    'manageShippingMethods',
+    'manageCurrencies',
+    'manageTaxes',
+     'manageBanners',
+
   ],
 };
 

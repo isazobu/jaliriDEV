@@ -6,9 +6,10 @@ const { toJSON, paginate } = require('./plugins');
 
 const productSchema = Schema(
   {
+    category: [{ type: Schema.Types.ObjectId, ref: 'Category', required: true }],
+    productId: { type: String, trim: true, required: [true, 'Product Id is required'] },
     title: {
       type: String,
-      unique: true,
       trim: true,
       required: true,
     },
@@ -23,25 +24,117 @@ const productSchema = Schema(
       maxLength: 200,
       trim: true,
     },
-    tags: [{ type: String }],
-    hasVariants: { type: Boolean, default: false },
-    brand: { type: String, required: true, trim: true, default: 'Jaliri' },
-    variants: [{ type: Schema.Types.ObjectId, ref: 'SKU' }],
-    // image: [{ type: String }],
-    isActive: { type: Boolean, default: true },
-    // discountExist: { type: Boolean, default: false },
-    // discounPercent: { type: Number, min: 0, max: 100, default: 0 },
-    // discountPrice: { type: Number, min: 0, default: 0 },
 
-    hasStock: { type: Boolean }, // virtual
-    totalStock: { type: Number, required: true, min: [0, 'It must not be lower than zero'], default: 0 },
-    // url: { type: String }, // virtual
-    category: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
-    // country: [{ type: Schema.Types.ObjectId, ref: 'Country' }],
-    //  subCategory: { type: String, trim: true },
-    // comment: {type: String, ref="Comment"},
-    // commentCount: {type: Number,}
-    // seller: {type: String, ref="Seller"},
+    thumbnail: { type: String, required: [true, 'Thumbnail is required'] },
+
+    brand: { type: String, required: [true, 'Brand is required'], trim: true, default: 'Jaliri' },
+    warrantyMonth: { type: Number },
+    country: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Country',
+      required: true,
+    },
+    variants: {
+      sku: {
+        type: String,
+        trim: true,
+        unique: true,
+        required: [true, 'SKU is required'],
+      },
+      barcode: {
+        type: String,
+        trim: true,
+        unique: true,
+        required: true,
+      },
+      attributes: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Attribute',
+          required: true,
+        },
+      ],
+
+      // color: { type: String, trim: true },
+      // size: { type: String },
+      // material: { type: String, trim: true },
+      // style: { type: String, trim: true },
+      kg: { type: Number },
+      dimension: {
+        width: { type: Number },
+        height: { type: Number },
+        depth: { type: Number },
+      },
+      tags: [{ type: String }],
+      image: [{ type: String }],
+
+      // TODO: if multiple variants exist, then hasVariants set to true
+      hasVariants: { type: Boolean, default: false },
+
+      isActive: { type: Boolean, default: true },
+      price: {
+        currency: {
+          type: String,
+          required: true,
+        },
+
+        sellingPrice: {
+          value: {
+            type: Number,
+            required: true,
+          },
+          text: {
+            type: String,
+          },
+        },
+        discountExist: { type: Boolean, default: false },
+        discountedPrice: {
+          value: { type: Number },
+          text: { type: String },
+        },
+        originalPrice: {
+          value: { type: Number, required: true },
+          text: { type: String },
+        },
+
+        discountAmount: {
+          value: { type: Number, default: 0 },
+          text: { type: String },
+        },
+        discountType: {
+          type: String,
+          enum: ['percentage', 'fixed', 'none', 'free_shipping'],
+          default: 'none',
+        },
+        shippingPrice: {
+          value: { type: Number, required: true },
+          text: { type: String },
+        },
+
+        // Price + shipping
+        totalPrice: {
+          value: { type: Number },
+          text: { type: String },
+        },
+
+        installmentPrice: { type: Number, default: 0 },
+      },
+
+      freeShipping: { type: Boolean, default: false },
+      hasStock: { type: Boolean }, // virtual
+      totalStock: { type: Number, required: true, min: [0, 'It must not be lower than zero'], default: 0 },
+      // url: { type: String }, // virtual
+
+      //  subCategory: { type: String, trim: true },
+      // comment: {type: String, ref="Comment"},
+      // commentCount: {type: Number,}
+      // seller: {type: String, ref="Seller"},
+
+      // Eklenecek var mı?
+      // Required?
+      // Bu collection nasıl şişer ?
+    }, // end variants
+
   },
   {
     timestamps: true,

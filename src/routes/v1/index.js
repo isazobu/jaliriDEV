@@ -5,13 +5,16 @@ const categoryRoute = require('./category.route');
 
 const colorRoute = require('./color.route');
 const sizeRoute = require('./size.route');
-const skuRoute = require('./sku.route');
+
 const countryRoute = require('./country.route');
 const addressRoute = require('./address.route');
 const productRoute = require('./product.route');
 const docsRoute = require('./docs.route');
-const productAttrRoute = require('./productAttr.route');
+
+const attributeRoute = require('./attribute.route');
+
 const bannerRoute = require('./banner.route');
+
 // const cartRoute = require('./cart.route');
 // const orderRoute = require('./order.route');
 // const paymentRoute = require('./payment.route');
@@ -63,14 +66,16 @@ const defaultRoutes = [
     path: '/sizes',
     route: sizeRoute,
   },
+
   {
-    path: '/skus',
-    route: skuRoute,
+    path: '/docs',
+    route: docsRoute,
   },
   {
-    path: '/productAttrs',
-    route: productAttrRoute,
+    path: '/attributes',
+    route: attributeRoute,
   },
+
   {
     path: '/banners',
     route: bannerRoute,
@@ -85,10 +90,6 @@ const defaultRoutes = [
   //   path: '/orders',
   //   routes: orderRoute,
   // },
-  {
-    path: '/docs',
-    route: docsRoute,
-  },
 ];
 
 const devRoutes = [
