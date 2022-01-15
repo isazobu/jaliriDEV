@@ -10,7 +10,9 @@ module.exports.Size = require('./size.model');
 module.exports.Color = require('./color.model');
 module.exports.Sku = require('./sku.model');
 module.exports.Country = require('./country.model');
-module.exports.Price = require('./price.model');
+
+module.exports.Attribute = require('./attribute.model');
+
 // module.exports.State = require('./state.model');
 // module.exports.City = require('./city.model');
 // module.exports.Payment = require('./payment.model');
