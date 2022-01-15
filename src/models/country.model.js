@@ -30,6 +30,7 @@ const countrySchema = Schema({
     unique: true,
     required: [true, 'Country currency symbol is required'],
   },
+  isActive: { type: Boolean, required: true, default: true },
 });
 
 countrySchema.plugin(toJSON);

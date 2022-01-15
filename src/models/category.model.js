@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
+const slugify = require('slugify');
 // const validator = require('validator');
 const { toJSON, paginate } = require('./plugins');
 
@@ -13,7 +14,12 @@ const categorySchema = Schema(
       required: [true, 'Category title is required'],
     },
     image: { type: String },
-    isActive: { type: Boolean, required: true, default: false },
+    isActive: { type: Boolean, required: true, default: true },
+    // category slug model
+    slug: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );
@@ -31,6 +37,12 @@ categorySchema.statics.isCategoryExist = async function (title, excludeUserId) {
   const category = await this.findOne({ title, _id: { $ne: excludeUserId } });
   return !!category;
 };
+
+// pre Save Hook
+categorySchema.pre('validation', function (next) {
+  this.slug = slugify(this.title, { lower: true });
+  next();
+});
 
 /**
  * @typedef Category

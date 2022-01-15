@@ -13,11 +13,18 @@ const productSchema = Schema(
       trim: true,
       required: true,
     },
+    seoTitle: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+
     description: {
       type: String,
       maxLength: 200,
       trim: true,
     },
+
     thumbnail: { type: String, required: [true, 'Thumbnail is required'] },
 
     brand: { type: String, required: [true, 'Brand is required'], trim: true, default: 'Jaliri' },
@@ -127,6 +134,7 @@ const productSchema = Schema(
       // Required?
       // Bu collection nasıl şişer ?
     }, // end variants
+
   },
   {
     timestamps: true,
@@ -144,6 +152,11 @@ productSchema.statics.isProductExist = async function (title) {
   const product = await this.findOne({ title });
   return !!product;
 };
+
+// productSchema.pre('save', async function (next) {
+
+// });
+
 /**
  * @typedef Product
  */

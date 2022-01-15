@@ -11,7 +11,11 @@ module.exports.Color = require('./color.model');
 module.exports.Sku = require('./sku.model');
 module.exports.Country = require('./country.model');
 
+
 module.exports.Attribute = require('./attribute.model');
+
+module.exports.Banner = require('./banner.model');
+
 
 // module.exports.State = require('./state.model');
 // module.exports.City = require('./city.model');
