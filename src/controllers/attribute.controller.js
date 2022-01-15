@@ -9,6 +9,11 @@ const createAttribute = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(attribute);
 });
 
+const createOrReadAttribute = catchAsync(async (req, res) => {
+  const attribute = await attributeService.createOrReadAttribute(req.body);
+  res.status(httpStatus.CREATED).send(attribute);
+});
+
 const getAttributes = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name', 'isActive']);
   const options = pick(req.query, ['sortBy', 'limit']);
@@ -25,7 +30,7 @@ const getAttribute = catchAsync(async (req, res) => {
 });
 
 const getAttributeByCouple = catchAsync(async (req, res) => {
-  const attribute = await attributeService.getAttributeByCouple(req.params.attributeName, req.params.attributeValue);
+  const attribute = await attributeService.getAttributeByCouple(req.params.name, req.params.value);
   if (!attribute) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Attribute not found');
   }
@@ -46,6 +51,7 @@ module.exports = {
   createAttribute,
   getAttributes,
   getAttribute,
+  createOrReadAttribute,
   getAttributeByCouple,
   updateAttribute,
   deleteAttribute,

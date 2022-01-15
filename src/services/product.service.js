@@ -8,28 +8,8 @@ const catchAsync = require('../utils/catchAsync');
  * @param {Object} productBody
  * @returns {Promise<Product>}
  */
-const newA = async (attribute, list) => {
-  let newAttribute = new Attribute(attribute);
-  const x = await Attribute.findOne({ name: newAttribute.name, value: newAttribute.value });
-  if (x) {
-    list.push(x._id);
-  } else {
-    newAttribute = await newAttribute.save();
-    list.push(newAttribute._id);
-  }
-};
 
-const createProduct = async (productBody) => {
-  const { variants, ...product } = productBody;
-
-  const tempAttr = variants.attributes;
-  variants.attributes = [];
-  const attributesId = catchAsync(
-    tempAttr.map(async (attribute) => {
-      return newA(attribute, variants.attributes);
-    })
-  );
-
+const createProduct = async (product) => {
   const productCountry = await Country.getCountryByCode(product.country);
 
   if (productCountry) {
@@ -44,7 +24,7 @@ const createProduct = async (productBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Category not found');
   }
 
-  return Product.create({ ...product, variants });
+  return Product.create(product);
 };
 
 /**
@@ -66,7 +46,7 @@ const queryProducts = async (filter, options) => {
  * @returns {Promise<Product>}
  */
 const getProductById = async (id) => {
-  return Product.findById(id).populate('category', '-isActive -image').populate('attr');
+  return Product.findById(id).populate('category', 'title').populate('country', 'name').populate('variants.attributes');
 };
 
 const updateProductById = async (productId, updateBody) => {

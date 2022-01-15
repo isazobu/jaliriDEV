@@ -7,7 +7,7 @@ const attributeController = require('../../controllers/attribute.controller');
 const router = express.Router();
 
 router.route('/').get(attributeController.getAttributes).post(auth('manageAttributes'), attributeController.createAttribute);
-
+router.route('/test').post(attributeController.createOrReadAttribute);
 // router.route('/title/:attributeTitle').get(attributeController.getAttributeByTitle);
 
 router

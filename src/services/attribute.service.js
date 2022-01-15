@@ -9,8 +9,16 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Attribute>}
  */
 const createAttribute = async (attributeBody) => {
-  if (await Attribute.isAttributeExist(attributeBody.title)) {
+  if (await Attribute.isAttributeExist(attributeBody.name, attributeBody.value)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Attribute already exist');
+  }
+  return Attribute.create(attributeBody);
+};
+
+const createOrReadAttribute = async (attributeBody) => {
+  const attribute = await Attribute.findOne({ name: attributeBody.name });
+  if (attribute) {
+    return attribute;
   }
   return Attribute.create(attributeBody);
 };
@@ -87,4 +95,5 @@ module.exports = {
   getAttributeByCouple,
   updateAttributeById,
   deleteAttributeById,
+  createOrReadAttribute,
 };

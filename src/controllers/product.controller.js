@@ -2,11 +2,21 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { productService } = require('../services');
+const { productService, attributeService } = require('../services');
 
 const createProduct = catchAsync(async (req, res) => {
-  const product = await productService.createProduct(req.body);
-  res.status(httpStatus.CREATED).send(product);
+  let { variants, ...product } = req.body;
+  // console.log(body);
+  const variantItems = variants.attributes.map(async (attribute) => {
+    newAttribute = await attributeService.createOrReadAttribute(attribute);
+    return newAttribute._id;
+  });
+  const variantIds = await Promise.all(variantItems);
+  variants.attributes = [];
+  variants.attributes = variantIds;
+  product['variants'] = variants;
+  const productItem = await productService.createProduct(product);
+  res.status(httpStatus.CREATED).send(productItem);
 });
 
 const getProduct = catchAsync(async (req, res) => {
