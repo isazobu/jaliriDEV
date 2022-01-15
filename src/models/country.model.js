@@ -16,6 +16,7 @@ const countrySchema = Schema({
     type: String,
     trim: true,
     unique: true,
+    toUpperCase: true,
     required: [true, 'Country code is required'],
   },
   currency: {
@@ -38,9 +39,13 @@ countrySchema.plugin(toJSON);
  * @param {string} name - The Country name
  * @returns {Promise<boolean>}
  */
-countrySchema.statics.isCountryExist = async function (name) {
-  const country = await this.findOne({ name });
+countrySchema.statics.isCountryExist = async function (code) {
+  const country = await this.findOne({ code });
   return !!country;
+};
+
+countrySchema.statics.getCountryByCode = async function (code) {
+  return this.findOne({ code });
 };
 
 // Get country by name

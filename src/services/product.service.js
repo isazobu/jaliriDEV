@@ -1,17 +1,50 @@
 const httpStatus = require('http-status');
-const { Product, Variant } = require('../models');
+const { Product, Attribute, Category, Country } = require('../models');
 const ApiError = require('../utils/ApiError');
-
+const _ = require('lodash');
+const catchAsync = require('../utils/catchAsync');
 /**
  * Create a user
  * @param {Object} productBody
  * @returns {Promise<Product>}
  */
-const createProduct = async (productBody) => {
-  const { attr, ...product } = productBody;
-  const newVariant = await Variant.create(attr);
+const newA = async (attribute, list) => {
+  let newAttribute = new Attribute(attribute);
+  const x = await Attribute.findOne({ name: newAttribute.name, value: newAttribute.value });
+  if (x) {
+    list.push(x._id);
+  } else {
+    newAttribute = await newAttribute.save();
+    list.push(newAttribute._id);
+  }
+};
 
-  return Product.create({ ...product, attr: newVariant });
+const createProduct = async (productBody) => {
+  const { variants, ...product } = productBody;
+
+  const tempAttr = variants.attributes;
+  variants.attributes = [];
+  const attributesId = catchAsync(
+    tempAttr.map(async (attribute) => {
+      return newA(attribute, variants.attributes);
+    })
+  );
+
+  const productCountry = await Country.getCountryByCode(product.country);
+
+  if (productCountry) {
+    product.country = productCountry._id;
+  } else {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Country not found');
+  }
+  const productCategory = await Category.findOne({ title: product.category });
+  if (productCategory) {
+    product.category = productCategory._id;
+  } else {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Category not found');
+  }
+
+  return Product.create({ ...product, variants });
 };
 
 /**

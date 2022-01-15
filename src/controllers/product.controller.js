@@ -10,7 +10,6 @@ const createProduct = catchAsync(async (req, res) => {
 });
 
 const getProduct = catchAsync(async (req, res) => {
-  console.log(productService.getProductById(req.params.productId));
   const product = await productService.getProductById(req.params.productId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
@@ -20,7 +19,8 @@ const getProduct = catchAsync(async (req, res) => {
 
 const getProducts = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['title', 'isActive']);
-  const options = pick(req.query, ['sortBy', 'limit']);
+  const options = pick(req.query, ['sortBy', 'populate', 'limit', 'page']);
+  options.populate = 'category, variants.attributes';
   const result = await productService.queryProducts(filter, options);
   res.status(httpStatus.OK).send(result);
 });
