@@ -16,7 +16,7 @@ const createAttribute = async (attributeBody) => {
 };
 
 const createOrReadAttribute = async (attributeBody) => {
-  const attribute = await Attribute.findOne({ name: attributeBody.name });
+  const attribute = await Attribute.findOne({ name: attributeBody.name, value: attributeBody.value });
   if (attribute) {
     return attribute;
   }

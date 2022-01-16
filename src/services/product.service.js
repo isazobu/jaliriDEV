@@ -2,9 +2,6 @@ const httpStatus = require('http-status');
 const { Product, Attribute, Category, Country } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-
-
-
 /**
  * Create a user
  * @param {Object} productBody
