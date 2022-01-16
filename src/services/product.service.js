@@ -79,7 +79,6 @@ const deleteProductById = async (productId) => {
 
 module.exports = {
   createProduct,
-  createOrReadVariant,
   queryProducts,
   getProductById,
   updateProductById,
