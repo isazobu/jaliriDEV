@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const { Product, Attribute, Category, Country } = require('../models');
 const ApiError = require('../utils/ApiError');
-const _ = require('lodash');
+
 const catchAsync = require('../utils/catchAsync');
 /**
  * Create a user
