@@ -39,6 +39,16 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
     - run: yarn
-    - run: yarn dev
- 
+    - run: yarn lint
+
+  deploy: ## <-- this is the new stuff
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: 509cadd4-85c5-4d5e-9ee3-212a3dcf4d23
+          heroku_app_name: "api-jaliri"
+          heroku_email: "isa_fb_1846@hotmail.com"
    
