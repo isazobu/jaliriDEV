@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
-const createCategory = {
+const createWarehouse = {
   body: Joi.object().keys({
     title: Joi.string().required(),
     image: Joi.string(),
@@ -9,31 +9,31 @@ const createCategory = {
   }),
 };
 
-const getCategories = {
+const getWarehouses = {
   query: Joi.object().keys({
     title: Joi.string(),
     image: Joi.string(),
     isActive: Joi.boolean(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
-    page: Joi.number().integer(),
+    // page: Joi.number().integer(),
   }),
 };
 
-const getCategory = {
+const getWarehouse = {
   params: Joi.object().keys({
-    categoryId: Joi.string().custom(objectId),
+    warehouseId: Joi.string().custom(objectId),
   }),
 };
-const getCategoryByTitle = {
+const getWarehouseByTitle = {
   params: Joi.object().keys({
-    categoryTitle: Joi.string().required(),
+    warehouseTitle: Joi.string().required(),
   }),
 };
 
-const updateCategory = {
+const updateWarehouse = {
   params: Joi.object().keys({
-    categoryId: Joi.required().custom(objectId),
+    warehouseId: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
@@ -44,16 +44,16 @@ const updateCategory = {
     .min(1),
 };
 
-const deleteCategory = {
+const deleteWarehouse = {
   params: Joi.object().keys({
-    categoryId: Joi.string().custom(objectId),
+    warehouseId: Joi.string().custom(objectId),
   }),
 };
 module.exports = {
-  createCategory,
-  getCategories,
-  getCategory,
-  updateCategory,
-  deleteCategory,
-  getCategoryByTitle,
+  createWarehouse,
+  getWarehouses,
+  getWarehouse,
+  updateWarehouse,
+  deleteWarehouse,
+  getWarehouseByTitle,
 };

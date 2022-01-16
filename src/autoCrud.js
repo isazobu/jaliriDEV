@@ -13,26 +13,26 @@ function writeFilePromise(fileName) {
     const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const ${fileName}Validation = require('../../validations/${fileName}.validation');
+
 const ${fileName}Controller = require('../../controllers/${fileName}.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(validate(${fileName}Validation.get${upperFileName}s), ${fileName}Controller.get${upperFileName}s)
-  .post(auth('manage${upperFileName}s'), validate(${fileName}Validation.create${upperFileName}), ${fileName}Controller.create${upperFileName});
+  .get(${fileName}Controller.get${upperFileName}s)
+  .post(auth('manage${upperFileName}s'), ${fileName}Controller.create${upperFileName});
 
 
 router
   .route('/title/:${fileName}Title')
-  .get(validate(${fileName}Validation.get${upperFileName}ByTitle), ${fileName}Controller.get${upperFileName}ByTitle);
+  .get( ${fileName}Controller.get${upperFileName}ByTitle);
 
 router
   .route('/:${fileName}Id')
-  .get(validate(${fileName}Validation.get${upperFileName}), ${fileName}Controller.get${upperFileName})
-  .patch(auth('manage${upperFileName}s'), validate(${fileName}Validation.update${upperFileName}), ${fileName}Controller.update${upperFileName})
-  .delete(auth('manage${upperFileName}s'), validate(${fileName}Validation.delete${upperFileName}), ${fileName}Controller.delete${upperFileName});
+  .get(${fileName}Controller.get${upperFileName})
+  .patch(auth('manage${upperFileName}s'), ${fileName}Controller.update${upperFileName})
+  .delete(auth('manage${upperFileName}s'), ${fileName}Controller.delete${upperFileName});
 
 module.exports = router;
 
@@ -536,7 +536,7 @@ module.exports = {
   get${upperFileName}ByTitle,
 };
 `;
-    fs.writeFile(`routes/${fileName}.route.js`, routesString, (err) => {
+    fs.writeFile(`routes/v1/${fileName}.route.js`, routesString, (err) => {
       err ? reject(err) : resolve();
     });
 
@@ -548,12 +548,12 @@ module.exports = {
       err ? reject(err) : resolve();
     });
 
-    fs.writeFile(`controllers/${fileName}.validation.js`, controllerString, (err) => {
+    fs.writeFile(`controllers/${fileName}.controller.js`, controllerString, (err) => {
       err ? reject(err) : resolve();
     });
-    fs.writeFile(`validations/${fileName}.js`, validationsString, (err) => {
-      err ? reject(err) : resolve();
-    });
+    // fs.writeFile(`validations/${fileName}.js`, validationsString, (err) => {
+    //   err ? reject(err) : resolve();
+    // });
   });
 }
 

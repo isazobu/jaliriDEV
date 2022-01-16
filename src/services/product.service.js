@@ -2,12 +2,12 @@ const httpStatus = require('http-status');
 const { Product, Attribute, Category, Country } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const catchAsync = require('../utils/catchAsync');
 /**
  * Create a user
  * @param {Object} productBody
  * @returns {Promise<Product>}
  */
+
 
 const createProduct = async (product) => {
   const productCountry = await Country.getCountryByCode(product.country);
@@ -25,6 +25,7 @@ const createProduct = async (product) => {
   }
 
   return Product.create(product);
+
 };
 
 /**
@@ -78,6 +79,7 @@ const deleteProductById = async (productId) => {
 
 module.exports = {
   createProduct,
+  createOrReadVariant,
   queryProducts,
   getProductById,
   updateProductById,

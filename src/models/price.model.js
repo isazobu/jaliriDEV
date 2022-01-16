@@ -22,6 +22,10 @@ const priceSchema = new Schema({
     value: { type: Number, required: true },
     text: { type: String },
   },
+  listPrice: {
+    value: { type: Number, required: true },
+    text: { type: String },
+  },
 
   totalPrice: {
     value: { type: Number },

@@ -14,11 +14,6 @@ const createCountry = async (countryBody) => {
   return Country.create(countryBody);
 };
 
-const queryCountries = async (filter, options) => {
-  const countries = await Country.paginate(filter, options);
-  return countries;
-};
-
 /**
  * Get All countries
  * @returns {Promise<[Country]>}
