@@ -1,11 +1,11 @@
 {
-  "name": "create-nodejs-express-app",
+  "name": "ecommerce-jaliri",
   "version": "1.7.0",
-  "description": "Create a Node.js app for building production-ready RESTful APIs using Express, by running one command",
+  "description": "Create a MERN Stack E-commerce app",
   "bin": "bin/createNodejsApp.js",
   "main": "src/index.js",
-  "repository": "https://github.com/hagopj13/node-express-boilerplate.git",
-  "author": "Hagop Jamkojian <hagopj13@gmail.com>",
+  "repository": "https://github.com/isazobu/jaliriDEV.git",
+  "author": "İsa Zobu <isaazobu@gmail.com>",
   "license": "MIT",
   "engines": {
     "node": ">=12.0.0"
@@ -14,6 +14,7 @@
     "start": "pm2 start ecosystem.config.json --no-daemon",
     "dev": "cross-env NODE_ENV=development nodemon src/index.js",
     "debug": "cross-env NODE_ENV=development nodemon src/index.js",
+    "ci": "yarn install --frozen-lockfile",
     "test": "jest -i --colors --verbose --detectOpenHandles",
     "test:watch": "jest -i --watchAll",
     "coverage": "jest -i --coverage",
