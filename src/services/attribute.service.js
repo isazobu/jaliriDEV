@@ -1,7 +1,6 @@
-const { Attribute } = require('../models');
-
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
+const { Attribute } = require('../models');
 
 /**
  * Create a attribute
