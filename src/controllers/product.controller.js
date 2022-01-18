@@ -29,7 +29,7 @@ const getProduct = catchAsync(async (req, res) => {
 
 const getProducts = catchAsync(async (req, res) => {
 
-  const filter = pick(req.query, ['title', 'isActive']);
+  const filter = pick(req.query, ['title','productId','isActive']);
   const options = pick(req.query, ['sortBy', 'populate', 'limit', 'page']);
   options.populate = 'category, variants.attributes';
 
