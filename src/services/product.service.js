@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Product, Attribute, Category, Country } = require('../models');
+const { Product, Category, Country } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -8,24 +8,22 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Product>}
  */
 
-
-const createProduct = async (product) => {
-  const productCountry = await Country.getCountryByCode(product.country);
+const createProduct = async (productBody) => {
+  const productCountry = await Country.getCountryByCode(productBody.country);
 
   if (productCountry) {
-    product.country = productCountry._id;
+    productBody.country = productCountry._id;
   } else {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Country not found');
   }
-  const productCategory = await Category.findOne({ title: product.category });
+  const productCategory = await Category.findOne({ title: productBody.category });
   if (productCategory) {
-    product.category = productCategory._id;
+    productBody.category = productCategory._id;
   } else {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Category not found');
   }
 
-  return Product.create(product);
-
+  return Product.create(productBody);
 };
 
 /**
