@@ -81,6 +81,7 @@ module.exports = {
   getAllCountries,
   getCountryById,
   getCountryByCode,
+  queryCountries,
   updateCountryById,
   deleteCountryById,
 };

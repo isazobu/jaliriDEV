@@ -3,9 +3,6 @@ const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const categoryRoute = require('./category.route');
 
-const colorRoute = require('./color.route');
-const sizeRoute = require('./size.route');
-
 const countryRoute = require('./country.route');
 const addressRoute = require('./address.route');
 const productRoute = require('./product.route');
@@ -57,15 +54,6 @@ const defaultRoutes = [
     route: countryRoute,
   },
   // TODO: Add swagger and spell check
-  {
-    path: '/colors',
-    route: colorRoute,
-  },
-  // TODO: Add swagger and spell check
-  {
-    path: '/sizes',
-    route: sizeRoute,
-  },
 
   {
     path: '/docs',

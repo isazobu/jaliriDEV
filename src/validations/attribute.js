@@ -1,5 +1,4 @@
-
-    const Joi = require('joi');
+const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
 const createAttribute = {

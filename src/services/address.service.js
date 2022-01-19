@@ -8,7 +8,7 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Address>}
  */
 const createAddress = async (addressBody) => {
-  if (await Address.isAddressExist(addressBody.title, addressBody.user)) {
+  if (!(await Address.isAddressExist(addressBody.title, addressBody.user))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Address title already exist');
   }
   return Address.create(addressBody);
@@ -25,6 +25,12 @@ const createAddress = async (addressBody) => {
 const queryAddresses = async (filter, options) => {
   const addresses = await Address.paginate(filter, options);
   return addresses;
+};
+
+// me address
+const getMeAddress = async (userId) => {
+  const address = await Address.getMeAddress(userId);
+  return address;
 };
 
 /**
@@ -81,6 +87,7 @@ const deleteAddressById = async (addressId) => {
 
 module.exports = {
   createAddress,
+  getMeAddress,
   queryAddresses,
   getAddressById,
   getAddressByTitle,

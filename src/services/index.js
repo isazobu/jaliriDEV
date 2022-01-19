@@ -6,11 +6,7 @@ module.exports.categoryService = require('./category.service');
 module.exports.productService = require('./product.service');
 module.exports.orderService = require('./order.service');
 module.exports.addressService = require('./address.service');
-module.exports.sizeService = require('./size.service');
-module.exports.colorService = require('./color.service');
-module.exports.skuService = require('./sku.service');
 module.exports.countryService = require('./country.service');
-
 module.exports.attributeService = require('./attribute.service');
 module.exports.bannerService = require('./banner.service');
 

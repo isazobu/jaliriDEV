@@ -37,6 +37,11 @@ addressSchema.statics.isAddressExist = async function (title, user) {
   return !!address;
 };
 
+addressSchema.statics.getMeAddress = async function (user) {
+  const address = await this.findOne({ user });
+  return address;
+};
+
 /**
  * @typedef Address
  */

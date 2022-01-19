@@ -10,10 +10,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(validate(addressValidation.getAddresses), addressController.getAddresses)
-  .post(auth('manageAddresses'), validate(addressValidation.createAddress), addressController.createAddress);
+  .get(auth('manageAddresses'), validate(addressValidation.getAddresses), addressController.getAddresses)
+  .post(auth('me'), validate(addressValidation.createAddress), addressController.createAddress);
 
 router.route('title/:addressTitle').get(validate(addressValidation.getAddressByTitle), addressController.getAddressByTitle);
+
+// me address
+router.route('/me').get(auth('me'), addressController.getMeAddress);
 
 router
   .route('/:addressId')

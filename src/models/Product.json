@@ -1,0 +1,72 @@
+{
+  "category": "Shoes",
+  "productId": "31",
+  "title": "Men Shoe",
+  "description": "Lorem ipsum dolor sit amet.",
+  "thumbnail": "https://picsum.photos/200/300",
+  "brand": "Jaliri",
+  "warrantyMonth": 24,
+  "country": {
+    "code": "tr"
+  },
+  "variants": {
+    "sku": "123431313131",
+    "barcode": "3131313131",
+    "attributes": [
+      {
+        "name": "Size",
+        "value": "42",
+        "isActive": true
+      }
+    ],
+    "kg": "1",
+    "dimension": {
+      "width": "20",
+      "height": "31",
+      "depth": "69"
+    },
+    "tags": [
+      "freeshipping",
+      "new"
+    ],
+    "image": [
+      "https://picsum.photos/200/300",
+      "https://picsum.photos/200/300",
+      "https://picsum.photos/200/300"
+    ],
+<<<<<<< Updated upstream
+    "hasVariants": true,
+=======
+    // "hasVariants": true,
+>>>>>>> Stashed changes
+    "isActive": true,
+    "price": {
+      "currency": "TL",
+      "sellingPrice": {
+        "value": 31,
+        "text": "31 TL"
+      },
+<<<<<<< Updated upstream
+      "discountExist": "true",
+=======
+      "discountExist": true,
+>>>>>>> Stashed changes
+      "discountedPrice": {
+        "value": 30,
+        "text": "30 TL"
+      },
+      "originalPrice": {
+        "value": 3131,
+        "text": "3131 TL"
+      },
+      "discountAmount": {
+        "value": 1,
+        "text": "1 TL"
+      },
+      "discountType": "fixed"
+    },
+    "freeShipping": true,
+    "hasStock": true,
+    "totalStock": 31
+  }
+}

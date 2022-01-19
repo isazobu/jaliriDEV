@@ -4,9 +4,7 @@ module.exports.categoryValidation = require('./category.validation');
 module.exports.productValidation = require('./product.validation');
 module.exports.orderValidation = require('./order.validation');
 module.exports.addressValidation = require('./address.validation');
-module.exports.productSizeValidation = require('./size.validation');
-module.exports.productColorValidation = require('./color.validation');
-module.exports.productSKUValidation = require('./sku.validation');
+
 module.exports.countryValidation = require('./country.validation');
 module.exports.bannerValidation = require('./banner.validation');
 // module.exports.adminValidation = require('./admin.validation');
