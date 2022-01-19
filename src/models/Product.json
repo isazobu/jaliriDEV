@@ -14,7 +14,7 @@
     "barcode": "3131313131",
     "attributes": [
       {
-        "name": "Black",
+        "name": "Size",
         "value": "42",
         "isActive": true
       }
@@ -34,7 +34,11 @@
       "https://picsum.photos/200/300",
       "https://picsum.photos/200/300"
     ],
+<<<<<<< Updated upstream
     "hasVariants": true,
+=======
+    // "hasVariants": true,
+>>>>>>> Stashed changes
     "isActive": true,
     "price": {
       "currency": "TL",
@@ -42,7 +46,11 @@
         "value": 31,
         "text": "31 TL"
       },
+<<<<<<< Updated upstream
       "discountExist": "true",
+=======
+      "discountExist": true,
+>>>>>>> Stashed changes
       "discountedPrice": {
         "value": 30,
         "text": "30 TL"

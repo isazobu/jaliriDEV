@@ -17,6 +17,12 @@ const getAddresses = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(result);
 });
 
+// get me address
+const getMeAddress = catchAsync(async (req, res) => {
+  const address = await addressService.getMeAddress(req.user.id);
+  res.status(httpStatus.OK).send(address);
+});
+
 const getAddress = catchAsync(async (req, res) => {
   const address = await addressService.getAddressById(req.params.addressId);
   if (!address) {
@@ -47,6 +53,7 @@ module.exports = {
   createAddress,
   getAddresses,
   getAddress,
+  getMeAddress,
   getAddressByTitle,
   updateAddress,
   deleteAddress,
