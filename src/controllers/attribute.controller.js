@@ -15,7 +15,7 @@ const createOrReadAttribute = catchAsync(async (req, res) => {
 });
 
 const getAttributes = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'isActive']);
+  const filter = pick(req.query, ['name', 'value', 'slug', 'isActive']);
   const options = pick(req.query, ['sortBy', 'limit']);
   const result = await attributeService.queryAttributes(filter, options);
   res.status(httpStatus.OK).send(result);

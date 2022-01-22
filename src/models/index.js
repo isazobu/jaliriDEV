@@ -6,15 +6,9 @@ module.exports.Variant = require('./variant.model');
 module.exports.OrderItem = require('./orderItem.model');
 module.exports.Order = require('./order.model');
 module.exports.Address = require('./address.model');
-
 module.exports.Country = require('./country.model');
-
-
 module.exports.Attribute = require('./attribute.model');
-
 module.exports.Banner = require('./banner.model');
-
-
 // module.exports.State = require('./state.model');
 // module.exports.City = require('./city.model');
 // module.exports.Payment = require('./payment.model');

@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const { productService, attributeService } = require('../services');
 
 const createProduct = catchAsync(async (req, res) => {
-  let { variants, ...product } = req.body;
+  const { variants, ...product } = req.body;
   // console.log(body);
   const variantItems = variants.attributes.map(async (attribute) => {
     newAttribute = await attributeService.createOrReadAttribute(attribute);
@@ -14,7 +14,7 @@ const createProduct = catchAsync(async (req, res) => {
   const variantIds = await Promise.all(variantItems);
   variants.attributes = [];
   variants.attributes = variantIds;
-  product['variants'] = variants;
+  product.variants = variants;
   const productItem = await productService.createProduct(product);
   res.status(httpStatus.CREATED).send(productItem);
 });
@@ -28,10 +28,9 @@ const getProduct = catchAsync(async (req, res) => {
 });
 
 const getProducts = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['productId', 'title', 'category', 'brand', 'size', 'color', 'country']);
 
-  const filter = pick(req.query, ['title', 'isActive']);
-  const options = pick(req.query, ['sortBy', 'populate', 'limit', 'page']);
-  options.populate = 'category, variants.attributes';
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
 
   const result = await productService.queryProducts(filter, options);
   res.status(httpStatus.OK).send(result);
