@@ -1,16 +1,19 @@
 const mongoose = require('mongoose');
+const { orderCartSchema } = require('./schemas');
 
 // const validator = require('validator');
 const { toJSON, paginate } = require('./plugins');
 
 const orderSchema = mongoose.Schema({
-  orderItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem', required: true }],
+  // orderItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem', required: true }],
+  // cart: { type: mongoose.Schema.ObjectId, ref: 'OrderCart', required: true },
+  cart: { type: orderCartSchema, required: true },
   address: { type: mongoose.Schema.Types.ObjectId, ref: 'Address', required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   status: { type: String, required: true, default: 'Pending' },
-  itemsPrice: { type: Number, required: true },
-  shipingsPrice: { type: Number, required: true },
-  totalPrice: { type: Number, required: true },
+  // itemsPrice: { type: Number, required: true },
+  // shipingsPrice: { type: Number, required: true },
+  // totalPrice: { type: Number, required: true },
   isPaid: { type: Boolean, required: true, default: false },
   paidAt: { type: Date },
   paymentMethod: { type: String, required: true, default: 'COD' },
