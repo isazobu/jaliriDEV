@@ -1,7 +1,6 @@
 const httpStatus = require('http-status');
-const { query } = require('../config/logger');
+
 const { Product, Category, Country } = require('../models');
-const { toJSON } = require('../models/plugins');
 
 const ApiError = require('../utils/ApiError');
 
