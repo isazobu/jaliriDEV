@@ -87,7 +87,7 @@ const queryProducts = async (filter, options) => {
   //   .sort('-variants.price.sellingPrice.value')
   //   .limit(options.limit)
   //   .skip(options.skip).;
-  console.log(products);
+
   return products;
 };
 

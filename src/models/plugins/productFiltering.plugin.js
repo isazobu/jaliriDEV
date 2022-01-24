@@ -73,6 +73,12 @@ const productFiltering = (schema) => {
       filterObj = { $or: [] };
       delete filter.country;
     }
+    if (filter.discountExist) {
+      filterObj.$or.push({ 'variants.price.discountExist': filter.discountExist });
+      criterias.push(filterObj);
+      filterObj = { $or: [] };
+      delete filter.discountExist;
+    }
 
     if (filter.color) {
       filter.color.split(',').forEach((color) => {
