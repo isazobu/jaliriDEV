@@ -36,10 +36,7 @@ const productFiltering = (schema) => {
 
     const criterias = [];
     let filterObj = { $or: [] };
-    const categoryCriterias = [];
-    const brandCriterias = [];
-    const countryCriteria = {};
-    const attributeCriterias = [];
+
     // const countPromise = this.countDocuments(filter).exec();
     // multiple filters array split
 
@@ -73,8 +70,9 @@ const productFiltering = (schema) => {
       filterObj = { $or: [] };
       delete filter.country;
     }
-    if (filter.discountExist) {
-      filterObj.$or.push({ 'variants.price.discountExist': filter.discountExist });
+    if (filter.discountExist === 'true') {
+      var isTrueSet = filter.discountExist === 'true';
+      filterObj.$or.push({ 'variants.price.discountExist': isTrueSet });
       criterias.push(filterObj);
       filterObj = { $or: [] };
       delete filter.discountExist;
