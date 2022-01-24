@@ -78,6 +78,19 @@ const productFiltering = (schema) => {
       delete filter.discountExist;
     }
 
+    if (filter.price) {
+      let minAndMax;
+      filter.price.split(',').forEach((price) => {
+        minAndMax = price.split('-');
+
+        filterObj.$or.push({
+          'variants.price.sellingPrice.value': { $gte: parseInt(minAndMax[0]), $lte: parseInt(minAndMax[1]) },
+        });
+      });
+      criterias.push(filterObj);
+      filterObj = { $or: [] };
+      delete filter.price;
+    }
     if (filter.color) {
       filter.color.split(',').forEach((color) => {
         filterObj.$or.push({ 'variants.attributes.value': color });

@@ -28,7 +28,17 @@ const getProduct = catchAsync(async (req, res) => {
 });
 
 const getProducts = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['productId', 'title', 'discountExist', 'category', 'brand', 'size', 'color', 'country']);
+  const filter = pick(req.query, [
+    'productId',
+    'title',
+    'discountExist',
+    'price',
+    'category',
+    'brand',
+    'size',
+    'color',
+    'country',
+  ]);
 
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
 
