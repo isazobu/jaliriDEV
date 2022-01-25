@@ -24,7 +24,7 @@ const getMeAddress = catchAsync(async (req, res) => {
 });
 
 const getAddress = catchAsync(async (req, res) => {
-  const address = await addressService.getAddressById(req.params.addressId);
+  const address = await addressService.getAddressById(req.params.addressId, req.user.id);
   if (!address) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Address not found');
   }
@@ -40,12 +40,13 @@ const getAddressByTitle = catchAsync(async (req, res) => {
 });
 
 const updateAddress = catchAsync(async (req, res) => {
+  req.body.user = req.user.id;
   const address = await addressService.updateAddressById(req.params.addressId, req.body);
   res.send(address);
 });
 
 const deleteAddress = catchAsync(async (req, res) => {
-  await addressService.deleteAddressById(req.params.addressId);
+  await addressService.deleteAddressById(req.params.addressId, req.user.id);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

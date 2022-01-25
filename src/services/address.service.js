@@ -38,8 +38,13 @@ const getMeAddress = async (userId) => {
  * @param {ObjectId} id
  * @returns {Promise<Address>}
  */
-const getAddressById = async (addressId) => {
-  return Address.findById(addressId);
+const getAddressByIdandMe = async (addressId, userId) => {
+  const address = await Address.findById(addressId);
+
+  if (address && address.user.toString() !== userId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'You can only operate your own address');
+  }
+  return address;
 };
 
 /**
@@ -59,10 +64,7 @@ const getAddressByTitle = async (title) => {
  */
 
 const updateAddressById = async (addressId, updateBody) => {
-  const address = await getAddressById(addressId);
-  if (address.user.toString() !== updateBody.user.toString()) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You can only update your own address');
-  }
+  const address = await getAddressByIdandMe(addressId, updateBody.user.toString());
 
   if (!address) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Address not found');
@@ -81,13 +83,11 @@ const updateAddressById = async (addressId, updateBody) => {
  * @returns {Promise<Address>}
  */
 const deleteAddressById = async (addressId, userId) => {
-  const address = await getAddressById(addressId);
+  const address = await getAddressByIdandMe(addressId, userId);
   if (!address) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Address not found');
   }
-  if (address.user.toString() !== userId.toString()) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You can only delete your own address');
-  }
+
   await address.remove();
   return address;
 };
@@ -96,7 +96,7 @@ module.exports = {
   createAddress,
   getMeAddress,
   queryAddresses,
-  getAddressById,
+  getAddressById: getAddressByIdandMe,
   getAddressByTitle,
   updateAddressById,
   deleteAddressById,
