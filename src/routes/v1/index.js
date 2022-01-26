@@ -2,6 +2,7 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const categoryRoute = require('./category.route');
+const cartRoute = require('./cart.route');
 
 const countryRoute = require('./country.route');
 const addressRoute = require('./address.route');
@@ -67,6 +68,11 @@ const defaultRoutes = [
   {
     path: '/banners',
     route: bannerRoute,
+  },
+
+  {
+    path: '/cart',
+    route: cartRoute,
   },
 
   // {

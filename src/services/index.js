@@ -9,6 +9,7 @@ module.exports.addressService = require('./address.service');
 module.exports.countryService = require('./country.service');
 module.exports.attributeService = require('./attribute.service');
 module.exports.bannerService = require('./banner.service');
+module.exports.cartService = require('./cart.service');
 
 
 // module.exports.stateService = require('./state.service');

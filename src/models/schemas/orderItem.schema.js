@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const orderItemSchema = mongoose.Schema({
+const orderItemSchema = new mongoose.Schema({
   quantity: { type: Number, required: true },
   product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
   totalDiscount: { type: Number, required: true }, // discount for this item
