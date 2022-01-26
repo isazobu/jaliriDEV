@@ -47,7 +47,6 @@ const userSchema = mongoose.Schema(
     },
     cart: {
       type: orderCartSchema,
-      // default: null,
     },
   },
   {

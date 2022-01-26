@@ -4,26 +4,44 @@ const { cartService } = require('../services');
 const pick = require('../utils/pick');
 
 const getCart = catchAsync(async (req, res) => {
+  const { _id } = req.user;
   const params = pick(req.query, ['detail']);
-  const cart = await cartService.getCartByUserId('61f111c1d3479a163c065838', params);
+  const cart = await cartService.getCartByUserId(_id, params);
   res.status(httpStatus.OK).send(cart);
 });
 
 const addToCart = catchAsync(async (req, res) => {
-  const { userId, productId } = req.body;
-  const response = await cartService.addToCart(userId, productId);
+  const { _id } = req.user;
+  const { productId, quantity } = req.body;
+  const response = await cartService.addToCart(_id, productId, quantity);
   res.status(httpStatus.CREATED).send(response);
 });
 
+const decreaseQuantity = catchAsync(async (req, res) => {
+  const { _id } = req.user;
+  const { productId } = req.body;
+  const response = await cartService.decreaseQuantity(_id, productId);
+  res.status(httpStatus.OK).send(response);
+});
+
+const increaseQuantity = catchAsync(async (req, res) => {
+  const { _id } = req.user;
+  const { productId } = req.body;
+  const response = await cartService.increaseQuantity(_id, productId);
+  res.status(httpStatus.OK).send(response);
+});
+
 const deleteFromCart = catchAsync(async (req, res) => {
-  const { userId, productId } = req.body;
-  const response = await cartService.deleteFromCart(userId, productId);
+  const { _id } = req.user;
+  const { productId } = req.body;
+  const response = await cartService.deleteFromCart(_id, productId);
   res.status(httpStatus.NO_CONTENT).send(response);
 });
 
 const updateCart = catchAsync(async (req, res) => {
-  const { userId, items } = req.body;
-  const response = await cartService.updateCart(userId, items);
+  const { _id } = req.user;
+  const { items } = req.body;
+  const response = await cartService.updateCart(_id, items);
   res.status(httpStatus.NO_CONTENT).send(response);
 });
 
@@ -32,4 +50,6 @@ module.exports = {
   addToCart,
   deleteFromCart,
   updateCart,
+  decreaseQuantity,
+  increaseQuantity,
 };
