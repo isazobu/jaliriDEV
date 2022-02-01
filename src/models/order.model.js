@@ -7,7 +7,7 @@ const { toJSON, paginate } = require('./plugins');
 const orderSchema = mongoose.Schema({
   // orderItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem', required: true }],
   // cart: { type: mongoose.Schema.ObjectId, ref: 'OrderCart', required: true },
-  cart: { type: orderCartSchema, required: true },
+  cart: { type: orderCartSchema },
   address: { type: mongoose.Schema.Types.ObjectId, ref: 'Address', required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   status: { type: String, required: true, default: 'Pending' },

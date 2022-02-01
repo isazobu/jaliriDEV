@@ -5,10 +5,10 @@ const catchAsync = require('../utils/catchAsync');
 const { orderService } = require('../services');
 
 const createOrder = catchAsync(async (req, res) => {
-  if (req.body.orderItems.length === 0) {
-    res.status(httpStatus.BAD_REQUEST).send({ message: 'Card is empty' });
+  if (!req.user.cart || req.user.cart.items.length === 0) {
+    res.status(httpStatus.BAD_REQUEST).send({ message: 'Cart is empty' });
   }
-  const order = await orderService.createOrder(req.body);
+  const order = await orderService.createOrder(req.user._id, req.body);
   res.status(httpStatus.CREATED).send(order);
 });
 

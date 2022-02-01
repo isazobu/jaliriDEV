@@ -1,6 +1,6 @@
 const allRoles = {
   guest: [],
-  user: ['me', 'manageCarts'],
+  user: ['me', 'manageCarts', 'manageOrders'],
   admin: [
     'getUsers',
     'manageOrders',
