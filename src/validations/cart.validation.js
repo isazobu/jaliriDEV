@@ -15,7 +15,7 @@ const addToCart = {
 };
 
 const deleteFromCart = {
-  body: Joi.object().keys({
+  params: Joi.object().keys({
     productId: Joi.string().custom(objectId),
   }),
 };

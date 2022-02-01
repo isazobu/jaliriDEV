@@ -33,7 +33,7 @@ const increaseQuantity = catchAsync(async (req, res) => {
 
 const deleteFromCart = catchAsync(async (req, res) => {
   const { _id } = req.user;
-  const { productId } = req.body;
+  const { productId } = req.params;
   const response = await cartService.deleteFromCart(_id, productId);
   res.status(httpStatus.NO_CONTENT).send(response);
 });
