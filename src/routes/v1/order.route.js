@@ -13,7 +13,7 @@ router
 
 router
   .get('/me', auth('me'), validate(orderValidation.getMeOrders), orderController.getMeOrders)
-  .delete('/me/:orderId', validate(orderValidation.deleteOrder), auth('me'), orderController.deleteMyOrder);
+  .delete('/me/:orderId', auth('me'), validate(orderValidation.deleteOrder), orderController.deleteMyOrder);
 
 router
   .route('/:orderId')

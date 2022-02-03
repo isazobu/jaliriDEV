@@ -31,7 +31,7 @@ const createOrder = async (userId, orderBody) => {
   if (!user) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
   }
-  const address = await Address.findById(orderBody.addressId);
+  const address = await Address.findById(orderBody.address);
   if (!address || address.user.toString() !== userId.toString()) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Address not found');
   }
@@ -98,9 +98,6 @@ const updateOrderById = async (orderId, updateBody) => {
   if (!order) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
   }
-  if (updateBody.title && (await Order.isOrderExist(updateBody.title, orderId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Order already taken');
-  }
   Object.assign(order, updateBody);
   await order.save();
   return order;
@@ -115,6 +112,23 @@ const deleteOrderById = async (orderId) => {
   const order = await getOrderById(orderId);
   if (!order) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+  await order.remove();
+  return order;
+};
+
+/**
+ * Delete order of the user by id
+ * @param {ObjectId} orderId
+ * @returns {Promise<Order>}
+ */
+const deleteMyOrderById = async (orderId, userId) => {
+  const order = await getOrderById(orderId);
+  if (!order) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+  if (order.user.toString() !== userId.toString()) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
   }
   await order.remove();
   return order;
@@ -137,4 +151,5 @@ module.exports = {
   createOrReadOrderItem,
   updateOrderById,
   deleteOrderById,
+  deleteMyOrderById,
 };

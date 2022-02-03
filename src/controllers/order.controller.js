@@ -13,8 +13,16 @@ const createOrder = catchAsync(async (req, res) => {
 });
 
 const getOrders = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['title', 'isActive']);
-  const options = pick(req.query, ['sortBy', 'limit']);
+  const filter = pick(req.query, ['status', 'isPaid', 'user', 'address']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const result = await orderService.queryOrders(filter, options);
+  res.status(httpStatus.OK).send(result);
+});
+
+const getMeOrders = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['status', 'isPaid', 'address']);
+  filter.user = req.user._id;
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await orderService.queryOrders(filter, options);
   res.status(httpStatus.OK).send(result);
 });
@@ -45,11 +53,18 @@ const deleteOrder = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const deleteMyOrder = catchAsync(async (req, res) => {
+  await orderService.deleteMyOrderById(req.params.orderId, req.user._id);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   createOrder,
   getOrders,
+  getMeOrders,
   getOrder,
   getOrderByTitle,
   updateOrder,
   deleteOrder,
+  deleteMyOrder,
 };
