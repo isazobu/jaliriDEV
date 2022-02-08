@@ -4,6 +4,8 @@ const { objectId } = require('./custom.validation');
 const createCategory = {
   body: Joi.object().keys({
     title: Joi.string().required(),
+    parentId: Joi.string().custom(objectId),
+    subCategories: Joi.array().items(Joi.string().custom(objectId)),
     image: Joi.string(),
     isActive: Joi.boolean(),
   }),
@@ -13,9 +15,12 @@ const getCategories = {
   query: Joi.object().keys({
     title: Joi.string(),
     image: Joi.string(),
+    parentId: Joi.string().custom(objectId),
+    subCategories: Joi.array().items(Joi.string().custom(objectId)),
     isActive: Joi.boolean(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
+    populate: Joi.string(),
     page: Joi.number().integer(),
   }),
 };
@@ -25,9 +30,10 @@ const getCategory = {
     categoryId: Joi.string().custom(objectId),
   }),
 };
-const getCategoryByTitle = {
+
+const getCategoryBySlug = {
   params: Joi.object().keys({
-    categoryTitle: Joi.string().required(),
+    categorySlug: Joi.string().required(),
   }),
 };
 
@@ -55,5 +61,5 @@ module.exports = {
   getCategory,
   updateCategory,
   deleteCategory,
-  getCategoryByTitle,
+  getCategoryBySlug,
 };

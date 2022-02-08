@@ -13,8 +13,8 @@ router
 
 //! ADD swagger this route
 router
-  .route('/title/:categoryTitle')
-  .get(validate(categoryValidation.getCategoryByTitle), categoryController.getCategoryByTitle);
+  .route('/slug/:categorySlug')
+  .get(validate(categoryValidation.getCategoryBySlug), categoryController.getCategoryBySlug);
 
 router
   .route('/:categoryId')

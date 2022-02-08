@@ -18,6 +18,52 @@ components:
         email: fake@example.com
         name: fake name
         role: user
+    F:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+      example:
+        id: 5ebac534954b54139806c112
+        email: fake@example.com
+        name: fake name
+        role: user
+
+    Address:
+      type: object
+      properties:
+        id: string
+        fullName: string
+        addressText: string
+        country:
+          type: string
+          enum: [KW, UAE]
+        city: string
+        area: string
+        phone: string
+        email:
+          type: string
+          format: email
+        user:
+          type: string
+          ref: User
+      example:
+        id: 5ebac534954b54139806c112
+        fullName: fake name
+        addressText: fake address
+        country: KW
+        city: fake city
+        area: fake area
+        phone: fake phone
+        email: fake@mail.com
 
     Token:
       type: object
