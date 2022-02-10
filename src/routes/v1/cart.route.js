@@ -3,6 +3,7 @@ const auth = require('../../middlewares/auth');
 const cartController = require('../../controllers/cart.controller');
 const validate = require('../../middlewares/validate');
 const { cartValidation } = require('../../validations');
+const { checkStock } = require('../../middlewares/stock');
 
 const router = express.Router();
 
@@ -12,7 +13,13 @@ router
   .get(auth('manageCarts'), validate(cartValidation.getCart), cartController.getCart)
   .post(auth('manageCarts'), cartController.addToCart);
 
-router.post('/manipulate', auth('manageCarts'), validate(cartValidation.manipulate), cartController.manipulate);
+router.post(
+  '/manipulate',
+  auth('manageCarts'),
+  validate(cartValidation.manipulate),
+  checkStock(),
+  cartController.manipulate
+);
 router.get('/stock', auth(), cartController.getCartStock);
 
 module.exports = router;
