@@ -10,13 +10,10 @@ const router = express.Router();
 router
   .route('/')
   .get(auth('manageCarts'), validate(cartValidation.getCart), cartController.getCart)
-  .post(auth('manageCarts'), validate(cartValidation.addToCart), cartController.addToCart)
-  .patch(auth('manageCarts'), cartController.updateCart);
+  .post(auth('manageCarts'), cartController.addToCart);
 
-router
-  .post('/add', auth('manageCarts'), validate(cartValidation.increaseQuantity), cartController.increaseQuantity)
-  .post('/remove', auth('manageCarts'), validate(cartValidation.decreaseQuantity), cartController.decreaseQuantity)
-  .delete('/:productId', auth('manageCarts'), validate(cartValidation.deleteFromCart), cartController.deleteFromCart);
+router.post('/manipulate', auth('manageCarts'), validate(cartValidation.manipulate), cartController.manipulate);
+router.get('/stock', auth(), cartController.getCartStock);
 
 module.exports = router;
 
@@ -59,8 +56,8 @@ module.exports = router;
  *
  *
  *   post:
- *     summary: Add to cart
- *     description: Only users can add to cart.
+ *     summary: Add products to cart
+ *     description: Only users can add to cart. It can be used for multiple add operations.
  *     tags: [Carts]
  *     security:
  *       - bearerAuth: []
@@ -69,18 +66,17 @@ module.exports = router;
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - productId
- *               - quantity
- *             properties:
- *               productId:
- *                 type: string
- *               quantity:
- *                 type: number
- *             example:
- *               productId: 61f10af8035339138bfb9874
- *               quantity: 2
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 productId:
+ *                   type: string
+ *                 quantity:
+ *                   type: number
+ *               example:
+ *                   productId: 5e9f8f8f8f8f8f8f8f8f8f8
+ *                   quantity: 1
  *     responses:
  *       "201":
  *         description: Created
@@ -98,22 +94,39 @@ module.exports = router;
 
 /**
  * @swagger
- * /carts/{id}:
- *   delete:
- *     summary: Delete an item from cart
- *     description: Only users can delete item from their cart.
+ * /carts/manipulate:
+ *   post:
+ *     summary: Manipulate cart with given action
+ *     description: delete by negative one quntity is to remove product from cart
  *     tags: [Carts]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         example: 61f10af8035339138bfb9874
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               action:
+ *                 type: string
+ *                 enum:
+ *                   - insert
+ *                   - delete
+ *                   - truncate
+ *               productId:
+ *                 type: string
+ *               quantity:
+ *                 type: number
+ *             example:
+ *               action: insert
+ *               productId: 5e9f8f8f8f8f8f8f8f8f8f8
+ *               quantity: 1
  *     responses:
- *       "204":
- *         description: No content
+ *       "200":
+ *         description: Changes saved successfully
+ *       "400":
+ *         $ref: '#/components/responses/BadRequest'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -125,74 +138,34 @@ module.exports = router;
 
 /**
  * @swagger
- * /carts/add:
- *   post:
- *    summary: Increase quantity of an item by one in cart
- *    description: Only users can increase quantity of an item in their cart.
- *    tags: [Carts]
- *    security:
- *      - bearerAuth: []
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *          required:
- *            - productId
- *          properties:
- *            productId:
- *              type: string
- *          example:
- *            productId: 61f10af8035339138bfb9874
- *    responses:
- *      "200":
- *        description: OK
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/Cart'
- *      "401":
- *        $ref: '#/components/responses/Unauthorized'
- *      "403":
- *        $ref: '#/components/responses/Forbidden'
- *      "404":
- *        $ref: '#/components/responses/NotFound'
- */
-
-/**
- * @swagger
- * /carts/remove:
- *   post:
- *    summary: Decrease quantity of an item by one in cart
- *    description: Only users can decrease quantity of an item in their cart.
- *    tags: [Carts]
- *    security:
- *      - bearerAuth: []
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *          required:
- *            - productId
- *          properties:
- *            productId:
- *              type: string
- *          example:
- *            productId: 61f10af8035339138bfb9874
- *    responses:
- *      "200":
- *        description: OK
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/Cart'
- *      "401":
- *        $ref: '#/components/responses/Unauthorized'
- *      "403":
- *        $ref: '#/components/responses/Forbidden'
- *      "404":
- *        $ref: '#/components/responses/NotFound'
+ * /carts/stock:
+ *   get:
+ *     summary: Get cart stock
+ *     description: Get the stock of all products in cart of logged user.
+ *     tags: [Carts]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       "200":
+ *         description: Cart stock
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 product:
+ *                   type: string
+ *                 hasStock:
+ *                   type: boolean
+ *                 totalStock:
+ *                   type: number
+ *               example:
+ *                 product: 5e9f8f8f8f8f8f8f8f8f8f8
+ *                 hasStock: true
+ *                 totalStock: 10
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
  */

@@ -12,44 +12,26 @@ const getCart = catchAsync(async (req, res) => {
 
 const addToCart = catchAsync(async (req, res) => {
   const { _id } = req.user;
-  const { productId, quantity } = req.body;
-  const response = await cartService.addToCart(_id, productId, quantity);
+  const response = await cartService.addToCart(_id, req.body);
   res.status(httpStatus.CREATED).send(response);
 });
 
-const decreaseQuantity = catchAsync(async (req, res) => {
+const manipulate = catchAsync(async (req, res) => {
   const { _id } = req.user;
-  const { productId } = req.body;
-  const response = await cartService.decreaseQuantity(_id, productId);
+  const { action, productId, quantity } = req.body;
+  const response = await cartService.manipulate(_id, action, productId, quantity);
   res.status(httpStatus.OK).send(response);
 });
 
-const increaseQuantity = catchAsync(async (req, res) => {
+const getCartStock = catchAsync(async (req, res) => {
   const { _id } = req.user;
-  const { productId } = req.body;
-  const response = await cartService.increaseQuantity(_id, productId);
+  const response = await cartService.getCartStock(_id);
   res.status(httpStatus.OK).send(response);
-});
-
-const deleteFromCart = catchAsync(async (req, res) => {
-  const { _id } = req.user;
-  const { productId } = req.params;
-  const response = await cartService.deleteFromCart(_id, productId);
-  res.status(httpStatus.NO_CONTENT).send(response);
-});
-
-const updateCart = catchAsync(async (req, res) => {
-  const { _id } = req.user;
-  const { items } = req.body;
-  const response = await cartService.updateCart(_id, items);
-  res.status(httpStatus.NO_CONTENT).send(response);
 });
 
 module.exports = {
   getCart,
   addToCart,
-  deleteFromCart,
-  updateCart,
-  decreaseQuantity,
-  increaseQuantity,
+  manipulate,
+  getCartStock,
 };

@@ -1,6 +1,8 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
+const logger = require('../config/logger');
 const { User, Product } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -29,37 +31,29 @@ const getCartByUserId = async (userId, params) => {
  * @param {Number} quantity
  * @returns {Promise<Cart>}
  */
-const addToCart = async (userId, productId, quantity) => {
+const addToCart = async (userId, products) => {
   let user = await User.findById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-
-  const product = await Product.findById(productId).select('variants');
-  if (!product) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
 
   if (!user.cart) {
     user.cart = newCart();
   }
-  const indexFound = user.cart.items.findIndex((item) => item.product.toString() === productId);
 
-  if (indexFound > -1) {
-    user.cart.items[indexFound].quantity += quantity;
-    user.cart.items[indexFound].totalPrice += product.variants.price.sellingPrice.value * quantity;
-    user.cart.items[indexFound].totalSalesPrice += product.variants.price.sellingPrice.value * quantity;
-  } else {
-    user.cart.items.push({
-      quantity,
-      product: mongoose.Types.ObjectId(productId),
-      totalDiscount: 0,
-      totalPrice: product.variants.price.sellingPrice.value * quantity,
-      totalSalesPrice: 10,
-    });
+  for (let index = 0; index < products.length; index++) {
+    // eslint-disable-next-line no-await-in-loop
+    const product = await Product.findById(products[index].productId).select('variants');
+    if (!product) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+    }
+    addItem(user.cart.items, product, products[index].quantity);
   }
-  user.cart.itemsPrice = user.cart.items.map((item) => item.totalPrice).reduce((acc, next) => acc + next);
-  user.cart.totalPrice = user.cart.itemsPrice + user.cart.shippingPrice;
+
+  calculateTotalPrice(user);
+
+  logger.warn(user.cart);
+  logger.warn(products[0].productId);
   user.markModified('cart');
   user = await user.save();
 
@@ -69,98 +63,121 @@ const addToCart = async (userId, productId, quantity) => {
 /**
  *
  * @param {ObjectId} userId
+ * @param {Enum} action
  * @param {ObjectId} productId
+ * @param {Number} quantity
  * @returns {Promise<Cart>}
  */
-const decreaseQuantity = async (userId, productId) => {
-  if (!(await User.exists({ _id: userId }))) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  const product = await Product.findById(productId).select('variants');
-  if (!product) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
-  }
-  const user = await handleItem(userId, product, false);
-  return user.cart;
-};
-
-/**
- *
- * @param {ObjectId} userId
- * @param {ObjectId} productId
- * @returns {Promise<Cart>}
- */
-const increaseQuantity = async (userId, productId) => {
-  if (!(await User.exists({ _id: userId }))) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  const product = await Product.findById(productId).select('variants');
-  if (!product) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
-  }
-  const user = await handleItem(userId, product, true);
-  return user.cart;
-};
-
-/**
- *
- * @param {ObjectId} userId
- * @param {ObjectId} productId
- * @returns {Promise<Cart>}
- */
-const deleteFromCart = async (userId, productId) => {
+const manipulate = async (userId, action, productId, quantity) => {
   let user = await User.findById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  const product = await Product.findById(productId);
-  if (!product) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  let product;
+  if (productId) {
+    product = await Product.findById(productId).select('variants');
+    if (!product) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+    }
   }
 
-  const indexFound = user.cart.items.findIndex((item) => item.product.toString() === productId);
+  if (!user.cart) {
+    user.cart = newCart();
+  }
 
-  if (indexFound > -1) {
-    user.cart.items.splice(indexFound, 1);
-  } else throw new ApiError(httpStatus.NOT_FOUND, 'Product not found in Cart');
+  const { items } = user.cart;
 
-  if (user.cart.items.length > 0)
-    user.cart.itemsPrice = user.cart.items.map((item) => item.totalPrice).reduce((acc, next) => acc + next);
-  else user.cart = newCart();
+  switch (action) {
+    case 'insert':
+      addItem(items, product, quantity);
+      break;
+    case 'delete':
+      deleteItem(items, product, quantity);
+      break;
+    case 'truncate':
+      items.splice(0, items.length);
+      break;
+    default:
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid action');
+  }
 
+  calculateTotalPrice(user);
   user.markModified('cart');
   user = await user.save();
   return user.cart;
 };
 
-/**
- *
- * @param {ObjectId} userId
- * @param {Object} product
- * @param {Boolean} isNew - Increase or decrease
- * @returns {Promise<User>}
- */
-async function handleItem(userId, product, isNew) {
+const getCartStock = async (userId) => {
   const user = await User.findById(userId);
-  const indexFound = user.cart.items.findIndex((item) => item.product.toString() === product._id.toString());
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
 
+  if (!user.cart) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Cart not found');
+  }
+
+  const { items } = user.cart;
+  const stock = await Product.find({
+    _id: { $in: items.map((item) => item.product) },
+  }).select('variants');
+
+  return stock.map((product) => {
+    return {
+      product: product._id,
+      hasStock: product.variants.hasStock,
+      totalStock: product.variants.totalStock,
+    };
+  });
+};
+
+function deleteItem(items, product, quantity) {
+  const indexFound = items.findIndex((item) => item.product.toString() === product._id.toString());
+  const { price } = product.variants;
   if (indexFound > -1) {
-    if (isNew) {
-      user.cart.items[indexFound].quantity += 1;
-      user.cart.items[indexFound].totalPrice += product.variants.price.sellingPrice.value;
-      user.cart.items[indexFound].totalSalesPrice += product.variants.price.sellingPrice.value;
+    if (quantity === -1 || items[indexFound].quantity === quantity) {
+      items.splice(indexFound, 1);
     } else {
-      if (user.cart.items[indexFound].quantity === 1) throw new ApiError(httpStatus.BAD_REQUEST, 'Quantity can not be zero');
-      user.cart.items[indexFound].quantity -= 1;
-      user.cart.items[indexFound].totalPrice -= product.variants.price.sellingPrice.value;
-      user.cart.items[indexFound].totalSalesPrice -= product.variants.price.sellingPrice.value;
+      if (items[indexFound].quantity < quantity)
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Quantity can not be less than zero');
+      items[indexFound].quantity -= quantity;
+      items[indexFound].totalPrice -= price.sellingPrice.value * quantity;
+      items[indexFound].totalSalesPrice -= price.discountExists
+        ? price.discountedPrice.value * quantity
+        : price.sellingPrice.value * quantity;
     }
-  } else throw new ApiError(httpStatus.NOT_FOUND, 'Product not found in Cart');
+  } else throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+}
 
-  user.cart.itemsPrice = user.cart.items.map((item) => item.totalPrice).reduce((acc, next) => acc + next);
-  user.markModified('cart');
-  return user.save();
+function addItem(items, product, quantity) {
+  const indexFound = items.findIndex((item) => item.product.toString() === product._id.toString());
+  const { price } = product.variants;
+  if (indexFound > -1) {
+    items[indexFound].quantity += quantity;
+    items[indexFound].totalPrice += price.sellingPrice.value * quantity;
+    items[indexFound].totalSalesPrice += price.discountExists
+      ? price.discountedPrice.value * quantity
+      : price.sellingPrice.value * quantity;
+  } else {
+    items.push({
+      quantity,
+      product: mongoose.Types.ObjectId(product._id),
+      totalDiscount: price.discountAmount.value * quantity,
+      totalPrice: price.sellingPrice.value * quantity,
+      // eslint-disable-next-line prettier/prettier
+      totalSalesPrice: price.discountExists ? price.discountedPrice.value * quantity : price.sellingPrice.value * quantity,
+    });
+  }
+}
+
+function calculateTotalPrice(user) {
+  if (user.cart.items.length > 0) {
+    user.cart.itemsPrice = user.cart.items.map((item) => item.totalPrice).reduce((acc, next) => acc + next);
+    user.cart.totalPrice = user.cart.itemsPrice + user.cart.shippingPrice;
+  } else {
+    user.cart = newCart();
+  }
 }
 
 const newCart = () => {
@@ -175,7 +192,6 @@ const newCart = () => {
 module.exports = {
   getCartByUserId,
   addToCart,
-  deleteFromCart,
-  decreaseQuantity,
-  increaseQuantity,
+  manipulate,
+  getCartStock,
 };
