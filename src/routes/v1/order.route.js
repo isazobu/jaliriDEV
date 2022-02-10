@@ -9,11 +9,9 @@ const router = express.Router();
 router
   .route('/')
   .get(auth('manageOrders'), validate(orderValidation.getOrders), orderController.getOrders)
-  .post(auth('me'), orderController.createOrder);
+  .post(auth('me'), validate(orderValidation.createOrder), orderController.createOrder);
 
-router
-  .get('/me', auth('me'), validate(orderValidation.getMeOrders), orderController.getMeOrders)
-  .delete('/me/:orderId', auth('me'), validate(orderValidation.deleteOrder), orderController.deleteMyOrder);
+router.get('/me', auth('me'), validate(orderValidation.getMeOrders), orderController.getMeOrders);
 
 router
   .route('/:orderId')
@@ -228,32 +226,6 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
- *
- *
- *   delete:
- *     summary: Delete an order of current user
- *     description: Only current user can access this endpoint and user can delete only his own orders
- *     tags: [Orders]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: orderId
- *         schema:
- *           type: string
- *         required: true
- *         description: OrderId to delete
- *         example: 5e9f8f8f8f8f8f8f8f8f8f8
- *     responses:
- *       "204":
- *         description: No Content
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
- *       "403":
- *         $ref: '#/components/responses/Forbidden'
- *       "404":
- *         $ref: '#/components/responses/NotFound'
- *
  */
 
 /**

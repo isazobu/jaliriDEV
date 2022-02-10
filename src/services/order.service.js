@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
-const { Order, OrderItem, Address } = require('../models');
+const { Order, OrderItem, Address, Product } = require('../models');
 const User = require('../models/user.model');
 const ApiError = require('../utils/ApiError');
 
@@ -47,6 +47,12 @@ const createOrder = async (userId, orderBody) => {
   });
 
   Object.assign(order.cart, user.cart);
+
+  await Product.updateMany(
+    { _id: { $in: order.cart.items.map((item) => item.product) } },
+    { $inc: { 'variants.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
+  );
+
   user.cart = undefined;
   await user.save();
 

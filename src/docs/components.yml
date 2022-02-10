@@ -209,6 +209,15 @@ components:
           example:
             code: 404
             message: Not found
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad request
 
   securitySchemes:
     bearerAuth:
