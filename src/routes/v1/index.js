@@ -2,6 +2,7 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const categoryRoute = require('./category.route');
+const cartRoute = require('./cart.route');
 
 const countryRoute = require('./country.route');
 const addressRoute = require('./address.route');
@@ -13,7 +14,7 @@ const attributeRoute = require('./attribute.route');
 const bannerRoute = require('./banner.route');
 
 // const cartRoute = require('./cart.route');
-// const orderRoute = require('./order.route');
+const orderRoute = require('./order.route');
 // const paymentRoute = require('./payment.route');
 // const shippingRoute = require('./shipping.route');
 // const reviewRoute = require('./review.route');
@@ -69,14 +70,20 @@ const defaultRoutes = [
     route: bannerRoute,
   },
 
+  {
+    path: '/carts',
+    route: cartRoute,
+  },
+  // TODO: Add swagger and spell check
+
+  {
+    path: '/orders',
+    route: orderRoute,
+  },
+
   // {
   //   path: 'skus',
   //   route: skuRoute,
-  // },
-
-  // {
-  //   path: '/orders',
-  //   routes: orderRoute,
   // },
 ];
 

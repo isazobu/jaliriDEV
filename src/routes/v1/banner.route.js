@@ -33,7 +33,7 @@ module.exports = router;
  * /banners:
  *   post:
  *     summary: Create a banner
- *     description: Only admins can create other banners.
+ *     description: Only admins can create banners.
  *     tags: [Banners]
  *     security:
  *       - bearerAuth: []
@@ -46,6 +46,10 @@ module.exports = router;
  *             required:
  *               - title
  *               - image
+ *               - url
+ *               - field
+ *               - target
+ *               - row
  *               - isActive
  *             properties:
  *               title:
@@ -54,11 +58,25 @@ module.exports = router;
  *               image:
  *                 type: string
  *                 format: url
+ *               url:
+ *                 type: string
+ *                 format: url
+ *                 description: must be unique
+ *               field:
+ *                 type: string
+ *               target:
+ *                 type: string
+ *               row:
+ *                 type: number
  *               isActive:
  *                 type: boolean
  *             example:
- *               title: Shoes
- *               image: fake@example.com
+ *               title: banner
+ *               image: https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png
+ *               url: https://www.google.com
+ *               field: home
+ *               target: _blank
+ *               row: 1
  *               isActive: true
  *     responses:
  *       "201":
@@ -115,6 +133,9 @@ module.exports = router;
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Banner'
+ *                 page:
+ *                   type: integer
+ *                   example: 1
  *                 limit:
  *                   type: integer
  *                   example: 10
@@ -164,7 +185,7 @@ module.exports = router;
  * /banners/{id}:
  *   get:
  *     summary: Get a banner
- *     description: Logged in banners can fetch only their own banner information. Only admins can fetch other banners.
+ *     description: Get a banner by id
  *     tags: [Banners]
  *     parameters:
  *       - in: path
@@ -189,7 +210,7 @@ module.exports = router;
  *
  *   patch:
  *     summary: Update a banner
- *     description: Logged in banners can only update their own information. Only admins can update other banners.
+ *     description: Only admins can update banners.
  *     tags: [Banners]
  *     security:
  *       - bearerAuth: []
@@ -213,11 +234,25 @@ module.exports = router;
  *               image:
  *                 type: string
  *                 format: url
+ *               url:
+ *                 type: string
+ *                 format: url
+ *                 description: must be unique
+ *               field:
+ *                 type: string
+ *               target:
+ *                 type: string
+ *               row:
+ *                 type: number
  *               isActive:
  *                 type: boolean
  *             example:
- *               title: fake name
- *               url: example.com
+ *               title: banner
+ *               image: https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png
+ *               url: https://www.google.com
+ *               field: home
+ *               target: _blank
+ *               row: 1
  *               isActive: true
  *     responses:
  *       "200":
@@ -237,7 +272,7 @@ module.exports = router;
  *
  *   delete:
  *     summary: Delete a banner
- *     description: Logged in banners can delete only themselves. Only admins can delete other banners.
+ *     description: Only admins can delete banners.
  *     tags: [Banners]
  *     security:
  *       - bearerAuth: []
@@ -249,7 +284,7 @@ module.exports = router;
  *           type: string
  *         description: Banner id
  *     responses:
- *       "200":
+ *       "204":
  *         description: No content
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'

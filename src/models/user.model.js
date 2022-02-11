@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
+const { orderCartSchema } = require('./schemas');
 
 const userSchema = mongoose.Schema(
   {
@@ -38,11 +39,14 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       enum: roles,
-      default: 'user',
+      default: 'admin',
     },
     isEmailVerified: {
       type: Boolean,
       default: false,
+    },
+    cart: {
+      type: orderCartSchema,
     },
   },
   {

@@ -8,12 +8,14 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Address>}
  */
 const createAddress = async (addressBody) => {
+
   // if (!(await Address.isAddressExist(addressBody.title, addressBody.user))) {
   //   throw new ApiError(httpStatus.BAD_REQUEST, 'Address title already exist');
   // }
   const country = await Country.getCountryByCode(addressBody.country);
   if (!country) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Country not found');
+
   }
   addressBody.country = country._id;
   return Address.create(addressBody);
