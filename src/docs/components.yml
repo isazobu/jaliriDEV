@@ -65,6 +65,122 @@ components:
         phone: fake phone
         email: fake@mail.com
 
+    Banner:
+      type: object
+      properties:
+        id:
+          type: string
+        image:
+          type: string
+          format: url
+        url:
+          type: string
+          format: url
+        field:
+          type: string
+        target:
+          type: string
+        row:
+          type: number
+        isActive:
+          type: boolean
+        slug:
+          type: string
+      example:
+        row: 1
+        isActive: true        
+        title: banner
+        image: https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png
+        url: https://www.google.com
+        field: home
+        target: _blank
+        slug: banner8
+        id: 61f985d1df5de57ec38835bf
+    
+    CartItem:
+      type: object
+      properties:
+        quantity:
+          type: number
+        product:
+          type: string
+        totalDiscount:
+          type: number
+        totalPrice:
+          type: number
+        totalSalesPrice:
+          type: number
+      example:
+        quantity: 6
+        product: 61f10af8035339138bfb9874
+        totalDiscount: 0
+        totalPrice: 186
+        totalSalesprice: 10
+
+    Cart:
+      type: object
+      properties:
+        items:
+          type: array
+          items: 
+            $ref: '#/components/schemas/CartItem'
+        totalPrice:
+          type: number
+        itemsPrice:
+          type: number         
+        shippingPrice:
+          type: number
+      example:
+        items:
+          - quantity: 6
+            product: 61f10af8035339138bfb9874
+            totalDiscount: 0
+            totalPrice: 186
+            totalSalesprice: 10
+        totalPrice: 100
+        itemsPrice: 90
+        shippingPrice: 10
+
+    Order:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, processing, shipped, delivered, cancelled]
+        isPaid:
+          type: boolean
+        paymentMethod:
+          type: string
+        cart:
+          type: object
+          $ref: '#/components/schemas/Cart'
+        address:
+          type: string
+        user:
+          type: string
+        dateOrdered:
+          type: date
+        id:
+          type: string
+      example:
+        status: pending
+        isPaid: false
+        paymentMethod: COD
+        cart:
+          items:
+            - quantity: 6
+              product: 61f10af8035339138bfb9874
+              totalDiscount: 0
+              totalPrice: 186
+              totalSalesprice: 10
+          totalPrice: 100
+          itemsPrice: 90
+          shippingPrice: 10
+        address: address
+        user: 5ebac534954b54139806c112
+        dateOrdered: 2020-08-20T00:00:00.000Z
+        id: 61f985d1df5de57ec38835bf
+
     Token:
       type: object
       properties:
@@ -103,6 +219,15 @@ components:
           example:
             code: 400
             message: Email already taken
+    DuplicateBanner:
+      description: Banner title already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Banner title already exists
     Unauthorized:
       description: Unauthorized
       content:
@@ -130,6 +255,15 @@ components:
           example:
             code: 404
             message: Not found
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Bad request
 
   securitySchemes:
     bearerAuth:
