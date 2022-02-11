@@ -1,5 +1,7 @@
 const httpStatus = require('http-status');
+
 const { Product, Category, Country } = require('../models');
+
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -34,18 +36,69 @@ const createProduct = async (productBody) => {
  * @param {number} [options.limit] - Maximum number of results per page (default = 10)
  * @returns {Promise<QueryResult>}
  */
+
 const queryProducts = async (filter, options) => {
-  const products = await Product.paginate(filter, options);
+  const products = await Product.productFiltering(filter, options);
+  //   return products;
+  // };
+
+  // if (filter.category) {
+  //   criteria['category.title'] = filter.category;
+  // }
+  // if (filter.country) {
+  //   criteria['country.code'] = filter.country;
+  // }
+
+  // const products = await Product.aggregate([
+  //   {
+  //     $lookup: {
+  //       from: 'categories',
+  //       localField: 'category',
+  //       foreignField: '_id',
+  //       as: 'category',
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: 'countries',
+  //       localField: 'country',
+  //       foreignField: '_id',
+  //       as: 'country',
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: 'attributes',
+  //       localField: 'variants.attributes',
+  //       foreignField: '_id',
+  //       as: 'variants.attributes',
+  //     },
+  //   },
+  //   {
+  //     $sort: {
+  //       'variants.price.sellingPrice': 1,
+  //     },
+  //   },
+
+  //   {
+  //     $match: criteria,
+  //   },
+  // ])
+  //   .sort('-variants.price.sellingPrice.value')
+  //   .limit(options.limit)
+  //   .skip(options.skip).;
+
   return products;
 };
 
 /**
  * Get user by id
- * @param {ObjectId} id
+ * @pararem {ObjectId} id
  * @returns {Promise<Product>}
  */
 const getProductById = async (id) => {
-  return Product.findById(id).populate('category', 'title').populate('country', 'name').populate('variants.attributes');
+  const product = await Product.findById(id).populate('category').populate('country');
+  return product;
 };
 
 const updateProductById = async (productId, updateBody) => {

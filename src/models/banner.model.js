@@ -23,7 +23,7 @@ const bannerSchema = Schema(
     slug: {
       type: String,
       trim: true,
-      //required: [true, 'Banner slug is required'],
+      // required: [true, 'Banner slug is required'],
     },
   },
   { timestamps: true }

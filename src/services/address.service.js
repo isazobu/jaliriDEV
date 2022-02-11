@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Address } = require('../models');
+const { Address, Country } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -8,9 +8,16 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Address>}
  */
 const createAddress = async (addressBody) => {
-  if (await Address.isAddressExist(addressBody.title, addressBody.user)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Address title already exist');
+
+  // if (!(await Address.isAddressExist(addressBody.title, addressBody.user))) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Address title already exist');
+  // }
+  const country = Country.getCountryByCode(addressBody.country);
+  if (!country) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Country not found');
+
   }
+  addressBody.country = country._id;
   return Address.create(addressBody);
 };
 
@@ -38,8 +45,13 @@ const getMeAddress = async (userId) => {
  * @param {ObjectId} id
  * @returns {Promise<Address>}
  */
-const getAddressById = async (addressId) => {
-  return Address.findById(addressId);
+const getAddressByIdandMe = async (addressId, userId) => {
+  const address = await Address.findById(addressId);
+
+  if (address && address.user.toString() !== userId) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'You can only operate your own address');
+  }
+  return address;
 };
 
 /**
@@ -59,13 +71,14 @@ const getAddressByTitle = async (title) => {
  */
 
 const updateAddressById = async (addressId, updateBody) => {
-  const address = await getAddressById(addressId);
+  const address = await getAddressByIdandMe(addressId, updateBody.user.toString());
+
   if (!address) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Address not found');
   }
-  if (updateBody.title && (await Address.isAddressExist(updateBody.title, addressId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Address already taken');
-  }
+  // if (updateBody.title && (await Address.isAddressExist(updateBody.title, addressId))) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Address already taken');
+  // }
   Object.assign(address, updateBody);
   await address.save();
   return address;
@@ -76,11 +89,12 @@ const updateAddressById = async (addressId, updateBody) => {
  * @param {ObjectId} addressId
  * @returns {Promise<Address>}
  */
-const deleteAddressById = async (addressId) => {
-  const address = await getAddressById(addressId);
+const deleteAddressById = async (addressId, userId) => {
+  const address = await getAddressByIdandMe(addressId, userId);
   if (!address) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Address not found');
   }
+
   await address.remove();
   return address;
 };
@@ -89,7 +103,7 @@ module.exports = {
   createAddress,
   getMeAddress,
   queryAddresses,
-  getAddressById,
+  getAddressById: getAddressByIdandMe,
   getAddressByTitle,
   updateAddressById,
   deleteAddressById,

@@ -44,6 +44,12 @@ attributeSchema.statics.isAttributeExist = async function (name, value, excludeA
   return !!attribute;
 };
 
+// Slugify Name-Value
+attributeSchema.pre('save', async function (next) {
+  this.slug = `${this.name}-${this.value}`;
+  next();
+});
+
 /**
  * @typedef Attribute
  */

@@ -8,11 +8,31 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Category>}
  */
 const createCategory = async (categoryBody) => {
+  let parentCategory;
   if (await Category.isCategoryExist(categoryBody.title)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Category already exist');
   }
-  return Category.create(categoryBody);
+
+  if (categoryBody.parentId) {
+    parentCategory = await getCategoryById(categoryBody.parentId);
+    if (!parentCategory) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Parent category not found');
+    }
+  }
+
+  const category = await Category.create(categoryBody);
+  console.log(category._id);
+
+  if (parentCategory) {
+    parentCategory?.subCategories.push(category._id);
+    console.log(parentCategory?.subCategories);
+    await parentCategory.save();
+  }
+
+  return category;
 };
+
+//
 
 /**
  * Query for Categories
@@ -38,12 +58,12 @@ const getCategoryById = async (categoryId) => {
 };
 
 /**
- * Get user by email
- * @param {string} title
+ * Get category by slug
+ * @param {string} Slug
  * @returns {Promise<Category>}
  */
-const getCategoryByTitle = async (title) => {
-  return Category.findOne({ title });
+const getCategoryBySlug = async (slug) => {
+  return Category.findOne({ slug }).populate('subCategories', 'slug title image').populate('parentId', 'slug title');
 };
 
 /**
@@ -84,7 +104,7 @@ module.exports = {
   createCategory,
   queryCategories,
   getCategoryById,
-  getCategoryByTitle,
+  getCategoryBySlug,
   updateCategoryById,
   deleteCategoryById,
 };

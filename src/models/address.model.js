@@ -8,12 +8,11 @@ const addressSchema = mongoose.Schema(
     fullName: { type: 'string', required: true, trim: true },
     title: {
       type: String,
-      required: true,
       trim: true,
     },
     addressText: { type: String, required: true, trim: true },
     addressType: { type: String, required: true, trim: true, default: 'Delivery' },
-    country: { type: String, required: true, trim: true },
+    country: { type: mongoose.Schema.Types.ObjectId, ref: 'Country', required: true },
     city: { type: String, required: true, trim: true },
     area: { type: String, required: true, trim: true },
     phone: { type: String, required: true, trim: true },
@@ -38,7 +37,7 @@ addressSchema.statics.isAddressExist = async function (title, user) {
 };
 
 addressSchema.statics.getMeAddress = async function (user) {
-  const address = await this.findOne({ user });
+  const address = await this.find({ user });
   return address;
 };
 

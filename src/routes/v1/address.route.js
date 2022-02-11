@@ -20,8 +20,8 @@ router.route('/me').get(auth('me'), addressController.getMeAddress);
 
 router
   .route('/:addressId')
-  .get(validate(addressValidation.getAddress), addressController.getAddress)
-  .patch(auth('manageAddresses'), validate(addressValidation.updateAddress), addressController.updateAddress)
-  .delete(auth('manageAddresses'), validate(addressValidation.deleteAddress), addressController.deleteAddress);
+  .get(auth('me'), validate(addressValidation.getAddress), addressController.getAddress)
+  .patch(auth('me'), validate(addressValidation.updateAddress), addressController.updateAddress)
+  .delete(auth('me'), validate(addressValidation.deleteAddress), addressController.deleteAddress);
 
 module.exports = router;
