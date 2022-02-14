@@ -1,8 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
 const httpStatus = require('http-status');
-const mongoose = require('mongoose');
-const logger = require('../config/logger');
 const { User, Product } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -31,7 +29,7 @@ const getCartByUserId = async (userId, params) => {
  * @param {Number} quantity
  * @returns {Promise<Cart>}
  */
-const addToCart = async (userId, products) => {
+const addToCart = async (userId, items) => {
   let user = await User.findById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
@@ -41,19 +39,22 @@ const addToCart = async (userId, products) => {
     user.cart = newCart();
   }
 
-  for (let index = 0; index < products.length; index++) {
-    // eslint-disable-next-line no-await-in-loop
-    const product = await Product.findById(products[index].productId).select('variants');
-    if (!product) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
-    }
-    addItem(user.cart.items, product, products[index].quantity);
+  const skus = items.map((item) => item.sku);
+
+  const products = await Product.find({ 'variants.sku': { $in: skus } }).select('variants');
+  if (!products) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
+
+  products.forEach((product) => {
+    items.forEach((item) => {
+      const variant = product.variants.find((v) => v.sku === item.sku);
+      addItem(user.cart.items, variant, item.quantity);
+    });
+  });
 
   calculateTotalPrice(user);
 
-  logger.warn(user.cart);
-  logger.warn(products[0].productId);
   user.markModified('cart');
   user = await user.save();
 
@@ -68,18 +69,19 @@ const addToCart = async (userId, products) => {
  * @param {Number} quantity
  * @returns {Promise<Cart>}
  */
-const manipulate = async (userId, action, productId, quantity) => {
+const manipulate = async (userId, action, sku, quantity) => {
   let user = await User.findById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  let product;
-  if (productId) {
-    product = await Product.findById(productId).select('variants');
-    if (!product) {
+  let variant;
+  if (sku) {
+    const product = await Product.findOne({ 'variants.sku': sku }).select('variants');
+    if (!product || product.variants.length === 0) {
       throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
     }
+    variant = product.variants.find((item) => item.sku === sku);
   }
 
   if (!user.cart) {
@@ -90,10 +92,10 @@ const manipulate = async (userId, action, productId, quantity) => {
 
   switch (action) {
     case 'insert':
-      addItem(items, product, quantity);
+      addItem(items, variant, quantity);
       break;
     case 'delete':
-      deleteItem(items, product, quantity);
+      deleteItem(items, variant, quantity);
       break;
     case 'truncate':
       items.splice(0, items.length);
@@ -119,22 +121,35 @@ const getCartStock = async (userId) => {
   }
 
   const { items } = user.cart;
+  const skus = items.map((item) => item.sku);
   const stock = await Product.find({
-    _id: { $in: items.map((item) => item.product) },
+    'variants.sku': { $in: skus },
   }).select('variants');
 
-  return stock.map((product) => {
-    return {
-      product: product._id,
-      hasStock: product.variants.hasStock,
-      totalStock: product.variants.totalStock,
-    };
-  });
+  if (!stock) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+
+  const data = stock
+    .map((product) => {
+      return product.variants
+        .filter((item) => skus.includes(item.sku))
+        .map((variant) => {
+          return {
+            sku: variant.sku,
+            hasStock: variant.hasStock,
+            totalStock: variant.totalStock,
+          };
+        });
+    })
+    .flat();
+
+  return { items: data };
 };
 
-function deleteItem(items, product, quantity) {
-  const indexFound = items.findIndex((item) => item.product.toString() === product._id.toString());
-  const { price } = product.variants;
+function deleteItem(items, variant, quantity) {
+  const indexFound = items.findIndex((item) => item.sku === variant.sku);
+  const { price } = variant;
   if (indexFound > -1) {
     if (quantity === -1 || items[indexFound].quantity === quantity) {
       items.splice(indexFound, 1);
@@ -150,9 +165,9 @@ function deleteItem(items, product, quantity) {
   } else throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
 }
 
-function addItem(items, product, quantity) {
-  const indexFound = items.findIndex((item) => item.product.toString() === product._id.toString());
-  const { price } = product.variants;
+function addItem(items, variant, quantity) {
+  const indexFound = items.findIndex((item) => item.sku === variant.sku);
+  const { price } = variant;
   if (indexFound > -1) {
     items[indexFound].quantity += quantity;
     items[indexFound].totalPrice += price.sellingPrice.value * quantity;
@@ -162,7 +177,7 @@ function addItem(items, product, quantity) {
   } else {
     items.push({
       quantity,
-      product: mongoose.Types.ObjectId(product._id),
+      sku: variant.sku,
       totalDiscount: price.discountAmount.value * quantity,
       totalPrice: price.sellingPrice.value * quantity,
       // eslint-disable-next-line prettier/prettier

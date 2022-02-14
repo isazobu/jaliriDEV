@@ -102,7 +102,7 @@ components:
       properties:
         quantity:
           type: number
-        product:
+        sku:
           type: string
         totalDiscount:
           type: number
@@ -112,7 +112,7 @@ components:
           type: number
       example:
         quantity: 6
-        product: 61f10af8035339138bfb9874
+        sku: '613141'
         totalDiscount: 0
         totalPrice: 186
         totalSalesprice: 10
@@ -133,7 +133,7 @@ components:
       example:
         items:
           - quantity: 6
-            product: 61f10af8035339138bfb9874
+            sku: '611322'
             totalDiscount: 0
             totalPrice: 186
             totalSalesprice: 10

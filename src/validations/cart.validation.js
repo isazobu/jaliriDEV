@@ -1,5 +1,4 @@
 const Joi = require('joi');
-const { objectId } = require('./custom.validation');
 
 const getCart = {
   query: Joi.object().keys({
@@ -9,15 +8,19 @@ const getCart = {
 
 const addToCart = {
   body: Joi.object().keys({
-    productId: Joi.string().custom(objectId).required(),
-    quantity: Joi.number().required(),
+    items: Joi.array().items(
+      Joi.object().keys({
+        sku: Joi.string().required(),
+        quantity: Joi.number().required(),
+      })
+    ),
   }),
 };
 
 const manipulate = {
   body: Joi.object().keys({
     action: Joi.string().valid('insert', 'delete', 'truncate').required(),
-    productId: Joi.string().custom(objectId).when('action', {
+    sku: Joi.string().when('action', {
       not: 'truncate',
       then: Joi.required(),
     }),
