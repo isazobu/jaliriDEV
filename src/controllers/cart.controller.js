@@ -12,14 +12,15 @@ const getCart = catchAsync(async (req, res) => {
 
 const addToCart = catchAsync(async (req, res) => {
   const { _id } = req.user;
-  const response = await cartService.addToCart(_id, req.body);
+  const { items } = req.body;
+  const response = await cartService.addToCart(_id, items);
   res.status(httpStatus.CREATED).send(response);
 });
 
 const manipulate = catchAsync(async (req, res) => {
   const { _id } = req.user;
-  const { action, productId, quantity } = req.body;
-  const response = await cartService.manipulate(_id, action, productId, quantity);
+  const { action, sku, quantity } = req.body;
+  const response = await cartService.manipulate(_id, action, sku, quantity);
   res.status(httpStatus.OK).send(response);
 });
 

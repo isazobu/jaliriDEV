@@ -2,6 +2,7 @@ const allRoles = {
   guest: [],
   user: ['me', 'manageCarts', 'manageOrders'],
   admin: [
+    'me',
     'getUsers',
     'manageOrders',
     'manageSizes',
@@ -25,9 +26,8 @@ const allRoles = {
     'manageCurrencies',
     'manageTaxes',
     'manageBanners',
-
+    'manageBrands',
     'manageCarts',
-
   ],
 };
 

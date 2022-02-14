@@ -49,9 +49,14 @@ const createOrder = async (userId, orderBody) => {
   Object.assign(order.cart, user.cart);
 
   await Product.updateMany(
-    { _id: { $in: order.cart.items.map((item) => item.product) } },
-    { $inc: { 'variants.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
+    { 'variants.sku': { $in: order.cart.items.map((item) => item.product) } },
+    { $inc: { 'variants.$.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
   );
+
+  // await Product.updateMany(
+  //   { _id: { $in: order.cart.items.map((item) => item.product) } },
+  //   { $inc: { 'variants.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
+  // );
 
   user.cart = undefined;
   await user.save();

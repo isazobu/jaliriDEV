@@ -63,9 +63,7 @@ const productFiltering = (schema) => {
     }
 
     if (filter.country) {
-      filter.country.split(',').forEach((country) => {
-        filterObj.$or.push({ 'country.code': country });
-      });
+      filterObj.$or.push({ 'country.code': filter.country });
       criterias.push(filterObj);
       filterObj = { $or: [] };
       delete filter.country;
@@ -107,6 +105,11 @@ const productFiltering = (schema) => {
       filterObj = { $or: [] };
       delete filter.size;
     }
+
+    if (filter.productId) {
+      criterias.push({ productId: filter.productId });
+    }
+
     const resultDoc = this.aggregate([
       {
         $lookup: {
