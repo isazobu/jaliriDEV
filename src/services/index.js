@@ -10,7 +10,7 @@ module.exports.countryService = require('./country.service');
 module.exports.attributeService = require('./attribute.service');
 module.exports.bannerService = require('./banner.service');
 module.exports.cartService = require('./cart.service');
-
+module.exports.brandService = require('./brand.service');
 // module.exports.stateService = require('./state.service');
 // module.exports.cityService = require('./city.service');
 // module.exports.paymentService = require('./payment.service');

@@ -13,6 +13,8 @@ const attributeRoute = require('./attribute.route');
 
 const bannerRoute = require('./banner.route');
 
+const brandRoute = require('./brand.route');
+
 // const cartRoute = require('./cart.route');
 const orderRoute = require('./order.route');
 // const paymentRoute = require('./payment.route');
@@ -79,6 +81,10 @@ const defaultRoutes = [
   {
     path: '/orders',
     route: orderRoute,
+  },
+  {
+    path: '/brands',
+    route: brandRoute,
   },
 
   // {
