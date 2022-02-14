@@ -5,22 +5,12 @@ const catchAsync = require('../utils/catchAsync');
 const { productService, attributeService } = require('../services');
 
 const createProduct = catchAsync(async (req, res) => {
-  const { variants, ...product } = req.body;
-  // console.log(body);
-  const variantItems = variants.attributes.map(async (attribute) => {
-    newAttribute = await attributeService.createOrReadAttribute(attribute);
-    return newAttribute._id;
-  });
-  const variantIds = await Promise.all(variantItems);
-  variants.attributes = [];
-  variants.attributes = variantIds;
-  product.variants = variants;
-  const productItem = await productService.createProduct(product);
+  const productItem = await productService.createProduct(req.body);
   res.status(httpStatus.CREATED).send(productItem);
 });
 
 const getProduct = catchAsync(async (req, res) => {
-  const product = await productService.getProductById(req.params.productId);
+  const product = await productService.getProductById(req.params.id);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }

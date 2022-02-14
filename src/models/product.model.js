@@ -8,7 +8,6 @@ const { variantSchema } = require('./schemas');
 
 const { toJSON, paginate, productFiltering } = require('./plugins');
 
-
 const productSchema = Schema(
   {
     category: [{ type: Schema.Types.ObjectId, ref: 'Category', autopopulate: true, required: true }],
@@ -17,6 +16,14 @@ const productSchema = Schema(
       type: String,
       trim: true,
       required: true,
+      // unique validate title
+      validate: {
+        validator: async function (title) {
+          const product = await this.model('Product').findOne({ title });
+          return !product;
+        },
+        message: 'Product title already exist',
+      },
     },
     seoTitle: {
       type: String,
@@ -36,12 +43,21 @@ const productSchema = Schema(
       ref: 'Country',
       required: true,
       autopopulate: true,
+      validate: {
+        validator: async function (country) {
+          const countryObj = await this.model('Country').findOne({ code: country });
+          return !!countryObj;
+        },
+        message: 'Country not found',
+      },
     },
-    variants: {
-      type: variantSchema,
-      required: true, // end variants
-    },
-
+    tags: [{ type: String }],
+    variants: [
+      {
+        type: variantSchema,
+        required: true, // end variants
+      },
+    ],
   },
   {
     timestamps: true,
@@ -59,6 +75,11 @@ productSchema.virtual('url').get(function () {
 
 productSchema.statics.isProductExist = async function (title) {
   const product = await this.findOne({ title });
+  return !!product;
+};
+
+productSchema.statics.isProductExistByProductId = async function (productId) {
+  const product = await this.findOne({ productId: productId });
   return !!product;
 };
 

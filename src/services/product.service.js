@@ -25,6 +25,12 @@ const createProduct = async (productBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Category not found');
   }
 
+  // if (await Product.isProductExist(productBody.title)) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Product already exist');
+  if (await Product.isProductExistByProductId(productBody.productId)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Product Id already exist');
+  }
+
   return Product.create(productBody);
 };
 
@@ -101,6 +107,11 @@ const getProductById = async (id) => {
   return product;
 };
 
+const getProductsByProductId = async (productId) => {
+  const products = await Product.find({ productId });
+  return products;
+};
+
 const updateProductById = async (productId, updateBody) => {
   const product = await getProductById(productId);
   if (!product) {
@@ -132,6 +143,7 @@ module.exports = {
   createProduct,
   queryProducts,
   getProductById,
+  getProductsByProductId,
   updateProductById,
   deleteProductById,
 };
