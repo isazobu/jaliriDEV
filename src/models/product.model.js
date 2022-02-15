@@ -43,13 +43,6 @@ const productSchema = Schema(
       ref: 'Country',
       required: true,
       autopopulate: true,
-      validate: {
-        validator: async function (country) {
-          const countryObj = await this.model('Country').findOne({ code: country });
-          return !!countryObj;
-        },
-        message: 'Country not found',
-      },
     },
     tags: [{ type: String }],
     variants: [
