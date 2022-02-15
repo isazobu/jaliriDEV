@@ -43,6 +43,7 @@ const productSchema = Schema(
       ref: 'Country',
       required: true,
       autopopulate: true,
+
     },
     tags: [{ type: String }],
     variants: [

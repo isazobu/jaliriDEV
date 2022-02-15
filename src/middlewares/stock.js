@@ -3,36 +3,46 @@ const { Product } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 module.exports.checkStock = () => (req, res, next) => {
-  const { action, productId, quantity } = req.body;
-  const { items } = req.user.cart;
+  const { action, sku, quantity } = req.body;
+  const items  = req.user.cart?.items;
+  
+  const quantityInCart = items?.find((item) => item.sku === sku)?.quantity || 0;
+
   if (action === 'truncate') return next();
-  Product.findById(productId)
+  Product.findOne({'variants.sku': sku})
     .select('variants')
     .then((product) => {
-      if (
-        product.variants.totalStock <
-        quantity + items.find((e) => e.product.toString() === productId.toString()).quantity
-      ) {
+      if (!product) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Product not found');
+      }
+      const variant = product.variants.find((item) => item.sku === sku);
+      if (action === 'insert' && variant.totalStock < quantity + quantityInCart) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Not enough stock');
       }
+
       next();
     })
     .catch(next);
 };
 
 module.exports.checkStockForOrder = () => (req, res, next) => {
+  if (!req.user.cart || req.user.cart.items.length === 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Cart is empty');
+  }
   const { items } = req.user.cart;
-  const productIds = items.map((item) => item.product);
+  const skus = items.map((item) => item.sku);
   Product.find({
-    _id: { $in: productIds },
+    'variants.sku': { $in: skus },
   })
     .select('variants')
     .then((products) => {
       products.forEach((product) => {
-        const item = items.find((e) => e.product.toString() === product._id.toString());
-        if (product.variants.totalStock < item.quantity) {
+        items.forEach((cartItem) => {
+          const variant = product.variants.find((item) => item.sku === cartItem.sku);
+        if (variant.totalStock < cartItem.quantity) {
           throw new ApiError(httpStatus.BAD_REQUEST, 'Not enough stock');
         }
+        });
       });
       next();
     })
