@@ -19,9 +19,6 @@ module.exports.checkStock = () => (req, res, next) => {
       if (action === 'insert' && variant.totalStock < quantity + quantityInCart) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Not enough stock');
       }
-      if (action === 'delete' && quantityInCart - quantity < 0) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Not enough stock');
-      }
 
       next();
     })
