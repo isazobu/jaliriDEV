@@ -68,6 +68,7 @@ const productFiltering = (schema) => {
       filterObj = { $or: [] };
       delete filter.country;
     }
+
     if (filter.discountExist === 'true') {
       var isTrueSet = filter.discountExist === 'true';
       filterObj.$or.push({ 'variants.price.discountExist': isTrueSet });
@@ -135,19 +136,6 @@ const productFiltering = (schema) => {
             },
           ],
           as: 'country',
-        },
-      },
-      {
-        $lookup: {
-          from: 'attributes',
-          localField: 'variants.attributes',
-          foreignField: '_id',
-          pipeline: [
-            {
-              $project: { name: 1, value: 1, isActive: 1 },
-            },
-          ],
-          as: 'variants.attributes',
         },
       },
 
