@@ -45,7 +45,7 @@ const productFiltering = (schema) => {
       // CONCAT ALL CRITERİIAS
 
       filter.category.split(',').forEach((category, index) => {
-        filterObj.$or.push({ 'category.title': category });
+        filterObj.$or.push({ 'category.slug': category });
       });
       criterias.push(filterObj);
       filterObj = { $or: [] };
