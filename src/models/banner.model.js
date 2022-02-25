@@ -13,6 +13,11 @@ const bannerSchema = Schema(
       unique: true,
       required: [true, 'Banner title is required'],
     },
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+      required: true,
+    },
     image: { type: String, required: true },
     url: { type: String, required: true },
     field: { type: String, required: true },
@@ -48,6 +53,12 @@ bannerSchema.pre('save', function (next) {
   this.slug = slugify(this.title, { lower: true });
   next();
 });
+
+// is category id doesnt exist ?
+bannerSchema.statics.isCategoryExist = async function (categoryId) {
+  const category = await this.model('Category').findById(categoryId);
+  return !!category;
+};
 
 /**
  * @typedef Banner
