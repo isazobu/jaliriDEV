@@ -11,8 +11,8 @@ const createProduct = catchAsync(async (req, res) => {
 
 const getVariants = catchAsync(async (req, res) => {
   const { skuId } = req.params;
-  const { color } = req.query;
-  const variants = await productService.getVariants(skuId, color);
+
+  const variants = await productService.getVariants(skuId);
   res.status(httpStatus.OK).send(variants);
 });
 
