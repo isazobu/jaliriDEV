@@ -119,7 +119,7 @@ const productFiltering = (schema) => {
           foreignField: '_id',
           pipeline: [
             {
-              $project: { title: 1, id: 1 },
+              $project: { title: 1, slug: 1, id: 1 },
             },
           ],
           as: 'category',
