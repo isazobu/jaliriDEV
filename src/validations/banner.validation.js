@@ -52,6 +52,7 @@ const updateBanner = {
       image: Joi.string(),
       field: Joi.string(),
       target: Joi.string(),
+      category: Joi.string().custom(objectId),
       row: Joi.number(),
       isActive: Joi.boolean(),
     })
