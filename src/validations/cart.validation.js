@@ -11,7 +11,7 @@ const addToCart = {
     items: Joi.array().items(
       Joi.object().keys({
         sku: Joi.string().required(),
-        quantity: Joi.number().required(),
+        quantity: Joi.number().required().integer().min(1),
       })
     ),
   }),
