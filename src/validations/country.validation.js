@@ -17,6 +17,7 @@ const getCountries = {
     currency: Joi.string(),
     currencySymbol: Joi.string(),
     sortBy: Joi.string(),
+    flagImage: Joi.string(),
     limit: Joi.number().integer(),
     // page: Joi.number().integer(),
   }),
@@ -42,6 +43,7 @@ const updateCountry = {
       name: Joi.string(),
       code: Joi.string(),
       currency: Joi.string(),
+      flagImage: Joi.string(),
       currencySymbol: Joi.string(),
     })
     .min(1),
