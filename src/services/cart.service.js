@@ -49,7 +49,7 @@ const addToCart = async (userId, items) => {
   products.forEach((product) => {
     items.forEach((item) => {
       const variant = product.variants.find((v) => v.sku === item.sku);
-      addItem(user.cart.items, variant, item.quantity);
+      addItem(user.cart.items, variant, item.quantity, product._id);
     });
   });
 
@@ -76,8 +76,9 @@ const manipulate = async (userId, action, sku, quantity) => {
   }
 
   let variant;
+  let product;
   if (sku) {
-    const product = await Product.findOne({ 'variants.sku': sku }).select('variants');
+    product = await Product.findOne({ 'variants.sku': sku }).select('variants');
     if (!product || product.variants.length === 0) {
       throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
     }
@@ -92,7 +93,7 @@ const manipulate = async (userId, action, sku, quantity) => {
 
   switch (action) {
     case 'insert':
-      addItem(items, variant, quantity);
+      addItem(items, variant, quantity, product._id);
       break;
     case 'delete':
       deleteItem(items, variant, quantity);
@@ -165,7 +166,7 @@ function deleteItem(items, variant, quantity) {
   } else throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
 }
 
-function addItem(items, variant, quantity) {
+function addItem(items, variant, quantity, productId) {
   const indexFound = items.findIndex((item) => item.sku === variant.sku);
   const { price } = variant;
   if (indexFound > -1) {
@@ -178,6 +179,8 @@ function addItem(items, variant, quantity) {
     items.push({
       quantity,
       sku: variant.sku,
+      product: productId,
+      images: [...variant.image],
       totalDiscount: price.discountAmount.value * quantity,
       totalPrice: price.sellingPrice.value * quantity,
       // eslint-disable-next-line prettier/prettier
