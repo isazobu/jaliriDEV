@@ -3,7 +3,7 @@ const auth = require('../../middlewares/auth');
 const cartController = require('../../controllers/cart.controller');
 const validate = require('../../middlewares/validate');
 const { cartValidation } = require('../../validations');
-const { checkStock } = require('../../middlewares/stock');
+const checkStock = require('../../middlewares/stock');
 
 const router = express.Router();
 
@@ -11,13 +11,13 @@ const router = express.Router();
 router
   .route('/')
   .get(auth('manageCarts'), validate(cartValidation.getCart), cartController.getCart)
-  .post(auth('manageCarts'), cartController.addToCart);
+  .post(auth('manageCarts'), validate(cartValidation.addToCart), checkStock.addToCart, cartController.addToCart);
 
 router.post(
   '/manipulate',
   auth('manageCarts'),
   validate(cartValidation.manipulate),
-  checkStock(),
+  checkStock.manipulate,
   cartController.manipulate
 );
 router.get('/stock', auth(), cartController.getCartStock);
