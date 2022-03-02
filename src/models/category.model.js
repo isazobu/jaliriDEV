@@ -10,7 +10,6 @@ const categorySchema = Schema(
     title: {
       type: String,
       trim: true,
-      unique: true,
       required: [true, 'Category title is required'],
     },
     parentId: {
@@ -24,6 +23,10 @@ const categorySchema = Schema(
         ref: 'Category',
       },
     ],
+    mainCategory: {
+      type: Boolean,
+      default: false,
+    },
 
     image: { type: String },
     isActive: { type: Boolean, required: true, default: true },
@@ -45,8 +48,8 @@ categorySchema.plugin(paginate);
  * @param {ObjectId} [excludeCategoryId] - The id of the user to be excluded
  * @returns {Promise<boolean>}
  */
-categorySchema.statics.isCategoryExist = async function (title, excludeUserId) {
-  const category = await this.findOne({ title, _id: { $ne: excludeUserId } });
+categorySchema.statics.isCategoryExist = async function (title, parentId, excludeUserId) {
+  const category = await this.findOne({ title, parentId: { $eq: parentId }, _id: { $ne: excludeUserId } });
   return !!category;
 };
 

@@ -7,6 +7,7 @@ const createCategory = {
     parentId: Joi.string().custom(objectId),
     subCategories: Joi.array().items(Joi.string().custom(objectId)),
     image: Joi.string(),
+    mainCategory: Joi.boolean(),
     isActive: Joi.boolean(),
   }),
 };
@@ -18,6 +19,7 @@ const getCategories = {
     parentId: Joi.string().custom(objectId),
     subCategories: Joi.array().items(Joi.string().custom(objectId)),
     isActive: Joi.boolean(),
+    mainCategory: Joi.boolean(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     populate: Joi.string(),
@@ -46,7 +48,8 @@ const updateCategory = {
       title: Joi.string(),
       image: Joi.string(),
       isActive: Joi.boolean(),
-      parentId: Joi.required().custom(objectId),
+      mainCategory: Joi.boolean(),
+      parentId: Joi.string().custom(objectId),
       subCategories: Joi.array().items(Joi.string().custom(objectId)),
     })
     .min(1),

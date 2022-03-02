@@ -9,7 +9,7 @@ const ApiError = require('../utils/ApiError');
  */
 const createCategory = async (categoryBody) => {
   let parentCategory;
-  if (await Category.isCategoryExist(categoryBody.title)) {
+  if (await Category.isCategoryExist(categoryBody.title, categoryBody.parentId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Category already exist');
   }
 

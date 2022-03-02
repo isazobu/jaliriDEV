@@ -54,12 +54,6 @@ bannerSchema.pre('save', function (next) {
   next();
 });
 
-// is category id doesnt exist ?
-bannerSchema.statics.isCategoryExist = async function (categoryId) {
-  const category = await this.model('Category').findById(categoryId);
-  return !!category;
-};
-
 /**
  * @typedef Banner
  */
