@@ -74,6 +74,12 @@ const deleteProduct = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getManySku = catchAsync(async (req, res) => {
+  const skuIds = req.body.skuIds;
+  const products = await productService.getManySku(skuIds);
+  res.status(httpStatus.OK).send(products);
+});
+
 module.exports = {
   createProduct,
   createManyProducts,
@@ -82,6 +88,7 @@ module.exports = {
   getVariants,
   getProduct,
   updateProduct,
+  getManySku,
   deleteProduct,
   getAllSizeByColorWithSku,
 };

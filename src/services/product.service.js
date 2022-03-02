@@ -256,11 +256,22 @@ const deleteProductById = async (productId) => {
   return product;
 };
 
+const getManySku = async (skus) => {
+  const skuProducts = await Product.aggregate()
+    .unwind('variants')
+    .match({
+      'variants.sku': { $in: skus },
+    })
+    .exec();
+  return skuProducts;
+};
+
 module.exports = {
   createProduct,
   createManyProducts,
   queryProducts,
   getProductBySku,
+  getManySku,
   getVariants,
   getProductById,
   getProductsByProductId,

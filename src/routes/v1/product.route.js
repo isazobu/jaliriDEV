@@ -14,6 +14,9 @@ router.route('/variants/:skuId').get(productController.getVariants);
 router.route('/sku/:skuId/sizes').get(productController.getAllSizeByColorWithSku);
 router.route('/many').post(auth('manageProducts'), productController.createManyProducts);
 
+// post multiple sku
+router.route('/skus').post(auth(), productController.getManySku);
+
 router
   .route('/:productId')
   .get(productController.getProduct)
