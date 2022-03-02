@@ -28,6 +28,7 @@ const allRoles = {
     'manageBanners',
     'manageBrands',
     'manageCarts',
+    'manageCoupons',
   ],
 };
 

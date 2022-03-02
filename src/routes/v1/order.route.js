@@ -3,14 +3,14 @@ const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const orderValidation = require('../../validations/order.validation');
 const orderController = require('../../controllers/order.controller');
-const { checkStockForOrder } = require('../../middlewares/stock');
+const checkStock = require('../../middlewares/stock');
 
 const router = express.Router();
 
 router
   .route('/')
   .get(auth('manageOrders'), validate(orderValidation.getOrders), orderController.getOrders)
-  .post(auth('me'), validate(orderValidation.createOrder), checkStockForOrder(), orderController.createOrder);
+  .post(auth('me'), validate(orderValidation.createOrder), checkStock.createOrder, orderController.createOrder);
 
 router.get('/me', auth('me'), validate(orderValidation.getMeOrders), orderController.getMeOrders);
 
