@@ -133,9 +133,12 @@ async function applyDiscount(cart, coupon) {
   }
 
   if (type === 'percentage') {
-    cart.totalPrice -= (cart.totalPrice * value) / 100;
+    const discount = (cart.totalPrice * value) / 100;
+    cart.totalPrice -= discount;
+    cart.couponDiscount = discount;
   } else if (type === 'amount') {
     cart.totalPrice -= value;
+    cart.couponDiscount = value;
   } else {
     if (minCartAmount && cart.totalPrice < minCartAmount) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Minimum cart amount is not reached');
@@ -160,11 +163,11 @@ async function applyDiscount(cart, coupon) {
   }
 
   function handleProduct() {
-    console.log('product');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Not implemented');
   }
 
   function handleCategory() {
-    console.log('category');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Not implemented');
   }
 }
 
