@@ -6,7 +6,7 @@ module.exports.Variant = require('./variant.model');
 module.exports.Order = require('./order.model');
 module.exports.Address = require('./address.model');
 module.exports.Country = require('./country.model');
-
+module.exports.Coupon = require('./coupon.model');
 module.exports.Attribute = require('./attribute.model');
 module.exports.Banner = require('./banner.model');
 

@@ -3,7 +3,7 @@ const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const categoryRoute = require('./category.route');
 const cartRoute = require('./cart.route');
-
+const couponRoute = require('./coupon.route');
 const countryRoute = require('./country.route');
 const addressRoute = require('./address.route');
 const productRoute = require('./product.route');
@@ -85,6 +85,10 @@ const defaultRoutes = [
   {
     path: '/brands',
     route: brandRoute,
+  },
+  {
+    path: '/coupons',
+    route: couponRoute,
   },
 
   // {
