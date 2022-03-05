@@ -7,15 +7,22 @@ const { toJSON, paginate } = require('./plugins');
 const orderSchema = mongoose.Schema({
   // orderItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem', required: true }],
   // cart: { type: mongoose.Schema.ObjectId, ref: 'OrderCart', required: true },
+  orderNo: { type: String, required: true, unique: true },
   cart: { type: orderCartSchema },
   address: { type: mongoose.Schema.Types.ObjectId, ref: 'Address', required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  status: { type: String, required: true, default: 'Pending' },
+  status: { type: String, enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'], default: 'Pending' },
   // itemsPrice: { type: Number, required: true },
   // shipingsPrice: { type: Number, required: true },
   // totalPrice: { type: Number, required: true },
   isPaid: { type: Boolean, required: true, default: false },
   paidAt: { type: Date },
+  shipping: { type: String },
+  deliveryDate: { type: Date },
+  message: { type: String },
+  summary: { type: String },
+  expectedDeliveryDate: { type: Date, default: () => new Date() + 1000 * 60 * 60 * 24 * 7 }, // 7 days
+  tax: { type: Number, default: 0 },
   paymentMethod: { type: String, required: true, default: 'COD' },
   dataOrdered: {
     type: Date,

@@ -48,6 +48,12 @@ const createOrder = async (userId, orderBody) => {
 
   Object.assign(order.cart, user.cart);
 
+  const itemCount = order.cart.items.reduce((acc, item) => {
+    return acc + item.quantity;
+  }, 0);
+  order.message = `${itemCount} items pending for delivery`;
+  order.summary = `${itemCount} items`;
+
   await Product.updateMany(
     { 'variants.sku': { $in: order.cart.items.map((item) => item.product) } },
     { $inc: { 'variants.$.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
