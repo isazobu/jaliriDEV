@@ -8,6 +8,7 @@ const orderCartSchema = new mongoose.Schema(
     itemsPrice: { type: Number, required: true },
     shippingPrice: { type: Number, required: true },
     coupon: { type: String, default: null },
+    couponDiscount: { type: Number, default: 0 },
   },
   { _id: false }
 );
