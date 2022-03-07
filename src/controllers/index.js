@@ -16,6 +16,7 @@ module.exports.attributeController = require('./attribute.controller');
 module.exports.bannerController = require('./banner.controller');
 
 module.exports.brandController = require('./brand.controller');
+module.exports.wishlistController = require('./wishlist.controller');
 
 // module.exports.adminController = require('./admin.controller');
 // module.exports.cartController = require('./cart.controller');
