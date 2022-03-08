@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
@@ -92,6 +93,13 @@ const createOrReadAdress = async (addressBody) => {
  */
 const queryOrders = async (filter, options) => {
   const orders = await Order.paginate(filter, options);
+  orders.results = await Promise.all(
+    orders.results.map(async (order) => {
+      const addressId = order.address;
+      order.address = await Address.findById(addressId);
+      return order;
+    })
+  );
   return orders;
 };
 
