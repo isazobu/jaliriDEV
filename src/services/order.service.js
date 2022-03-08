@@ -93,13 +93,6 @@ const createOrReadAdress = async (addressBody) => {
  */
 const queryOrders = async (filter, options) => {
   const orders = await Order.paginate(filter, options);
-  orders.results = await Promise.all(
-    orders.results.map(async (order) => {
-      const addressId = order.address;
-      order.address = await Address.findById(addressId);
-      return order;
-    })
-  );
   return orders;
 };
 

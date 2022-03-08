@@ -14,7 +14,7 @@ const createOrder = catchAsync(async (req, res) => {
 
 const getOrders = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['status', 'isPaid', 'user', 'address']);
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page', 'populate']);
   const result = await orderService.queryOrders(filter, options);
   res.status(httpStatus.OK).send(result);
 });
@@ -22,7 +22,7 @@ const getOrders = catchAsync(async (req, res) => {
 const getMeOrders = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['status', 'isPaid', 'address']);
   filter.user = req.user._id;
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page', 'populate']);
   const result = await orderService.queryOrders(filter, options);
   res.status(httpStatus.OK).send(result);
 });
