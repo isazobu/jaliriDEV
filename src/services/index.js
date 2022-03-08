@@ -17,6 +17,6 @@ module.exports.brandService = require('./brand.service');
 // module.exports.shippingService = require('./shipping.service');
 module.exports.couponService = require('./coupon.service');
 // module.exports.reviewService = require('./review.service');
-// module.exports.wishlistService = require('./wishlist.service');
+module.exports.wishlistService = require('./wishlist.service');
 // module.exports.cartService = require('./cart.service');
 // module.exports.orderStatusService = require('./orderStatus.service');
