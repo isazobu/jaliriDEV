@@ -6,6 +6,7 @@ const createCountry = {
     name: Joi.string().required(),
     code: Joi.string().required(),
     currency: Joi.string().required(),
+    rightToLeft: Joi.boolean(),
     currencySymbol: Joi.string().required(),
   }),
 };
@@ -14,6 +15,7 @@ const getCountries = {
   query: Joi.object().keys({
     name: Joi.string(),
     code: Joi.string(),
+    rightToLeft: Joi.boolean(),
     currency: Joi.string(),
     currencySymbol: Joi.string(),
     sortBy: Joi.string(),
@@ -43,6 +45,7 @@ const updateCountry = {
       name: Joi.string(),
       code: Joi.string(),
       currency: Joi.string(),
+      rightToLeft: Joi.boolean(),
       flagImage: Joi.string(),
       currencySymbol: Joi.string(),
     })

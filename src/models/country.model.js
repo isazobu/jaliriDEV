@@ -35,6 +35,10 @@ const countrySchema = Schema({
     trim: true,
     required: [true, 'Country flag image is required'],
   },
+  rightToLeft: {
+    type: Boolean,
+    default: false,
+  },
   isActive: { type: Boolean, required: true, default: true },
 });
 
