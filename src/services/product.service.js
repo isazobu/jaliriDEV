@@ -35,9 +35,17 @@ const createProduct = async (productBody) => {
   return Product.create(productBody);
 };
 
+const getProductBySku = async (sku) => {
+  const product = await Product.aggregate().unwind('variants').match({ 'variants.sku': sku }).exec();
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+  return product[0];
+};
+
 const getVariants = async (sku) => {
   const skuProduct = await getProductBySku(sku);
-  const color = skuProduct.variants.attributes.filter((attribute) => attribute.name === 'Color')[0].value || '';
+  const color = skuProduct.variants.attributes.filter((attribute) => attribute.name === 'Color')[0]?.value || '';
   const product = Product.aggregate([
     {
       $match: {
@@ -141,14 +149,6 @@ const createManyProducts = async (products) => {
     }
   });
   return Product.create(products);
-};
-
-const getProductBySku = async (sku) => {
-  const product = await Product.aggregate().unwind('variants').match({ 'variants.sku': sku }).exec();
-  if (!product) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
-  }
-  return product[0];
 };
 
 /**
@@ -256,11 +256,22 @@ const deleteProductById = async (productId) => {
   return product;
 };
 
+const getManySku = async (skus) => {
+  const skuProducts = await Product.aggregate()
+    .unwind('variants')
+    .match({
+      'variants.sku': { $in: skus },
+    })
+    .exec();
+  return skuProducts;
+};
+
 module.exports = {
   createProduct,
   createManyProducts,
   queryProducts,
   getProductBySku,
+  getManySku,
   getVariants,
   getProductById,
   getProductsByProductId,

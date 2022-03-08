@@ -27,8 +27,6 @@ const allRoles = {
     'manageTaxes',
     'manageBanners',
     'manageBrands',
-    'manageCarts',
-    'manageCoupons',
   ],
 };
 

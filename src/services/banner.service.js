@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Banner } = require('../models');
+const { Banner, Category } = require('../models');
 
 const ApiError = require('../utils/ApiError');
 
@@ -12,6 +12,10 @@ const createBanner = async (bannerBody) => {
   if (await Banner.isBannerExist(bannerBody.title)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Banner already exist');
   }
+  if (!(await Category.isCategoryExist(bannerBody.category))) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Category does not exist');
+  }
+
   return Banner.create(bannerBody);
 };
 

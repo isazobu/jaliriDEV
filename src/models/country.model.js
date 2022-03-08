@@ -30,6 +30,15 @@ const countrySchema = Schema({
     unique: true,
     required: [true, 'Country currency symbol is required'],
   },
+  flagImage: {
+    type: String,
+    trim: true,
+    required: [true, 'Country flag image is required'],
+  },
+  rightToLeft: {
+    type: Boolean,
+    default: false,
+  },
   isActive: { type: Boolean, required: true, default: true },
 });
 

@@ -12,7 +12,7 @@ const addressSchema = mongoose.Schema(
     },
     addressText: { type: String, required: true, trim: true },
     addressType: { type: String, required: true, trim: true, default: 'Delivery' },
-    country: { type: mongoose.Schema.Types.ObjectId, ref: 'Country', required: true },
+    country: { type: String, required: true },
     city: { type: String, required: true, trim: true },
     area: { type: String, required: true, trim: true },
     phone: { type: String, required: true, trim: true },

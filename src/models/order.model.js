@@ -3,11 +3,13 @@ const { orderCartSchema } = require('./schemas');
 
 // const validator = require('validator');
 const { toJSON, paginate } = require('./plugins');
+const { customAlphabet } = require('nanoid');
 
+const uniqueOrderNo = customAlphabet('1234567890', 11);
 const orderSchema = mongoose.Schema({
   // orderItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem', required: true }],
   // cart: { type: mongoose.Schema.ObjectId, ref: 'OrderCart', required: true },
-  orderNo: { type: String, required: true, unique: true },
+  orderNo: { type: String, required: true, unique: true, default: uniqueOrderNo() },
   cart: { type: orderCartSchema },
   address: { type: mongoose.Schema.Types.ObjectId, ref: 'Address', required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
