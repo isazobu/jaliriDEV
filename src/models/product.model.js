@@ -43,13 +43,12 @@ const productSchema = Schema(
       ref: 'Country',
       required: true,
       autopopulate: true,
-
     },
     tags: [{ type: String }],
     variants: [
       {
-        type: variantSchema,
-        required: true, // end variants
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Variant',
       },
     ],
   },
