@@ -90,10 +90,23 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
+// get user mail and name from userid and return it
+const getUserMailAndName = async (userId) => {
+  const user = await userService.getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
+  }
+  return {
+    email: user.email,
+    name: user.name,
+  };
+};
+
 module.exports = {
   loginUserWithEmailAndPassword,
   logout,
   refreshAuth,
   resetPassword,
   verifyEmail,
+  getUserMailAndName,
 };

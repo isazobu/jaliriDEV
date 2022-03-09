@@ -18,21 +18,19 @@ const createCategory = async (categoryBody) => {
     if (!parentCategory) {
       throw new ApiError(httpStatus.NOT_FOUND, 'Parent category not found');
     }
+    if (parentCategory._id === categoryBody.parentId) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Parent category cannot be itself');
+    }
   }
-
   const category = await Category.create(categoryBody);
-  console.log(category._id);
 
   if (parentCategory) {
     parentCategory?.subCategories.push(category._id);
-    console.log(parentCategory?.subCategories);
     await parentCategory.save();
   }
 
   return category;
 };
-
-//
 
 /**
  * Query for Categories
@@ -54,7 +52,7 @@ const queryCategories = async (filter, options) => {
  * @returns {Promise<Category>}
  */
 const getCategoryById = async (categoryId) => {
-  return Category.findById(categoryId);
+  return Category.findById(categoryId).populate('subCategories', 'slug title image').populate('parentId', 'slug title');
 };
 
 /**
@@ -81,6 +79,17 @@ const updateCategoryById = async (categoryId, updateBody) => {
   if (updateBody.title && (await Category.isCategoryExist(updateBody.title, categoryId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Category already taken');
   }
+
+  if (updateBody.parentId) {
+    parentCategory = await getCategoryById(updateBody.parentId);
+    if (!parentCategory) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Parent category not found');
+    }
+    if (parentCategory._id === updateBody.parentId) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Parent category cannot be itself');
+    }
+  }
+
   Object.assign(category, updateBody);
   await category.save();
   return category;
@@ -96,6 +105,16 @@ const deleteCategoryById = async (categoryId) => {
   if (!category) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Category not found');
   }
+  if (category.parentId) {
+    parentCategory = await getCategoryById(category.parentId);
+    if (!parentCategory) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Parent category not found');
+    }
+
+    parentCategory.subCategories.pull(categoryId);
+    await parentCategory.save();
+  }
+
   await category.remove();
   return category;
 };

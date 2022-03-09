@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const attributeSchema = require('./attribute.schema');
 
 const variantSchema = mongoose.Schema({
   sku: {
@@ -13,14 +14,7 @@ const variantSchema = mongoose.Schema({
     unique: true,
     required: true,
   },
-  attributes: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Attribute',
-      required: true,
-    },
-  ],
-
+  attributes: [attributeSchema],
   // color: { type: String, trim: true },
   // size: { type: String },
   // material: { type: String, trim: true },
@@ -31,7 +25,6 @@ const variantSchema = mongoose.Schema({
     height: { type: Number },
     depth: { type: Number },
   },
-  tags: [{ type: String }],
   image: [{ type: String }],
 
   // TODO: if multiple variants exist, then hasVariants set to true
@@ -72,6 +65,7 @@ const variantSchema = mongoose.Schema({
       enum: ['percentage', 'fixed', 'none', 'free_shipping'],
       default: 'none',
     },
+
     shippingPrice: {
       value: { type: Number, required: true },
       text: { type: String },

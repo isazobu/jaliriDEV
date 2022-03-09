@@ -5,6 +5,7 @@ const createBanner = {
   body: Joi.object().keys({
     title: Joi.string().required(),
     url: Joi.string().uri().required(),
+    category: Joi.string().custom(objectId),
     image: Joi.string().required(),
     field: Joi.string().required(),
     target: Joi.string().required(),
@@ -20,6 +21,7 @@ const getBanners = {
     image: Joi.string(),
     field: Joi.string(),
     target: Joi.string(),
+    category: Joi.string().custom(objectId),
     row: Joi.number(),
     isActive: Joi.boolean(),
     sortBy: Joi.string(),
@@ -50,6 +52,7 @@ const updateBanner = {
       image: Joi.string(),
       field: Joi.string(),
       target: Joi.string(),
+      category: Joi.string().custom(objectId),
       row: Joi.number(),
       isActive: Joi.boolean(),
     })

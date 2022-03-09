@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const mongoose = require('mongoose');
 
 const { Product, Category, Country } = require('../models');
 
@@ -25,7 +26,129 @@ const createProduct = async (productBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Category not found');
   }
 
+  // if (await Product.isProductExist(productBody.title)) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Product already exist');
+  if (await Product.isProductExistByProductId(productBody.productId)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Product Id already exist');
+  }
+
   return Product.create(productBody);
+};
+
+const getProductBySku = async (sku) => {
+  const product = await Product.aggregate().unwind('variants').match({ 'variants.sku': sku }).exec();
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+  return product[0];
+};
+
+const getVariants = async (sku) => {
+  const skuProduct = await getProductBySku(sku);
+  const color = skuProduct.variants.attributes.filter((attribute) => attribute.name === 'Color')[0]?.value || '';
+  const product = Product.aggregate([
+    {
+      $match: {
+        'variants.sku': sku,
+      },
+    },
+    {
+      $project: {
+        variants: 1,
+      },
+    },
+    {
+      $unwind: '$variants',
+    },
+    {
+      $match: {
+        'variants.attributes.value': { $regex: color, $options: 'i' },
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: '$variants',
+      },
+    },
+  ]);
+
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+
+  return product;
+};
+
+const getAllSizeByColorWithSku = async (sku) => {
+  const skuProduct = await getProductBySku(sku);
+  const color = skuProduct.variants.attributes.filter((attribute) => attribute.name === 'Color')[0].value || '';
+  const size = Product.aggregate([
+    {
+      $match: {
+        'variants.sku': sku,
+      },
+    },
+    {
+      $project: {
+        'variants.attributes.name': 1,
+        'variants.attributes.value': 1,
+      },
+    },
+    {
+      $unwind: '$variants',
+    },
+    {
+      $match: {
+        'variants.attributes.value': { $regex: color, $options: 'i' },
+      },
+    },
+
+    {
+      $unwind: '$variants.attributes',
+    },
+    {
+      $match: {
+        'variants.attributes.name': 'Size',
+      },
+    },
+    {
+      $replaceRoot: {
+        newRoot: '$variants.attributes',
+      },
+    },
+    { $sort: { value: 1 } },
+  ]).exec();
+
+  if (!size) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Size not found');
+  }
+
+  return size;
+};
+
+// Create many products
+const createManyProducts = async (products) => {
+  products.forEach(async (product) => {
+    const productCountry = await Country.getCountryByCode(product.country);
+    if (productCountry) {
+      product.country = productCountry._id;
+    } else {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Country not found');
+    }
+    const productCategory = await Category.findOne({ title: product.category });
+    if (productCategory) {
+      product.category = productCategory._id;
+    } else {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Category not found');
+    }
+
+    // if (await Product.isProductExist(productBody.title)) {
+    //   throw new ApiError(httpStatus.BAD_REQUEST, 'Product already exist');
+    if (await Product.isProductExistByProductId(product.productId)) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Product Id already exist');
+    }
+  });
+  return Product.create(products);
 };
 
 /**
@@ -101,6 +224,11 @@ const getProductById = async (id) => {
   return product;
 };
 
+const getProductsByProductId = async (productId) => {
+  const products = await Product.find({ productId });
+  return products;
+};
+
 const updateProductById = async (productId, updateBody) => {
   const product = await getProductById(productId);
   if (!product) {
@@ -128,10 +256,26 @@ const deleteProductById = async (productId) => {
   return product;
 };
 
+const getManySku = async (skus) => {
+  const skuProducts = await Product.aggregate()
+    .unwind('variants')
+    .match({
+      'variants.sku': { $in: skus },
+    })
+    .exec();
+  return skuProducts;
+};
+
 module.exports = {
   createProduct,
+  createManyProducts,
   queryProducts,
+  getProductBySku,
+  getManySku,
+  getVariants,
   getProductById,
+  getProductsByProductId,
   updateProductById,
   deleteProductById,
+  getAllSizeByColorWithSku,
 };

@@ -46,6 +46,8 @@ const updateCategory = {
       title: Joi.string(),
       image: Joi.string(),
       isActive: Joi.boolean(),
+      parentId: Joi.required().custom(objectId),
+      subCategories: Joi.array().items(Joi.string().custom(objectId)),
     })
     .min(1),
 };

@@ -9,6 +9,14 @@ const router = express.Router();
 
 router.route('/').get(productController.getProducts).post(auth('manageProducts'), productController.createProduct);
 
+router.route('/sku/:skuId').get(productController.getProductBySku);
+router.route('/variants/:skuId').get(productController.getVariants);
+router.route('/sku/:skuId/sizes').get(productController.getAllSizeByColorWithSku);
+router.route('/many').post(auth('manageProducts'), productController.createManyProducts);
+
+// post multiple sku
+router.route('/skus').post(productController.getManySku);
+
 router
   .route('/:productId')
   .get(productController.getProduct)

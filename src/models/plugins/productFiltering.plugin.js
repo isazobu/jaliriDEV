@@ -45,7 +45,7 @@ const productFiltering = (schema) => {
       // CONCAT ALL CRITERİIAS
 
       filter.category.split(',').forEach((category, index) => {
-        filterObj.$or.push({ 'category.title': category });
+        filterObj.$or.push({ 'category.slug': category });
       });
       criterias.push(filterObj);
       filterObj = { $or: [] };
@@ -63,13 +63,12 @@ const productFiltering = (schema) => {
     }
 
     if (filter.country) {
-      filter.country.split(',').forEach((country) => {
-        filterObj.$or.push({ 'country.code': country });
-      });
+      filterObj.$or.push({ 'country.code': filter.country });
       criterias.push(filterObj);
       filterObj = { $or: [] };
       delete filter.country;
     }
+
     if (filter.discountExist === 'true') {
       var isTrueSet = filter.discountExist === 'true';
       filterObj.$or.push({ 'variants.price.discountExist': isTrueSet });
@@ -107,6 +106,11 @@ const productFiltering = (schema) => {
       filterObj = { $or: [] };
       delete filter.size;
     }
+
+    if (filter.productId) {
+      criterias.push({ productId: filter.productId });
+    }
+
     const resultDoc = this.aggregate([
       {
         $lookup: {
@@ -115,7 +119,7 @@ const productFiltering = (schema) => {
           foreignField: '_id',
           pipeline: [
             {
-              $project: { title: 1, id: 1 },
+              $project: { title: 1, slug: 1, id: 1 },
             },
           ],
           as: 'category',
@@ -132,19 +136,6 @@ const productFiltering = (schema) => {
             },
           ],
           as: 'country',
-        },
-      },
-      {
-        $lookup: {
-          from: 'attributes',
-          localField: 'variants.attributes',
-          foreignField: '_id',
-          pipeline: [
-            {
-              $project: { name: 1, value: 1, isActive: 1 },
-            },
-          ],
-          as: 'variants.attributes',
         },
       },
 

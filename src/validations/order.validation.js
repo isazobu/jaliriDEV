@@ -9,6 +9,7 @@ const getOrders = {
     address: Joi.string().custom(objectId),
     sortBy: Joi.string(),
     limit: Joi.number().integer().min(1).default(10),
+    populate: Joi.string().default('address'),
     page: Joi.number().integer().min(1).default(1),
   }),
 };
@@ -32,6 +33,7 @@ const getMeOrders = {
     address: Joi.string().custom(objectId),
     sortBy: Joi.string(),
     limit: Joi.number().integer().min(1).default(10),
+    populate: Joi.string().default('address'),
     page: Joi.number().integer().min(1).default(1),
   }),
 };

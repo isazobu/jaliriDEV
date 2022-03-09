@@ -2,39 +2,44 @@ const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 
-const brandController = require('../../controllers/brand.controller');
-const brandValidation = require('../../validations/brand.validation');
+const { wishlistController } = require('../../controllers');
+const { wishlistValidation } = require('../../validations');
+
 const router = express.Router();
 
 router
   .route('/')
-  .get(validate(brandValidation.getBrands), auth('manageBrands'), brandController.getBrands)
-  .post(validate(brandValidation.createBrand), auth('manageBrands'), brandController.createBrand);
+  .get(auth(), validate(wishlistValidation.getWishlists), wishlistController.getWishlists)
+  .post(auth(), wishlistController.createWishlist);
 
 router
-  .route('/:brandSlug')
-  .get(validate(brandValidation.getBrandBySlug), brandController.getBrandBySlug)
-  .patch(validate(brandValidation.updateBrand), auth('manageBrands'), brandController.updateBrand)
-  .delete(validate(brandValidation.deleteBrand), auth('manageBrands'), brandController.deleteBrand);
+  .route('/me')
+  .get(auth(), validate(wishlistValidation.getMyWishlist), wishlistController.getMyWishlist)
+  .post(auth(), validate(wishlistValidation.addToWishlist), wishlistController.addToWishlist)
+  .delete(auth(), validate(wishlistValidation.removeFromWishlist), wishlistController.removeFromWishlist);
 
-router.route('/:brandId').get(brandController.getBrand);
+router
+  .route('/:wishlistId')
+  .get(auth(), wishlistController.getWishlist)
+  .patch(auth(), wishlistController.updateWishlist)
+  .delete(auth(), wishlistController.deleteWishlist);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Brands
- *   description: Brand management and retrieval
+ *   name: Wishlists
+ *   description: Wishlist management and retrieval
  */
 
 /**
  * @swagger
- * /brands:
+ * /wishlists:
  *   post:
- *     summary: Create a brand
- *     description: Only admins can create other brands.
- *     tags: [Brands]
+ *     summary: Create a wishlist
+ *     description: Only admins can create other wishlists.
+ *     tags: [Wishlists]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -66,30 +71,30 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Brand'
+ *                $ref: '#/components/schemas/Wishlist'
  *       "400":
- *         $ref: '#/components/responses/DuplicateBrand'
+ *         $ref: '#/components/responses/DuplicateWishlist'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all brands
- *     description: Only admins can retrieve all brands.
- *     tags: [Brands]
+ *     summary: Get all wishlists
+ *     description: Only admins can retrieve all wishlists.
+ *     tags: [Wishlists]
 
  *     parameters:
  *       - in: query
  *         name: title
  *         schema:
  *           type: string
- *         description: Brand title
+ *         description: Wishlist title
  *       - in: query
  *         name: isActive
  *         schema:
  *           type: boolean
- *         description: Brand isActive
+ *         description: Wishlist isActive
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -101,7 +106,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of brands
+ *         description: Maximum number of wishlists
  *      
  *     responses:
  *       "200":
@@ -114,7 +119,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Brand'
+ *                     $ref: '#/components/schemas/Wishlist'
  *                 limit:
  *                   type: integer
  *                   example: 10
@@ -132,25 +137,25 @@ module.exports = router;
 
 /**
  * @swagger
- * /brands/title/{title}:
+ * /wishlists/title/{title}:
  *   get:
- *     summary: Get a brand by title
- *     description: Logged in brands can fetch only their own brand information.
- *     tags: [Brands]
+ *     summary: Get a wishlist by title
+ *     description: Logged in wishlists can fetch only their own wishlist information.
+ *     tags: [Wishlists]
  *     parameters:
  *       - in: path
  *         name: title
  *         required: true
  *         schema:
  *           type: string
- *         description: Brand title
+ *         description: Wishlist title
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Brand'
+ *                $ref: '#/components/schemas/Wishlist'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -161,25 +166,25 @@ module.exports = router;
  */
 /**
  * @swagger
- * /brands/{id}:
+ * /wishlists/{id}:
  *   get:
- *     summary: Get a brand
- *     description: Logged in brands can fetch only their own brand information. Only admins can fetch other brands.
- *     tags: [Brands]
+ *     summary: Get a wishlist
+ *     description: Logged in wishlists can fetch only their own wishlist information. Only admins can fetch other wishlists.
+ *     tags: [Wishlists]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: Brand id
+ *         description: Wishlist id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Brand'
+ *                $ref: '#/components/schemas/Wishlist'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -188,9 +193,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a brand
- *     description: Logged in brands can only update their own information. Only admins can update other brands.
- *     tags: [Brands]
+ *     summary: Update a wishlist
+ *     description: Logged in wishlists can only update their own information. Only admins can update other wishlists.
+ *     tags: [Wishlists]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -199,7 +204,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Brand id
+ *         description: Wishlist id
  *     requestBody:
  *       required: true
  *       content:
@@ -225,9 +230,9 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Brand'
+ *                $ref: '#/components/schemas/Wishlist'
  *       "400":
- *         $ref: '#/components/responses/DuplicateBrand'
+ *         $ref: '#/components/responses/DuplicateWishlist'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -236,9 +241,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a brand
- *     description: Logged in brands can delete only themselves. Only admins can delete other brands.
- *     tags: [Brands]
+ *     summary: Delete a wishlist
+ *     description: Logged in wishlists can delete only themselves. Only admins can delete other wishlists.
+ *     tags: [Wishlists]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -247,7 +252,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Brand id
+ *         description: Wishlist id
  *     responses:
  *       "200":
  *         description: No content

@@ -3,7 +3,7 @@ const auth = require('../../middlewares/auth');
 const cartController = require('../../controllers/cart.controller');
 const validate = require('../../middlewares/validate');
 const { cartValidation } = require('../../validations');
-const { checkStock } = require('../../middlewares/stock');
+const checkStock = require('../../middlewares/stock');
 
 const router = express.Router();
 
@@ -11,13 +11,13 @@ const router = express.Router();
 router
   .route('/')
   .get(auth('manageCarts'), validate(cartValidation.getCart), cartController.getCart)
-  .post(auth('manageCarts'), cartController.addToCart);
+  .post(auth('manageCarts'), validate(cartValidation.addToCart), checkStock.addToCart, cartController.addToCart);
 
 router.post(
   '/manipulate',
   auth('manageCarts'),
   validate(cartValidation.manipulate),
-  checkStock(),
+  checkStock.manipulate,
   cartController.manipulate
 );
 router.get('/stock', auth(), cartController.getCartStock);
@@ -40,13 +40,6 @@ module.exports = router;
  *     tags: [Carts]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: detail
- *         schema:
- *           type: boolean
- *           default: false
- *         description: If true, return cart detail
  *     responses:
  *       "200":
  *         description: Cart
@@ -73,17 +66,20 @@ module.exports = router;
  *       content:
  *         application/json:
  *           schema:
- *             type: array
- *             items:
- *               type: object
- *               properties:
- *                 productId:
- *                   type: string
- *                 quantity:
- *                   type: number
- *               example:
- *                   productId: 5e9f8f8f8f8f8f8f8f8f8f8
- *                   quantity: 1
+ *             type: object
+ *             properties:
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     sku:
+ *                       type: string
+ *                     quantity:
+ *                       type: number
+ *                   example:
+ *                     sku: 5e9f8f8f8f8f8f8f8f8f8f8
+ *                     quantity: 1
  *     responses:
  *       "201":
  *         description: Created
@@ -121,13 +117,13 @@ module.exports = router;
  *                   - insert
  *                   - delete
  *                   - truncate
- *               productId:
+ *               sku:
  *                 type: string
  *               quantity:
  *                 type: number
  *             example:
  *               action: insert
- *               productId: 5e9f8f8f8f8f8f8f8f8f8f8
+ *               sku: '123456'
  *               quantity: 1
  *     responses:
  *       "200":
@@ -160,16 +156,21 @@ module.exports = router;
  *             schema:
  *               type: object
  *               properties:
- *                 product:
- *                   type: string
- *                 hasStock:
- *                   type: boolean
- *                 totalStock:
- *                   type: number
- *               example:
- *                 product: 5e9f8f8f8f8f8f8f8f8f8f8
- *                 hasStock: true
- *                 totalStock: 10
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       sku:
+ *                         type: string
+ *                       hasStock:
+ *                         type: boolean
+ *                       totalStock:
+ *                         type: number
+ *                     example:
+ *                       sku: '123456'
+ *                       hasStock: true
+ *                       totalStock: 10
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "404":
