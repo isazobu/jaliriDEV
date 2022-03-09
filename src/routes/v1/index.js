@@ -93,6 +93,10 @@ const defaultRoutes = [
     path: '/coupons',
     route: couponRoute,
   },
+  {
+    path: '/wishlists',
+    route: wishlistRoute,
+  },
 
   // {
   //   path: 'skus',
