@@ -182,6 +182,7 @@ function addItem(items, variant, quantity, productId, title, brand) {
       product: productId,
       brand,
       title,
+      attributes: variant.attributes,
       images: [...variant.image],
       totalDiscount: price.discountAmount.value * quantity,
       totalPrice: price.sellingPrice.value * quantity,
