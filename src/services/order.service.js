@@ -40,7 +40,7 @@ const createOrder = async (userId, orderBody) => {
 
   //   const addressId = this.createOrReadAdress(address);
 
-  const order = new Order({
+  let order = new Order({
     cart: newCart(),
     address: mongoose.Types.ObjectId(orderBody.addressId),
     user: mongoose.Types.ObjectId(userId),
@@ -64,11 +64,12 @@ const createOrder = async (userId, orderBody) => {
   //   { _id: { $in: order.cart.items.map((item) => item.product) } },
   //   { $inc: { 'variants.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
   // );
+  order = order.save();
 
   user.cart = undefined;
   await user.save();
 
-  return order.save();
+  return order;
 };
 
 const createOrReadOrderItem = async (orderItemBody) => {

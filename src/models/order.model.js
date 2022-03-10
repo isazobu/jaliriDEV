@@ -9,7 +9,7 @@ const uniqueOrderNo = customAlphabet('1234567890', 11);
 const orderSchema = mongoose.Schema({
   // orderItems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OrderItem', required: true }],
   // cart: { type: mongoose.Schema.ObjectId, ref: 'OrderCart', required: true },
-  orderNo: { type: String, required: true, unique: true, default: uniqueOrderNo() },
+  orderNo: { type: String, required: true, unique: true, default: () => uniqueOrderNo() },
   cart: { type: orderCartSchema },
   address: { type: mongoose.Schema.Types.ObjectId, ref: 'Address', required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -26,7 +26,7 @@ const orderSchema = mongoose.Schema({
   expectedDeliveryDate: { type: Date, default: () => new Date() + 1000 * 60 * 60 * 24 * 7 }, // 7 days
   tax: { type: Number, default: 0 },
   paymentMethod: { type: String, required: true, default: 'COD' },
-  dataOrdered: {
+  dateOrdered: {
     type: Date,
     default: Date.now,
   },
