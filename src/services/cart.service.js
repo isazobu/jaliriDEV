@@ -41,7 +41,7 @@ const addToCart = async (userId, items) => {
 
   const skus = items.map((item) => item.sku);
 
-  const products = await Product.find({ 'variants.sku': { $in: skus } }).select('variants title');
+  const products = await Product.find({ 'variants.sku': { $in: skus } }).select('variants title brand');
   if (!products) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
@@ -49,7 +49,7 @@ const addToCart = async (userId, items) => {
   products.forEach((product) => {
     items.forEach((item) => {
       const variant = product.variants.find((v) => v.sku === item.sku);
-      addItem(user.cart.items, variant, item.quantity, product._id, product.title);
+      addItem(user.cart.items, variant, item.quantity, product._id, product.title, product.brand);
     });
   });
 
@@ -78,7 +78,7 @@ const manipulate = async (userId, action, sku, quantity) => {
   let variant;
   let product;
   if (sku) {
-    product = await Product.findOne({ 'variants.sku': sku }).select('variants');
+    product = await Product.findOne({ 'variants.sku': sku }).select('variants title brand');
     if (!product || product.variants.length === 0) {
       throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
     }
@@ -93,7 +93,7 @@ const manipulate = async (userId, action, sku, quantity) => {
 
   switch (action) {
     case 'insert':
-      addItem(items, variant, quantity, product._id, product.title);
+      addItem(items, variant, quantity, product._id, product.title, product.brand);
       break;
     case 'delete':
       deleteItem(items, variant, quantity);
@@ -166,7 +166,7 @@ function deleteItem(items, variant, quantity) {
   } else throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
 }
 
-function addItem(items, variant, quantity, productId, title) {
+function addItem(items, variant, quantity, productId, title, brand) {
   const indexFound = items.findIndex((item) => item.sku === variant.sku);
   const { price } = variant;
   if (indexFound > -1) {
@@ -180,6 +180,7 @@ function addItem(items, variant, quantity, productId, title) {
       quantity,
       sku: variant.sku,
       product: productId,
+      brand,
       title,
       images: [...variant.image],
       totalDiscount: price.discountAmount.value * quantity,
