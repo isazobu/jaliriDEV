@@ -55,10 +55,9 @@ const createOrder = async (userId, orderBody) => {
   order.message = `${itemCount} items pending for delivery`;
   order.summary = `${itemCount} items`;
 
-  await Product.updateMany(
-    { 'variants.sku': { $in: order.cart.items.map((item) => item.product) } },
-    { $inc: { 'variants.$.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
-  );
+  await order.cart.items.forEach(async (item) => {
+    await Product.updateOne({ 'variants.sku': item.sku }, { $inc: { 'variants.$.totalStock': -item.quantity } });
+  });
 
   // await Product.updateMany(
   //   { _id: { $in: order.cart.items.map((item) => item.product) } },
