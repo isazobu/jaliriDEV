@@ -49,6 +49,7 @@ const addToCart = async (userId, items) => {
   products.forEach((product) => {
     items.forEach((item) => {
       const variant = product.variants.find((v) => v.sku === item.sku);
+      if (!variant) return;
       addItem(user.cart.items, variant, item.quantity, product._id, product.title, product.brand);
     });
   });
@@ -183,7 +184,7 @@ function addItem(items, variant, quantity, productId, title, brand) {
       brand,
       title,
       attributes: variant.attributes,
-      images: [...variant.image],
+      images: variant.image,
       totalDiscount: price.discountAmount.value * quantity,
       totalPrice: price.sellingPrice.value * quantity,
       // eslint-disable-next-line prettier/prettier
