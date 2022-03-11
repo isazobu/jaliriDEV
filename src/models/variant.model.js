@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const attributeSchema = require('./attribute.schema');
+const { paginate, toJSON } = require('./plugins');
+const attributeSchema = require('./schemas/attribute.schema');
 
 const variantSchema = mongoose.Schema({
   sku: {
@@ -94,6 +95,9 @@ const variantSchema = mongoose.Schema({
   // Required?
   // Bu collection nasıl şişer ?
 });
+
+variantSchema.plugin(toJSON);
+variantSchema.plugin(paginate);
 
 /**
  * @typedef Variant

@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
 
-const { Product, Category, Country } = require('../models');
+const { Product, Category, Country, Variant } = require('../models');
 
 const ApiError = require('../utils/ApiError');
 
@@ -31,6 +31,10 @@ const createProduct = async (productBody) => {
   if (await Product.isProductExistByProductId(productBody.productId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Product Id already exist');
   }
+
+  productBody.variants.forEach(async (variant) => {
+    await Variant.create(variant);
+  });
 
   return Product.create(productBody);
 };

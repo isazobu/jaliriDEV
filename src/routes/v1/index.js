@@ -11,7 +11,6 @@ const docsRoute = require('./docs.route');
 
 const wishlistRoute = require('./wishlist.route');
 
-
 const attributeRoute = require('./attribute.route');
 
 const bannerRoute = require('./banner.route');
