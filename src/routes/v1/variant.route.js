@@ -1,5 +1,4 @@
-
-    const express = require('express');
+const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 
@@ -7,15 +6,9 @@ const variantController = require('../../controllers/variant.controller');
 
 const router = express.Router();
 
-router
-  .route('/')
-  .get(variantController.getVariants)
-  .post(auth('manageVariants'), variantController.createVariant);
+router.route('/').get(variantController.getVariants).post(auth(), variantController.createVariant);
 
-
-router
-  .route('/title/:variantTitle')
-  .get( variantController.getVariantByTitle);
+router.route('/title/:variantTitle').get(variantController.getVariantByTitle);
 
 router
   .route('/:variantId')
@@ -262,5 +255,3 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
-        

@@ -15,6 +15,11 @@ const variantSchema = mongoose.Schema({
     unique: true,
     required: true,
   },
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true,
+  },
   attributes: [attributeSchema],
   // color: { type: String, trim: true },
   // size: { type: String },
@@ -98,6 +103,11 @@ const variantSchema = mongoose.Schema({
 
 variantSchema.plugin(toJSON);
 variantSchema.plugin(paginate);
+
+variantSchema.statics.isVariantExist = async function (sku) {
+  const variant = await this.findOne({ sku });
+  return !!variant;
+};
 
 /**
  * @typedef Variant
