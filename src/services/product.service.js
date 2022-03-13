@@ -32,10 +32,6 @@ const createProduct = async (productBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Product Id already exist');
   }
 
-  productBody.variants.forEach(async (variant) => {
-    await Variant.create(variant);
-  });
-
   return Product.create(productBody);
 };
 
@@ -224,7 +220,7 @@ const queryProducts = async (filter, options) => {
  * @returns {Promise<Product>}
  */
 const getProductById = async (id) => {
-  const product = await Product.findById(id).populate('category').populate('country');
+  const product = await Product.findById(id).populate('category').populate('country').populate('variants');
   return product;
 };
 
