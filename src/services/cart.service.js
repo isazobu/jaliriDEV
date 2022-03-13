@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
 const httpStatus = require('http-status');
-const { User, Product } = require('../models');
+const { User, Product, Variant } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -75,14 +75,10 @@ const manipulate = async (userId, action, sku, quantity) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  let variant;
-  let product;
-  if (sku) {
-    product = await Product.findOne({ 'variants.sku': sku }).select('variants title brand');
-    if (!product || product.variants.length === 0) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
-    }
-    variant = product.variants.find((item) => item.sku === sku);
+  const variant = await Variant.findOne({ sku }).populate('product', 'title brand');
+  console.log(variant.product);
+  if (!variant) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Variant not found');
   }
 
   if (!user.cart) {
@@ -90,10 +86,11 @@ const manipulate = async (userId, action, sku, quantity) => {
   }
 
   const { items } = user.cart;
+  const { _id, title, brand } = variant.product;
 
   switch (action) {
     case 'insert':
-      addItem(items, variant, quantity, product._id, product.title, product.brand);
+      addItem(items, variant, quantity, _id, title, brand);
       break;
     case 'delete':
       deleteItem(items, variant, quantity);
