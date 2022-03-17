@@ -3,26 +3,25 @@ const { Product, Variant } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const manipulate = (req, res, next) => {
-  // const { action, sku, quantity } = req.body;
-  // const items = req.user.cart?.items;
+  const { action, sku, quantity } = req.body;
+  const items = req.user.cart?.items;
 
-  // const quantityInCart = items?.find((item) => item.sku === sku)?.quantity || 0;
+  const quantityInCart = items?.find((item) => item.sku === sku)?.quantity || 0;
 
-  // if (action === 'truncate') return next();
-  // Variant.findOne({ sku })
-  //   .select('totalStock')
-  //   .then((variant) => {
-  //     if (!variant) {
-  //       throw new ApiError(httpStatus.BAD_REQUEST, 'Variant not found');
-  //     }
-  //     if (action === 'insert' && variant.totalStock < quantity + quantityInCart) {
-  //       throw new ApiError(httpStatus.BAD_REQUEST, 'Not enough stock');
-  //     }
+  if (action === 'truncate') return next();
+  Variant.findOne({ sku })
+    .select('totalStock')
+    .then((variant) => {
+      if (!variant) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Variant not found');
+      }
+      if (action === 'insert' && variant.totalStock < quantity + quantityInCart) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Not enough stock');
+      }
 
-  //     next();
-  //   })
-  //   .catch(next);
-  next();
+      next();
+    })
+    .catch(next);
 };
 
 const createOrder = (req, res, next) => {
@@ -56,7 +55,7 @@ const addToCart = (req, res, next) => {
   Variant.find({
     sku: { $in: skus },
   })
-    .select('totalStock')
+    .select('totalStock sku')
     .then((variants) => {
       variants.forEach((variant) => {
         const itemToAdd = items.find((item) => item.sku === variant.sku);
