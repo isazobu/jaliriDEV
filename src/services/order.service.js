@@ -2,7 +2,7 @@
 /* eslint-disable no-use-before-define */
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
-const { Order, OrderItem, Address, Product } = require('../models');
+const { Order, OrderItem, Address, Variant } = require('../models');
 const User = require('../models/user.model');
 const ApiError = require('../utils/ApiError');
 
@@ -39,32 +39,26 @@ const createOrder = async (userId, orderBody) => {
   const { addressId, ...other } = orderBody;
 
   //   const addressId = this.createOrReadAdress(address);
+  const itemCount = user.cart.items.reduce((acc, item) => {
+    return acc + item.quantity;
+  }, 0);
 
   let order = new Order({
     cart: newCart(),
     address: mongoose.Types.ObjectId(orderBody.addressId),
     user: mongoose.Types.ObjectId(userId),
+    message: `${itemCount} items pending for delivery`,
+    summary: `${itemCount} items`,
     ...other,
   });
 
   Object.assign(order.cart, user.cart);
 
-  const itemCount = order.cart.items.reduce((acc, item) => {
-    return acc + item.quantity;
-  }, 0);
-  order.message = `${itemCount} items pending for delivery`;
-  order.summary = `${itemCount} items`;
-
-  await Product.updateMany(
-    { 'variants.sku': { $in: order.cart.items.map((item) => item.product) } },
-    { $inc: { 'variants.$.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
-  );
-
-  // await Product.updateMany(
-  //   { _id: { $in: order.cart.items.map((item) => item.product) } },
-  //   { $inc: { 'variants.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
-  // );
   order = order.save();
+
+  await user.cart.items.forEach(async (item) => {
+    await Variant.updateOne({ sku: item.sku }, { $inc: { totalStock: -item.quantity } });
+  });
 
   user.cart = undefined;
   await user.save();
