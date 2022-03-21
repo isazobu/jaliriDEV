@@ -24,3 +24,5 @@ module.exports.wishlistController = require('./wishlist.controller');
 // module.exports.paymentController = require('./payment.controller');
 // module.exports.shippingController = require('./shipping.controller');
 // module.exports.productReviewController = require('./productReview.controller');
+
+module.exports.searchController = require('./search.controller');
