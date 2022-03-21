@@ -22,7 +22,7 @@ const getCoupon = catchAsync(async (req, res) => {
 });
 
 const redeemCoupon = catchAsync(async (req, res) => {
-  if (!req.user.cart) {
+  if (!req.user.cart || !req.user.cart.items.length) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'UserCart is empty');
   }
   const coupon = await couponService.redeemCoupon(req.user._id, req.body);
