@@ -10,18 +10,16 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(auth('manageAddresses'), validate(addressValidation.getAddresses), addressController.getAddresses)
-  .post(auth('me'), validate(addressValidation.createAddress), addressController.createAddress);
+  .get(auth('me'), addressController.getAddresses)
+  .post(auth('me'), validate(addressValidation.createAddress), addressController.createAddress)
+  .patch(auth('me'), validate(addressValidation.updateAddress), addressController.updateAddress);
 
-router.route('title/:addressTitle').get(validate(addressValidation.getAddressByTitle), addressController.getAddressByTitle);
-
-// me address
-router.route('/me').get(auth('me'), addressController.getMeAddress);
+router.get('/title/:addressTitle', auth(), addressController.getAddressByTitle);
 
 router
   .route('/:addressId')
-  .get(auth('me'), validate(addressValidation.getAddress), addressController.getAddress)
-  .patch(auth('me'), validate(addressValidation.updateAddress), addressController.updateAddress)
-  .delete(auth('me'), validate(addressValidation.deleteAddress), addressController.deleteAddress);
+  .get(auth('me'), addressController.getAddressById)
+  .patch(auth(), addressController.updateAddress)
+  .delete(auth(), addressController.deleteAddress);
 
 module.exports = router;

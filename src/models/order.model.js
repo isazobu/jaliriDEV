@@ -4,6 +4,7 @@ const { orderCartSchema } = require('./schemas');
 // const validator = require('validator');
 const { toJSON, paginate } = require('./plugins');
 const { customAlphabet } = require('nanoid');
+const addressSchema = require('./schemas/address.schema');
 
 const uniqueOrderNo = customAlphabet('1234567890', 11);
 const orderSchema = mongoose.Schema({
@@ -11,7 +12,7 @@ const orderSchema = mongoose.Schema({
   // cart: { type: mongoose.Schema.ObjectId, ref: 'OrderCart', required: true },
   orderNo: { type: String, required: true, unique: true, default: () => uniqueOrderNo() },
   cart: { type: orderCartSchema },
-  address: { type: mongoose.Schema.Types.ObjectId, ref: 'Address', required: true },
+  address: { type: addressSchema },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   status: { type: String, enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'], default: 'Pending' },
   // itemsPrice: { type: Number, required: true },
