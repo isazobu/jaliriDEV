@@ -14,12 +14,17 @@ router
   .post(auth('me'), validate(addressValidation.createAddress), addressController.createAddress)
   .patch(auth('me'), validate(addressValidation.updateAddress), addressController.updateAddress);
 
-router.get('/title/:addressTitle', auth(), addressController.getAddressByTitle);
+router.get(
+  '/title/:addressTitle',
+  auth(),
+  validate(addressValidation.getAddressByTitle),
+  addressController.getAddressByTitle
+);
 
 router
   .route('/:addressId')
-  .get(auth('me'), addressController.getAddressById)
-  .patch(auth(), addressController.updateAddress)
-  .delete(auth(), addressController.deleteAddress);
+  .get(auth('me'), validate(addressValidation.getAddressById), addressController.getAddressById)
+  .patch(auth('me'), validate(addressValidation.updateAddress), addressController.updateAddress)
+  .delete(auth('me'), validate(addressValidation.deleteAddress), addressController.deleteAddress);
 
 module.exports = router;
