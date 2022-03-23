@@ -78,7 +78,7 @@ const manipulate = async (userId, action, sku, quantity) => {
 
   let variant;
   let product;
-  if (sku) {
+  if (sku && action !== 'truncate') {
     product = await Product.findOne({ 'variants.sku': sku }).select('variants title brand');
     if (!product || product.variants.length === 0) {
       throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
