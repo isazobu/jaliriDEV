@@ -16,7 +16,7 @@ const getOrders = {
 
 const createOrder = {
   body: Joi.object().keys({
-    addressId: Joi.string().custom(objectId).required(),
+    address: Joi.string().custom(objectId).required(),
   }),
 };
 

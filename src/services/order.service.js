@@ -32,7 +32,7 @@ const createOrder = async (userId, orderBody) => {
   if (!user) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
   }
-  const { addressId, ...other } = orderBody;
+  const { address: addressId, ...other } = orderBody;
 
   const address = user.addresses.find((addr) => addr.id === addressId);
   if (!address) {
