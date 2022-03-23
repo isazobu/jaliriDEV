@@ -11,8 +11,7 @@ const router = express.Router();
 router
   .route('/')
   .get(auth('me'), addressController.getAddresses)
-  .post(auth('me'), validate(addressValidation.createAddress), addressController.createAddress)
-  .patch(auth('me'), validate(addressValidation.updateAddress), addressController.updateAddress);
+  .post(auth('me'), validate(addressValidation.createAddress), addressController.createAddress);
 
 router.get(
   '/title/:addressTitle',

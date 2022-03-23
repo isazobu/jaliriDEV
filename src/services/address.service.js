@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 const httpStatus = require('http-status');
-const { Address, Country, User } = require('../models');
+const { Country, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -27,39 +27,6 @@ const createAddress = async (userId, addressBody) => {
 };
 
 /**
- * Query for Addresses
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @returns {Promise<QueryResult>}
- */
-const queryAddresses = async (filter, options) => {
-  const addresses = await Address.paginate(filter, options);
-  return addresses;
-};
-
-// me address
-const getMeAddress = async (userId) => {
-  const address = await Address.getMeAddress(userId);
-  return address;
-};
-
-/**
- * Get address by id
- * @param {ObjectId} id
- * @returns {Promise<Address>}
- */
-const getAddressByIdandMe = async (addressId, userId) => {
-  const address = await Address.findById(addressId);
-
-  if (address && address.user.toString() !== userId) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You can only operate your own address');
-  }
-  return address;
-};
-
-/**
  * Get address by email
  * @param {string} title
  * @returns {Promise<Address>}
@@ -68,16 +35,28 @@ const getAddressByTitle = async (addresses, title) => {
   return addresses.find((address) => address.title === title);
 };
 
+/**
+ *
+ * @param {Array} addresses
+ * @param {ObjectId} id
+ * @returns
+ */
 const getAddressById = async (addresses, id) => {
   return addresses.find((address) => address.id === id);
 };
+
+const getAddresses = async (addresses) => {
+  return addresses;
+};
+
+
 /**
  * Update address by id
+ * @param {ObjectId} userId
  * @param {ObjectId} addressId
  * @param {Object} updateBody
  * @returns {Promise<Address>}
  */
-
 const updateAddressByUserId = async (userId, updateBody, addressId) => {
   const user = await User.findById(userId);
   const address = user.addresses.find((addr) => addr.id === addressId);
@@ -107,10 +86,8 @@ const deleteAddressById = async (addressId, userId) => {
 
 module.exports = {
   createAddress,
-  getMeAddress,
-  queryAddresses,
+  getAddresses,
   getAddressById,
-  getAddressByIdandMe,
   getAddressByTitle,
   updateAddressByUserId,
   deleteAddressById,

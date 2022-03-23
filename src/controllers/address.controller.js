@@ -11,7 +11,8 @@ const createAddress = catchAsync(async (req, res) => {
 
 // get me address
 const getAddresses = catchAsync(async (req, res) => {
-  res.status(httpStatus.OK).send(req.user.addresses);
+  const addresses = await addressService.getAddresses(req.user.addresses);
+  res.status(httpStatus.OK).send(addresses);
 });
 
 const getAddressByTitle = catchAsync(async (req, res) => {
