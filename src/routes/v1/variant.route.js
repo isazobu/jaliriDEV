@@ -3,18 +3,22 @@ const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 
 const variantController = require('../../controllers/variant.controller');
+const { variantValidation } = require('../../validations');
 
 const router = express.Router();
 
-router.route('/').get(variantController.getVariants).post(auth(), variantController.createVariant);
+router
+  .route('/')
+  .get(validate(variantValidation.getVariants), variantController.getVariants)
+  .post(auth(), validate(variantValidation.createVariant), variantController.createVariant);
 
-router.route('/title/:variantTitle').get(variantController.getVariantByTitle);
+router.route('/sku/:variantSku').get(validate(variantValidation.getVariantBySku), variantController.getVariantBySku);
 
 router
   .route('/:variantId')
-  .get(variantController.getVariant)
-  .patch(auth('manageVariants'), variantController.updateVariant)
-  .delete(auth('manageVariants'), variantController.deleteVariant);
+  .get(validate(variantValidation.getVariantById), variantController.getVariant)
+  .patch(auth(), validate(variantValidation.updateVariant), variantController.updateVariant)
+  .delete(auth(), validate(variantValidation.deleteVariant), variantController.deleteVariant);
 
 module.exports = router;
 

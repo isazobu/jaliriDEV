@@ -1,6 +1,6 @@
+const httpStatus = require('http-status');
 const { Variant } = require('../models');
 
-const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -42,8 +42,8 @@ const getVariantById = async (variantId) => {
  * @param {string} title
  * @returns {Promise<Variant>}
  */
-const getVariantByTitle = async (title) => {
-  return Variant.findOne({ title });
+const getVariantBySku = async (sku) => {
+  return Variant.findOne({ sku });
 };
 
 /**
@@ -84,7 +84,7 @@ module.exports = {
   createVariant,
   queryVariants,
   getVariantById,
-  getVariantByTitle,
+  getVariantBySku,
   updateVariantById,
   deleteVariantById,
 };
