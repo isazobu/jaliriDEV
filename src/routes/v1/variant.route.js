@@ -10,15 +10,15 @@ const router = express.Router();
 router
   .route('/')
   .get(validate(variantValidation.getVariants), variantController.getVariants)
-  .post(auth(), validate(variantValidation.createVariant), variantController.createVariant);
+  .post(auth('menageVariants'), validate(variantValidation.createVariant), variantController.createVariant);
 
 router.route('/sku/:variantSku').get(validate(variantValidation.getVariantBySku), variantController.getVariantBySku);
 
 router
   .route('/:variantId')
   .get(validate(variantValidation.getVariantById), variantController.getVariant)
-  .patch(auth(), validate(variantValidation.updateVariant), variantController.updateVariant)
-  .delete(auth(), validate(variantValidation.deleteVariant), variantController.deleteVariant);
+  .patch(auth('menageVariants'), validate(variantValidation.updateVariant), variantController.updateVariant)
+  .delete(auth('menageVariants'), validate(variantValidation.deleteVariant), variantController.deleteVariant);
 
 module.exports = router;
 
