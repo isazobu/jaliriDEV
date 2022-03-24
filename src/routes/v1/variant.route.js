@@ -10,15 +10,15 @@ const router = express.Router();
 router
   .route('/')
   .get(validate(variantValidation.getVariants), variantController.getVariants)
-  .post(auth('menageVariants'), validate(variantValidation.createVariant), variantController.createVariant);
+  .post(auth('manageVariants'), validate(variantValidation.createVariant), variantController.createVariant);
 
 router.route('/sku/:variantSku').get(validate(variantValidation.getVariantBySku), variantController.getVariantBySku);
 
 router
   .route('/:variantId')
   .get(validate(variantValidation.getVariantById), variantController.getVariant)
-  .patch(auth('menageVariants'), validate(variantValidation.updateVariant), variantController.updateVariant)
-  .delete(auth('menageVariants'), validate(variantValidation.deleteVariant), variantController.deleteVariant);
+  .patch(auth('manageVariants'), validate(variantValidation.updateVariant), variantController.updateVariant)
+  .delete(auth('manageVariants'), validate(variantValidation.deleteVariant), variantController.deleteVariant);
 
 module.exports = router;
 
@@ -43,24 +43,7 @@ module.exports = router;
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - title
- *               - image
- *               - isActive
- *             properties:
- *               title:
- *                 type: string
- *                 description: must be unique
- *               image:
- *                 type: string
- *                 format: url
- *               isActive:
- *                 type: boolean
- *             example:
- *               title: Shoes
- *               image: fake@example.com
- *               isActive: true
+ *             $ref: '#/components/schemas/Variant'
  *     responses:
  *       "201":
  *         description: Created
@@ -82,10 +65,20 @@ module.exports = router;
 
  *     parameters:
  *       - in: query
- *         name: title
+ *         name: product
  *         schema:
  *           type: string
- *         description: Variant title
+ *         description: Product of variant
+ *       - in: query
+ *         name: sku
+ *         schema:
+ *           type: string
+ *         description: SKU of variant
+ *       - in: query
+ *         name: barcode
+ *         schema:
+ *           type: string
+ *         description: Barcode of variant
  *       - in: query
  *         name: isActive
  *         schema:
@@ -103,6 +96,14 @@ module.exports = router;
  *           minimum: 1
  *         default: 10
  *         description: Maximum number of variants
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         default: 1
+ *         description: Page number
+
  *      
  *     responses:
  *       "200":
@@ -133,18 +134,18 @@ module.exports = router;
 
 /**
  * @swagger
- * /variants/title/{title}:
+ * /variants/sku/{sku}:
  *   get:
- *     summary: Get a variant by title
- *     description: Logged in variants can fetch only their own variant information.
+ *     summary: Get a variant by sku
+ *     description: Retrieve a variant by sku.
  *     tags: [Variants]
  *     parameters:
  *       - in: path
- *         name: title
+ *         name: sku
  *         required: true
  *         schema:
  *           type: string
- *         description: Variant title
+ *         description: Variant sku
  *     responses:
  *       "200":
  *         description: OK
@@ -206,20 +207,7 @@ module.exports = router;
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *                 description: must be unique
- *               image:
- *                 type: string
- *                 format: url
- *               isActive:
- *                 type: boolean
- *             example:
- *               title: fake name
- *               url: example.com
- *               isActive: true
+ *             $ref: '#/components/schemas/Variant'
  *     responses:
  *       "200":
  *         description: OK
