@@ -361,7 +361,7 @@ const filterProductMenu = async () => {
           },
           {
             $project: {
-              'filter.category': '$_id.category.title',
+              'filter.value': '$_id.category.title',
               'filter.count': { $size: '$products' },
             },
           },
