@@ -47,15 +47,16 @@ brandSchema.statics.isBrandExist = async function (name, excludeBrandSlug) {
 };
 
 // pre Save Hook
-brandSchema.pre('save', function (next) {
+function brandPreSave(next) {
   this.slug = slugify(this.name, { lower: true });
   this.name = capitalizeTheFirstLetterOfEachWord(this.name);
   next();
-});
+}
+brandSchema.pre('save', brandPreSave);
 
 /**
  * @typedef Brand
  */
 const Brand = mongoose.model('Brand', brandSchema);
 
-module.exports = Brand;
+module.exports = { Brand, brandPreSave };
