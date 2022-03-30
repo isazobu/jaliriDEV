@@ -326,7 +326,7 @@ const filterProductMenu = async () => {
           },
           {
             $project: {
-              'filter.brand': '$_id.brand',
+              'filter.value': '$_id.brand',
               'filter.count': { $size: '$products' },
             },
           },
