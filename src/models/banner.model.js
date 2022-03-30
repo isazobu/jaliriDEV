@@ -49,10 +49,11 @@ bannerSchema.statics.isBannerExist = async function (title, excludeUserId) {
 };
 
 // pre Save Hook
-bannerSchema.pre('save', function (next) {
+function bannerPreSave(next) {
   this.slug = slugify(this.title, { lower: true });
   next();
-});
+}
+bannerSchema.pre('save', bannerPreSave);
 
 // is category id doesnt exist ?
 bannerSchema.statics.isCategoryExist = async function (categoryId) {
@@ -65,4 +66,4 @@ bannerSchema.statics.isCategoryExist = async function (categoryId) {
  */
 const Banner = mongoose.model('Banner', bannerSchema);
 
-module.exports = Banner;
+module.exports = { Banner, bannerPreSave };
