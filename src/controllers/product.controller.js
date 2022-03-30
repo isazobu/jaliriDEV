@@ -80,6 +80,11 @@ const getManySku = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(products);
 });
 
+const filterProductMenu = catchAsync(async (req, res) => {
+  const result = await productService.filterProductMenu();
+  res.status(httpStatus.OK).send(result);
+});
+
 module.exports = {
   createProduct,
   createManyProducts,
@@ -91,4 +96,5 @@ module.exports = {
   getManySku,
   deleteProduct,
   getAllSizeByColorWithSku,
+  filterProductMenu,
 };
