@@ -382,7 +382,7 @@ const filterProductMenu = async () => {
       },
     },
   ]);
-  return products;
+  return products[0];
 };
 
 module.exports = {
