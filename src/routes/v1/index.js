@@ -101,12 +101,6 @@ const defaultRoutes = [
     path: '/search',
     route: searchRoute,
   },
-  {
-    path: '/loaderio-eaa6ab053c9d09089aefe8f4320294e5',
-    route: (req, res) => {
-      res.send('loaderio-eaa6ab053c9d09089aefe8f4320294e5');
-    },
-  },
   // {
   //   path: 'skus',
   //   route: skuRoute,
