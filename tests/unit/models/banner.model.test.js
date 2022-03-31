@@ -1,7 +1,6 @@
 const faker = require('faker');
 const mongoose = require('mongoose');
 const { Banner } = require('../../../src/models');
-const { bannerPreSave } = require('../../../src/models/banner.model');
 
 describe('Banner model', () => {
   describe('Banner validation', () => {
@@ -49,24 +48,6 @@ describe('Banner model', () => {
     test('should throw a validation error if url is invalid', async () => {
       newBanner.url = '';
       await expect(new Banner(newBanner).validate()).rejects.toThrow();
-    });
-  });
-  describe('Banner preSave', () => {
-    const newBanner = {
-      title: faker.name.findName(),
-      field: faker.name.findName(),
-      target: faker.name.findName(),
-      category: mongoose.Types.ObjectId(),
-      image: faker.name.findName(),
-      url: faker.name.findName(),
-    };
-    test('should correctly slugify the title', async () => {
-      newBanner.title = 'Banner Title';
-      const mNext = jest.fn();
-      const mContext = new Banner(newBanner);
-      await bannerPreSave.call(mContext, mNext);
-      expect(mContext.slug).toBe('banner-title');
-      expect(mNext).toBeCalledTimes(1);
     });
   });
 });
