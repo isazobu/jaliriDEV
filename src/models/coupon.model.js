@@ -36,6 +36,7 @@ const couponSchema = Schema(
       type: String,
       required: [true, 'Country code is required'],
       trim: true,
+      uppercase: true,
     },
     specification: {
       type: String,

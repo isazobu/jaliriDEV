@@ -63,17 +63,20 @@ const addToCart = (req, res, next) => {
   Product.find({ 'variants.sku': { $in: skus } })
     .select('variants')
     .then((products) => {
+      if (!products || products.length === 0) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Product not found');
+      }
       const variantStocks = products.map((product) => {
-        if (!product) {
-          throw new ApiError(httpStatus.BAD_REQUEST, 'Product not found');
-        }
         const variant = product.variants.find((item) => skus.includes(item.sku));
+        if (!variant) {
+          throw new ApiError(httpStatus.BAD_REQUEST, 'Variant not found');
+        }
         return {
           sku: variant.sku,
           stock: variant.totalStock,
         };
       });
-
+      
       items.forEach((itemToAdd) => {
         const variantStock = variantStocks.find((stock) => stock.sku === itemToAdd.sku);
         const quantityInCart = itemsInCart?.find((cartItem) => cartItem.sku === itemToAdd.sku)?.quantity || 0;
