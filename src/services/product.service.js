@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
 
-const { Product, Category, Country } = require('../models');
+const { Product, Category, Country, Variant } = require('../models');
 
 const ApiError = require('../utils/ApiError');
 
@@ -220,7 +220,7 @@ const queryProducts = async (filter, options) => {
  * @returns {Promise<Product>}
  */
 const getProductById = async (id) => {
-  const product = await Product.findById(id).populate('category').populate('country');
+  const product = await Product.findById(id).populate('category').populate('country').populate('variants');
   return product;
 };
 

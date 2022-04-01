@@ -9,6 +9,7 @@ module.exports.Country = require('./country.model');
 module.exports.Coupon = require('./coupon.model');
 module.exports.Attribute = require('./attribute.model');
 module.exports.Banner = require('./banner.model');
+module.exports.Variant = require('./variant.model');
 
 module.exports.Brand = require('./brand.model');
 // module.exports.State = require('./state.model');

@@ -35,6 +35,13 @@ const orderSchema = mongoose.Schema({
 orderSchema.plugin(toJSON);
 orderSchema.plugin(paginate);
 
+orderSchema.pre('save', function (next) {
+  if (this.isModified('status') && this.status === 'Delivered') {
+    this.deliveryDate = Date.now();
+  }
+  next();
+});
+
 /**
  * @typedef Order
  */

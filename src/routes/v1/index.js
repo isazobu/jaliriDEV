@@ -8,9 +8,9 @@ const countryRoute = require('./country.route');
 const addressRoute = require('./address.route');
 const productRoute = require('./product.route');
 const docsRoute = require('./docs.route');
+const variantsRoute = require('./variant.route');
 
 const wishlistRoute = require('./wishlist.route');
-
 
 const attributeRoute = require('./attribute.route');
 
@@ -96,6 +96,10 @@ const defaultRoutes = [
   {
     path: '/wishlists',
     route: wishlistRoute,
+  },
+  {
+    path: '/variants',
+    route: variantsRoute,
   },
 
   // {

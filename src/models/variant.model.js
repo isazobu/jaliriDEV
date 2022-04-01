@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const attributeSchema = require('./attribute.schema');
+const { paginate, toJSON } = require('./plugins');
+const attributeSchema = require('./schemas/attribute.schema');
 
 const variantSchema = mongoose.Schema({
   sku: {
@@ -12,6 +13,11 @@ const variantSchema = mongoose.Schema({
     type: String,
     trim: true,
     unique: true,
+    required: true,
+  },
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Product',
     required: true,
   },
   attributes: [attributeSchema],
@@ -94,6 +100,14 @@ const variantSchema = mongoose.Schema({
   // Required?
   // Bu collection nasıl şişer ?
 });
+
+variantSchema.plugin(toJSON);
+variantSchema.plugin(paginate);
+
+variantSchema.statics.isVariantExist = async function (sku) {
+  const variant = await this.findOne({ sku });
+  return !!variant;
+};
 
 /**
  * @typedef Variant

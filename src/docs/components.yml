@@ -144,6 +144,8 @@ components:
     Order:
       type: object
       properties:
+        orderNo:
+          type: string
         status:
           type: string
           enum: [pending, processing, shipped, delivered, cancelled]
@@ -163,6 +165,7 @@ components:
         id:
           type: string
       example:
+        orderNo: '12345678910'
         status: pending
         isPaid: false
         paymentMethod: COD
@@ -180,6 +183,144 @@ components:
         user: 5ebac534954b54139806c112
         dateOrdered: 2020-08-20T00:00:00.000Z
         id: 61f985d1df5de57ec38835bf
+    
+    Variant:
+      type: object
+      properties:
+        id:
+          type: string
+        sku:
+          type: string
+        barcode:
+          type: string
+        attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              attribute:
+                type: string
+              value:
+                type: string
+        kg:
+          type: number
+        dimension:
+          type: object
+          properties:
+            length:
+              type: number
+            width:
+              type: number
+            height:
+              type: number
+        price:
+          $ref: '#/components/schemas/Price'
+            
+        totalStock:
+          type: number
+        hasStock:
+          type: boolean
+        isActive:
+          type: boolean
+        product:
+          type: string
+          ref: Product
+        image:
+          type: array
+          items:
+            type: string
+            format: url
+        freeShipping:
+          type: boolean
+      example:
+        sku: 139234
+        barcode: 452381
+        product: 622e2ddedcf4e5651ed56821
+        attributes:
+        - name: Color
+          value: orange
+          isActive: true
+        kg: 3
+        dimension:
+          width: 28
+          height: 45
+          depth: 42
+        image:
+        - https://picsum.photos/200/300
+        - https://picsum.photos/200/300
+        - https://picsum.photos/200/300
+        isActive: true
+        price:
+          currency: MVR
+          sellingPrice:
+            text: "$53.81"
+            value: 38
+          discountExist: false
+          discountedPrice:
+            text: "$6.02"
+            value: 79
+          originalPrice:
+            text: "$27.27"
+            value: 22
+          discountAmount:
+            text: "$19.79"
+            value: 66
+          discountedType: fixed
+          shippingPrice:
+            text: "$37.12"
+            value: 51
+        freeShipping: false
+        hasStock: true
+        totalStock: 52
+
+    Price: 
+      type: object
+      properties:
+        currency:
+          type: string
+        sellingPrice:
+          type: object
+          properties:
+            text:
+              type: string
+            value:
+              type: number
+        discountExist:
+          type: boolean
+        discountedPrice:
+          type: object
+          properties:
+            text:
+              type: string
+            value:
+              type: number
+        originalPrice:
+          type: object
+          properties:
+            text:
+              type: string
+            value:
+              type: number
+          example:
+            text: "$27.27"
+            value: 22
+        discountAmount:
+          type: object
+          properties:
+            text:
+              type: string
+            value:
+              type: number
+        discountedType:
+          type: string
+          enum: [fixed, percentage]
+        shippingPrice:
+          type: object
+          properties:
+            text:
+              type: string
+            value:
+              type: number
 
     Token:
       type: object
