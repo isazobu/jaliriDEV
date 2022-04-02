@@ -26,24 +26,24 @@ const orderSchema = mongoose.Schema({
   expectedDeliveryDate: {
     type: Date,
     default: () => new Date() + 1000 * 60 * 60 * 24 * 7,
-    validate: {
-      validator(value) {
-        return value >= this.deliveryDate;
-      },
-      message: 'Expected delivery date must be after dateOrdered',
-    },
+    // validate: {
+    //   validator(value) {
+    //     return value >= this.deliveryDate;
+    //   },
+    //   message: 'Expected delivery date must be after dateOrdered',
+    // },
   }, // 7 days
   tax: { type: Number, default: 0 },
   paymentMethod: { type: String, required: true, default: 'COD' },
   dateOrdered: {
     type: Date,
     default: Date.now,
-    validate: {
-      validator(value) {
-        return value <= this.expectedDeliveryDate;
-      },
-      message: 'Date ordered must be before expected delivery date',
-    },
+    // validate: {
+    //   validator(value) {
+    //     return value <= this.expectedDeliveryDate;
+    //   },
+    //   message: 'Date ordered must be before expected delivery date',
+    // },
   },
 });
 

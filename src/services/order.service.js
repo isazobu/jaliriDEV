@@ -63,7 +63,7 @@ const createOrder = async (userId, orderBody) => {
   //   { _id: { $in: order.cart.items.map((item) => item.product) } },
   //   { $inc: { 'variants.totalStock': -order.cart.items.map((item) => item.quantity).reduce((a, b) => a + b, 0) } }
   // );
-  order = order.save();
+  order = await order.save();
 
   user.cart = undefined;
   await user.save();
