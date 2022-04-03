@@ -5,8 +5,8 @@ const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { searchService } = require('../services');
 
-const search = catchAsync(async (req, res) => {
-  const result = await searchService.search(req.query.key);
+const autoCompleteSearch = catchAsync(async (req, res) => {
+  const result = await searchService.autoCompleteSearch(req.query.key);
   // if search products not found
   if (result.length === 0) {
     return res.status(httpStatus.NOT_FOUND).send({
@@ -17,6 +17,7 @@ const search = catchAsync(async (req, res) => {
 
   res.status(httpStatus.OK).send(result);
 });
+
 module.exports = {
-  search,
+  autoCompleteSearch,
 };

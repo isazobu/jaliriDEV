@@ -6,6 +6,6 @@ const searchController = require('../../controllers/search.controller');
 
 const router = express.Router();
 
-router.route('/autocomplete').post(validate(searchValidation.search), searchController.search);
+router.route('/autocomplete').post(validate(searchValidation.search), searchController.autoCompleteSearch);
 
 module.exports = router;

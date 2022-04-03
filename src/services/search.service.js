@@ -13,7 +13,7 @@ const { populate } = require('../models/token.model');
  */
 
 // product search in seotitle field
-const search = async (key) => {
+const autoCompleteSearch = async (key) => {
   const query = Product.aggregate([
     {
       $search: {
@@ -25,16 +25,12 @@ const search = async (key) => {
             maxEdits: 2,
           },
         },
-        // highlight: {
-        //   path: 'title',
-        // },
       },
     },
     {
       $project: {
+        _id: 0,
         title: 1,
-        score: { $meta: 'searchScore' },
-        // highlight: { $meta: 'searchHighlights' },
       },
     },
     {
@@ -49,5 +45,5 @@ const search = async (key) => {
 };
 
 module.exports = {
-  search,
+  autoCompleteSearch,
 };
