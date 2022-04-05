@@ -45,6 +45,7 @@ const addToCart = async (userId, items) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Variant not found');
   }
 
+
   variants.forEach((variant) => {
     addItem(user.cart.items, variant, items.find((item) => item.sku === variant.sku).quantity);
   });
@@ -71,9 +72,15 @@ const manipulate = async (userId, action, sku, quantity) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  const variant = await Variant.findOne({ sku }).populate('product', 'title brand');
-  if (!variant) {
+  
+  // Zahid buraya bakacak. TRUNCATE Caseleri - is variant undefined?
+  let variant;
+
+  if (sku && action !== 'truncate') {
+    variant = await Variant.findOne({ sku }).populate('product', 'title brand');
+    if (!variant) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Variant not found');
+    }
   }
 
   if (!user.cart) {
@@ -166,7 +173,8 @@ function addItem(items, variant, quantity) {
       product: _id,
       brand,
       title,
-      images: [...variant.image],
+      attributes: variant.attributes,
+      images: variant.image,
       totalDiscount: price.discountAmount.value * quantity,
       totalPrice: price.sellingPrice.value * quantity,
       // eslint-disable-next-line prettier/prettier

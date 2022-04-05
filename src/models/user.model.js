@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
 const { orderCartSchema } = require('./schemas');
+const addressSchema = require('./schemas/address.schema');
 
 const userSchema = mongoose.Schema(
   {
@@ -48,6 +49,7 @@ const userSchema = mongoose.Schema(
     cart: {
       type: orderCartSchema,
     },
+    addresses: [addressSchema],
   },
   {
     timestamps: true,
