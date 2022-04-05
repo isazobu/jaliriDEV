@@ -102,6 +102,14 @@ const getUserMailAndName = async (userId) => {
   };
 };
 
+const changePassword = async (userId, oldPassword, newPassword) => {
+  const user = await userService.getUserById(userId);
+  if (!user || !(await user.isPasswordMatch(oldPassword))) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
+  }
+  await userService.updateUserById(user.id, { password: newPassword });
+};
+
 module.exports = {
   loginUserWithEmailAndPassword,
   logout,
@@ -109,4 +117,5 @@ module.exports = {
   resetPassword,
   verifyEmail,
   getUserMailAndName,
+  changePassword,
 };
