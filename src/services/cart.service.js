@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
 const httpStatus = require('http-status');
-const { User, Product } = require('../models');
+const { User, Variant } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -40,18 +40,14 @@ const addToCart = async (userId, items) => {
   }
 
   const skus = items.map((item) => item.sku);
-
-  const products = await Product.find({ 'variants.sku': { $in: skus } }).select('variants title brand');
-  if (!products) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  const variants = await Variant.find({ sku: skus }).populate('product', 'title brand');
+  if (variants.length !== skus.length) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Variant not found');
   }
 
-  products.forEach((product) => {
-    items.forEach((item) => {
-      const variant = product.variants.find((v) => v.sku === item.sku);
-      if (!variant) return;
-      addItem(user.cart.items, variant, item.quantity, product._id, product.title, product.brand);
-    });
+
+  variants.forEach((variant) => {
+    addItem(user.cart.items, variant, items.find((item) => item.sku === variant.sku).quantity);
   });
 
   calculateTotalPrice(user);
@@ -76,14 +72,15 @@ const manipulate = async (userId, action, sku, quantity) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 
+  
+  // Zahid buraya bakacak. TRUNCATE Caseleri - is variant undefined?
   let variant;
-  let product;
+
   if (sku && action !== 'truncate') {
-    product = await Product.findOne({ 'variants.sku': sku }).select('variants title brand');
-    if (!product || product.variants.length === 0) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+    variant = await Variant.findOne({ sku }).populate('product', 'title brand');
+    if (!variant) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Variant not found');
     }
-    variant = product.variants.find((item) => item.sku === sku);
   }
 
   if (!user.cart) {
@@ -94,7 +91,7 @@ const manipulate = async (userId, action, sku, quantity) => {
 
   switch (action) {
     case 'insert':
-      addItem(items, variant, quantity, product._id, product.title, product.brand);
+      addItem(items, variant, quantity);
       break;
     case 'delete':
       deleteItem(items, variant, quantity);
@@ -118,33 +115,25 @@ const getCartStock = async (userId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  if (!user.cart) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Cart not found');
+  if (!user.cart || user.cart.items.length === 0) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Cart is empty');
   }
 
   const { items } = user.cart;
-  const skus = items.map((item) => item.sku);
-  const stock = await Product.find({
-    'variants.sku': { $in: skus },
-  }).select('variants');
 
-  if (!stock) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
-  }
-
-  const data = stock
-    .map((product) => {
-      return product.variants
-        .filter((item) => skus.includes(item.sku))
-        .map((variant) => {
-          return {
-            sku: variant.sku,
-            hasStock: variant.hasStock,
-            totalStock: variant.totalStock,
-          };
-        });
+  const data = await Promise.all(
+    items.map(async (item) => {
+      const variant = await Variant.findOne({ sku: item.sku });
+      if (!variant) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Variant not found');
+      }
+      return {
+        sku: variant.sku,
+        hasStock: variant.hasStock,
+        totalStock: variant.totalStock,
+      };
     })
-    .flat();
+  );
 
   return { items: data };
 };
@@ -167,8 +156,9 @@ function deleteItem(items, variant, quantity) {
   } else throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
 }
 
-function addItem(items, variant, quantity, productId, title, brand) {
+function addItem(items, variant, quantity) {
   const indexFound = items.findIndex((item) => item.sku === variant.sku);
+  const { _id, title, brand } = variant.product;
   const { price } = variant;
   if (indexFound > -1) {
     items[indexFound].quantity += quantity;
@@ -180,7 +170,7 @@ function addItem(items, variant, quantity, productId, title, brand) {
     items.push({
       quantity,
       sku: variant.sku,
-      product: productId,
+      product: _id,
       brand,
       title,
       attributes: variant.attributes,

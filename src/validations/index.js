@@ -6,6 +6,7 @@ module.exports.orderValidation = require('./order.validation');
 module.exports.addressValidation = require('./address.validation');
 module.exports.cartValidation = require('./cart.validation');
 module.exports.couponValidation = require('./coupon.validation');
+module.exports.variantValidation = require('./variant.validation');
 
 module.exports.wishlistValidation = require('./wishlist.validation');
 module.exports.brandValidation = require('./brand.validation');

@@ -8,7 +8,7 @@ const { variantSchema } = require('./schemas');
 
 const { toJSON, paginate, productFiltering } = require('./plugins');
 
-const productSchema = Schema(
+const productSchema = new Schema(
   {
     category: [{ type: Schema.Types.ObjectId, ref: 'Category', autopopulate: true, required: true }],
     productId: { type: String, trim: true, required: [true, 'Product Id is required'] },
@@ -43,18 +43,18 @@ const productSchema = Schema(
       ref: 'Country',
       required: true,
       autopopulate: true,
-
     },
     tags: [{ type: String }],
-    variants: [
-      {
-        type: variantSchema,
-        required: true, // end variants
-      },
-    ],
+    // variants: [
+    //   {
+    //     type: String,
+    //   },
+    // ],
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
@@ -65,6 +65,13 @@ productSchema.plugin(productFiltering);
 
 productSchema.virtual('url').get(function () {
   return `localhost:3000/api/v1/products/${this._id}`;
+});
+
+productSchema.virtual('variants', {
+  ref: 'Variant',
+  localField: '_id',
+  foreignField: 'product',
+  autopopulate: true,
 });
 
 productSchema.statics.isProductExist = async function (title) {
