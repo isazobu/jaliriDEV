@@ -102,12 +102,15 @@ const getUserMailAndName = async (userId) => {
   };
 };
 
+// change passsword remove refresh token and generate new ones
 const changePassword = async (userId, oldPassword, newPassword) => {
   const user = await userService.getUserById(userId);
   if (!user || !(await user.isPasswordMatch(oldPassword))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect password');
   }
   await userService.updateUserById(user.id, { password: newPassword });
+  await Token.deleteMany({ user: user.id, type: tokenTypes.REFRESH });
+  return tokenService.generateAuthTokens(user);
 };
 
 module.exports = {
