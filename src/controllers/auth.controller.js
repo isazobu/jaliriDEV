@@ -41,8 +41,8 @@ const resetPassword = catchAsync(async (req, res) => {
 });
 
 const changePassword = catchAsync(async (req, res) => {
-  await authService.changePassword(req.user.id, req.body.oldPassword, req.body.newPassword);
-  res.status(httpStatus.OK).send({ message: 'Password changed successfully', success: true });
+  const tokens = await authService.changePassword(req.user.id, req.body.oldPassword, req.body.newPassword);
+  res.status(httpStatus.OK).send({ tokens, message: 'Password changed successfully', success: true });
 });
 
 const sendVerificationEmail = catchAsync(async (req, res) => {
