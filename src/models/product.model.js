@@ -11,7 +11,6 @@ const { toJSON, paginate, productFiltering } = require('./plugins');
 const productSchema = Schema(
   {
     category: [{ type: Schema.Types.ObjectId, ref: 'Category', autopopulate: true, required: true }],
-    productId: { type: String, trim: true, required: [true, 'Product Id is required'] },
     title: {
       type: String,
       trim: true,
@@ -32,7 +31,7 @@ const productSchema = Schema(
     },
     description: {
       type: String,
-      maxLength: 200,
+      maxlength: 500,
       trim: true,
     },
     thumbnail: { type: String, required: [true, 'Thumbnail is required'] },
@@ -43,7 +42,6 @@ const productSchema = Schema(
       ref: 'Country',
       required: true,
       autopopulate: true,
-
     },
     tags: [{ type: String }],
     variants: [
@@ -67,6 +65,36 @@ productSchema.virtual('url').get(function () {
   return `localhost:3000/api/v1/products/${this._id}`;
 });
 
+// prices values to prices text in variants
+productSchema.pre('save', async function (next) {
+  const variants = this.variants;
+  for (let i = 0; i < variants.length; i++) {
+    const variant = variants[i];
+    const { price } = variant;
+    const { currency, sellingPrice, discountedPrice, originalPrice, discountAmount, shippingPrice, totalPrice } = price;
+    // all values to text
+    if (sellingPrice) {
+      sellingPrice.text = `${currency} ${sellingPrice.value}`;
+    }
+    if (discountedPrice) {
+      variant.price.discountedPrice.text = `${currency} ${discountedPrice.value}`;
+    }
+    if (originalPrice) {
+      variant.price.originalPrice.text = `${currency} ${originalPrice.value}`;
+    }
+    if (discountAmount) {
+      variant.price.discountAmount.text = `${currency} ${discountAmount.value}`;
+    }
+    if (shippingPrice) {
+      variant.price.shippingPrice.text = `${currency} ${shippingPrice.value}`;
+    }
+    if (totalPrice) {
+      variant.price.totalPrice.text = `${currency} ${totalPrice.value}`;
+    }
+  }
+  next();
+});
+
 productSchema.statics.isProductExist = async function (title) {
   const product = await this.findOne({ title });
   return !!product;
@@ -76,10 +104,6 @@ productSchema.statics.isProductExistByProductId = async function (productId) {
   const product = await this.findOne({ productId: productId });
   return !!product;
 };
-
-// productSchema.pre('save', async function (next) {
-
-// });
 
 /**
  * @typedef Product
