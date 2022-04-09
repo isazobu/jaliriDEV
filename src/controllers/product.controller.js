@@ -9,16 +9,16 @@ const createProduct = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(productItem);
 });
 
+const createManyProducts = catchAsync(async (req, res) => {
+  const productItems = await productService.createManyProducts(req.body);
+  res.status(httpStatus.CREATED).send(productItems);
+});
+
 const getVariants = catchAsync(async (req, res) => {
   const { skuId } = req.params;
 
   const variants = await productService.getVariants(skuId);
   res.status(httpStatus.OK).send(variants);
-});
-
-const createManyProducts = catchAsync(async (req, res) => {
-  const productItems = await productService.createManyProducts(req.body);
-  res.status(httpStatus.CREATED).send(productItems);
 });
 
 const getProduct = catchAsync(async (req, res) => {

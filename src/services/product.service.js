@@ -128,7 +128,9 @@ const getAllSizeByColorWithSku = async (sku) => {
 
 // Create many products
 const createManyProducts = async (products) => {
-  products.forEach(async (product) => {
+  const productsCreated = [];
+  for (let i = 0; i < products.length; i++) {
+    const product = products[i];
     const productCountry = await Country.getCountryByCode(product.country);
     if (productCountry) {
       product.country = productCountry._id;
@@ -141,21 +143,16 @@ const createManyProducts = async (products) => {
     } else {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Category not found');
     }
-
-    // if (await Product.isProductExist(productBody.title)) {
-    //   throw new ApiError(httpStatus.BAD_REQUEST, 'Product already exist');
-    if (await Product.isProductExistByProductId(product.productId)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Product Id already exist');
-    }
-  });
-  return Product.create(products);
+    productsCreated.push(Product.create(product));
+  }
+  return Promise.all(productsCreated);
 };
 
 /**
  * Query for products
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {string} [options.sortBy] - ®Sort option in the format: sortField:(desc|asc)
  * @param {number} [options.limit] - Maximum number of results per page (default = 10)
  * @returns {Promise<QueryResult>}
  */
