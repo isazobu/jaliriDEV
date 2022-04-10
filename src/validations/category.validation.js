@@ -5,6 +5,7 @@ const createCategory = {
   body: Joi.object().keys({
     title: Joi.string().required(),
     parentId: Joi.string().custom(objectId),
+    mainCategory: Joi.boolean(),
     subCategories: Joi.array().items(Joi.string().custom(objectId)),
     image: Joi.string(),
     isActive: Joi.boolean(),

@@ -18,6 +18,10 @@ const categorySchema = Schema(
       ref: 'Category',
       default: null,
     },
+    mainCategory: {
+      type: Boolean,
+      default: false,
+    },
     subCategories: [
       {
         type: Schema.Types.ObjectId,
@@ -38,6 +42,14 @@ const categorySchema = Schema(
 
 categorySchema.plugin(toJSON);
 categorySchema.plugin(paginate);
+
+// // product count this categroy
+// categorySchema.virtual('productCount', {
+//   ref: 'Product',
+//   localField: 'category',
+//   foreignField: 'parentId',
+//   count: true,
+// });
 
 /**
  * Check if category is already exist
