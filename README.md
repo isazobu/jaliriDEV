@@ -1,4 +1,4 @@
-# RESTful API Node Server Boilerplate
+# RESTful API Node Server Jaliri
 
 
 ## Manual Installation
