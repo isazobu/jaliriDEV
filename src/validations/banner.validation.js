@@ -29,6 +29,11 @@ const getBanners = {
     limit: Joi.number().integer(),
     // page: Joi.number().integer(),
   }),
+  header: Joi.object()
+    .keys({
+      country: Joi.string().required(),
+    })
+    .min(1),
 };
 
 const getBanner = {
