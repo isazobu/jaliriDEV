@@ -22,6 +22,7 @@ const categorySchema = Schema(
       type: Boolean,
       default: false,
     },
+
     subCategories: [
       {
         type: Schema.Types.ObjectId,
@@ -59,6 +60,12 @@ categorySchema.plugin(paginate);
  */
 categorySchema.statics.isCategoryExist = async function (title, excludeUserId) {
   const category = await this.findOne({ title, _id: { $ne: excludeUserId } });
+  return !!category;
+};
+
+// category id is exist
+categorySchema.statics.isCategoryIdExist = async function (categoryId) {
+  const category = await this.findById(categoryId);
   return !!category;
 };
 

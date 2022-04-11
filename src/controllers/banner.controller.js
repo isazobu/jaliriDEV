@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { bannerService } = require('../services');
+const { bannerService, countryService } = require('../services');
 
 const createBanner = catchAsync(async (req, res) => {
   const banner = await bannerService.createBanner(req.body);
@@ -11,6 +11,17 @@ const createBanner = catchAsync(async (req, res) => {
 
 const getBanners = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['title', 'field', 'category', 'target', 'row', 'isActive']);
+  // add to filter the country header
+  if (req.headers.country) {
+    const country = await countryService.getCountryByCode(req.headers.country);
+    if (country) {
+      filter.country = req.headers.country.toUpperCase();
+    } else {
+      res.status(httpStatus.NOT_FOUND).send('Country not found');
+    }
+  } else {
+    res.status(httpStatus.NOT_FOUND).send('Country not found');
+  }
   const options = pick(req.query, ['sortBy', 'limit']);
   const result = await bannerService.queryBanners(filter, options);
   res.status(httpStatus.OK).send(result);

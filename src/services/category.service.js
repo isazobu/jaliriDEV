@@ -52,12 +52,7 @@ const queryCategories = async (filter, options) => {
  * @returns {Promise<Category>}
  */
 const getCategoryById = async (categoryId) => {
-  return (
-    Category.findById(categoryId)
-      // .populate('subCategories', 'slug title image')
-      // .populate('parentId', 'slug title')
-      .populate('productCount')
-  );
+  return Category.findById(categoryId).populate('subCategories', 'slug title image').populate('parentId', 'slug title');
 };
 
 /**

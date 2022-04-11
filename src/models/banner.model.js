@@ -18,6 +18,12 @@ const bannerSchema = Schema(
       ref: 'Category',
       required: true,
     },
+    // Country modelden title olarak çekilecek.
+    country: {
+      type: String,
+      trim: true,
+      required: true,
+    },
     image: { type: String, required: true },
     url: { type: String, required: true },
     field: { type: String, required: true },

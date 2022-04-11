@@ -6,6 +6,7 @@ const createBanner = {
     title: Joi.string().required(),
     url: Joi.string().uri().required(),
     category: Joi.string().custom(objectId),
+    country: Joi.string().required(),
     image: Joi.string().required(),
     field: Joi.string().required(),
     target: Joi.string().required(),
