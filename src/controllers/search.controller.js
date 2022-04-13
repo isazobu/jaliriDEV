@@ -8,12 +8,7 @@ const { searchService } = require('../services');
 const autoCompleteSearch = catchAsync(async (req, res) => {
   const result = await searchService.autoCompleteSearch(req.query.key);
   // if search products not found
-  if (result.length === 0) {
-    return res.status(httpStatus.NOT_FOUND).send({
-      status: httpStatus.NOT_FOUND,
-      message: 'No products found',
-    });
-  }
+  
 
   res.status(httpStatus.OK).send(result);
 });
