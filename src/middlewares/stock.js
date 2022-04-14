@@ -36,6 +36,9 @@ const createOrder = (req, res, next) => {
     .select('sku totalStock')
     .then((variants) => {
       variants.forEach((variant) => {
+        if (!variant) {
+          throw new ApiError(httpStatus.BAD_REQUEST, 'Variant not found');
+        }
         const cartItem = items.find((item) => item.sku === variant.sku);
         if (variant.totalStock < cartItem.quantity) {
           throw new ApiError(httpStatus.BAD_REQUEST, 'Not enough stock for item: ' + cartItem.sku);
@@ -58,6 +61,9 @@ const addToCart = (req, res, next) => {
     .select('totalStock sku')
     .then((variants) => {
       variants.forEach((variant) => {
+        if (!variant) {
+          throw new ApiError(httpStatus.BAD_REQUEST, 'Variant not found');
+        }
         const itemToAdd = items.find((item) => item.sku === variant.sku);
         const quantityInCart = itemsInCart?.find((cartItem) => cartItem.sku === itemToAdd.sku)?.quantity || 0;
         if (variant.totalStock < itemToAdd.quantity + quantityInCart) {

@@ -72,7 +72,7 @@ const manipulate = async (userId, action, sku, quantity) => {
   }
 
   const variant = await Variant.findOne({ sku }).populate('product', 'title brand');
-  if (!variant) {
+  if (!variant && action !== 'truncate') {
     throw new ApiError(httpStatus.NOT_FOUND, 'Variant not found');
   }
 
