@@ -47,6 +47,15 @@ const getUserByEmail = async (email) => {
 };
 
 /**
+ *
+ * @param {string} email
+ * @returns {Promise<User>}
+ */
+const getUserByEmailWithoutCartAndAddress = async (email) => {
+  return User.findOne({ email }).select('-cart -addresses');
+};
+
+/**
  * Update user by id
  * @param {ObjectId} userId
  * @param {Object} updateBody
@@ -84,6 +93,7 @@ module.exports = {
   queryUsers,
   getUserById,
   getUserByEmail,
+  getUserByEmailWithoutCartAndAddress,
   updateUserById,
   deleteUserById,
 };

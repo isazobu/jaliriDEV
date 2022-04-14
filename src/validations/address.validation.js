@@ -4,7 +4,7 @@ const { objectId } = require('./custom.validation');
 const createAddress = {
   body: Joi.object().keys({
     fullName: Joi.string().required(),
-    title: Joi.string(),
+    title: Joi.string().required(),
     addressText: Joi.string().required(),
     addressType: Joi.string(),
     country: Joi.string().required(),

@@ -45,6 +45,7 @@ const addToCart = async (userId, items) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Variant not found');
   }
 
+
   variants.forEach((variant) => {
     addItem(user.cart.items, variant, items.find((item) => item.sku === variant.sku).quantity);
   });
@@ -166,7 +167,8 @@ function addItem(items, variant, quantity) {
       product: _id,
       brand,
       title,
-      images: [...variant.image],
+      attributes: variant.attributes,
+      images: variant.image,
       totalDiscount: price.discountAmount.value * quantity,
       totalPrice: price.sellingPrice.value * quantity,
       // eslint-disable-next-line prettier/prettier

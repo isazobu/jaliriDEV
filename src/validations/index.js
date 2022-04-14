@@ -11,6 +11,7 @@ module.exports.variantValidation = require('./variant.validation');
 module.exports.wishlistValidation = require('./wishlist.validation');
 module.exports.brandValidation = require('./brand.validation');
 
+module.exports.searchValidation = require('./search.validation');
 module.exports.countryValidation = require('./country.validation');
 module.exports.bannerValidation = require('./banner.validation');
 // module.exports.adminValidation = require('./admin.validation');
