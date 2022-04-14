@@ -15,6 +15,10 @@ const createVariant = async (variantBody) => {
   return Variant.create(variantBody);
 };
 
+const createVariantsRange = async (variants) => {
+  return Variant.insertMany(variants).then((data) => data.map((variant) => variant._id));
+};
+
 /**
  * Query for Variants
  * @param {Object} filter - Mongo filter
@@ -82,6 +86,7 @@ const deleteVariantById = async (variantId) => {
 
 module.exports = {
   createVariant,
+  createVariantsRange,
   queryVariants,
   getVariantById,
   getVariantBySku,

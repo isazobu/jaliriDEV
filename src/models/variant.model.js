@@ -109,6 +109,11 @@ variantSchema.statics.isVariantExist = async function (sku) {
   return !!variant;
 };
 
+variantSchema.pre('remove', async function (next) {
+  await this.model('Product').updateOne({ variants: this._id }, { $pull: { variants: this._id } });
+  next();
+});
+
 /**
  * @typedef Variant
  */

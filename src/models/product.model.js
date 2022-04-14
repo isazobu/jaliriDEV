@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const autoPopulate = require('mongoose-autopopulate');
+const slugify = require('slugify');
 
 const { Schema } = mongoose;
 // const validator = require('validator');
@@ -45,11 +46,16 @@ const productSchema = new Schema(
       autopopulate: true,
     },
     tags: [{ type: String }],
-    // variants: [
-    //   {
-    //     type: String,
-    //   },
-    // ],
+    variants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Variant',
+      },
+    ],
+    slug: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,
@@ -64,15 +70,26 @@ productSchema.plugin(toJSON);
 productSchema.plugin(productFiltering);
 
 productSchema.virtual('url').get(function () {
-  return `localhost:3000/api/v1/products/${this._id}`;
+  return `localhost:3000/api/v1/products/${this.slug}`;
 });
 
-productSchema.virtual('variants', {
-  ref: 'Variant',
-  localField: '_id',
-  foreignField: 'product',
-  autopopulate: true,
+productSchema.pre('remove', async function (next) {
+  await this.model('Variant').deleteMany({ _id: { $in: this.variants } });
+  next();
 });
+
+//Slug generator
+productSchema.pre('save', function (next) {
+  this.slug = slugify(`${this.title}-${this.brand}`, { lower: true, replacement: '-' });
+  next();
+});
+
+// productSchema.virtual('variants', {
+//   ref: 'Variant',
+//   localField: '_id',
+//   foreignField: 'product',
+//   autopopulate: true,
+// });
 
 productSchema.statics.isProductExist = async function (title) {
   const product = await this.findOne({ title });
@@ -80,7 +97,7 @@ productSchema.statics.isProductExist = async function (title) {
 };
 
 productSchema.statics.isProductExistByProductId = async function (productId) {
-  const product = await this.findOne({ productId: productId });
+  const product = await this.findOne({ productId });
   return !!product;
 };
 
