@@ -111,6 +111,7 @@ variantSchema.statics.isVariantExist = async function (sku) {
 
 variantSchema.pre('remove', async function (next) {
   await this.model('Product').updateOne({ variants: this._id }, { $pull: { variants: this._id } });
+  await this.model('User').updateMany({ 'cart.items.sku': this.sku }, { $pull: { 'cart.items': { sku: this.sku } } });
   next();
 });
 
