@@ -12,19 +12,10 @@ const { toJSON, paginate, productFiltering } = require('./plugins');
 const productSchema = new Schema(
   {
     category: [{ type: Schema.Types.ObjectId, ref: 'Category', autopopulate: true, required: true }],
-    productId: { type: String, trim: true, required: [true, 'Product Id is required'] },
     title: {
       type: String,
       trim: true,
       required: true,
-      // unique validate title
-      validate: {
-        validator: async function (title) {
-          const product = await this.model('Product').findOne({ title });
-          return !product;
-        },
-        message: 'Product title already exist',
-      },
     },
     seoTitle: {
       type: String,
