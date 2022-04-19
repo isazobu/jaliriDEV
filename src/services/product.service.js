@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
-const mongoose = require('mongoose');
-
 const { Product, Category, Country, Variant } = require('../models');
+const { createVariantsRange } = require('./variant.service');
+const catchAsync = require('../utils/catchAsync');
 
 const ApiError = require('../utils/ApiError');
 
@@ -32,7 +32,21 @@ const createProduct = async (productBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Product Id already exist');
   }
 
-  return Product.create(productBody);
+  const { variants } = productBody;
+  delete productBody.variants;
+  product = new Product(productBody);
+  
+  let variantIds;
+  if (variants) {
+    variants.forEach(async (variant) => {
+      variant.product = product._id;
+    });
+    variantIds = await createVariantsRange(variants);
+  }
+
+  product.variants = variantIds;
+
+  return product.save();
 };
 
 const getProductBySku = async (sku) => {
@@ -266,6 +280,125 @@ const getManySku = async (skus) => {
   return skuProducts;
 };
 
+const filterProductMenu = async () => {
+  const products = await Product.aggregate([
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'category',
+        foreignField: '_id',
+        as: 'category',
+      },
+    },
+    {
+      $unwind: {
+        path: '$variants',
+      },
+    },
+    {
+      $unwind: {
+        path: '$variants.attributes',
+      },
+    },
+    {
+      $facet: {
+        result: [
+          {
+            $group: {
+              _id: { name: '$variants.attributes.name', value: '$variants.attributes.value' },
+              products: {
+                $addToSet: '$_id',
+              },
+            },
+          },
+          {
+            $project: {
+              'filter.value': '$_id.value',
+              'filter.count': { $size: '$products' },
+            },
+          },
+          {
+            $group: {
+              _id: '$_id.name',
+              filters: { $push: '$filter' },
+            },
+          },
+          {
+            $unwind: {
+              path: '$_id',
+            },
+          },
+        ],
+        brand: [
+          {
+            $group: {
+              _id: { name: 'Brand', brand: '$brand' },
+              products: {
+                $addToSet: '$_id',
+              },
+            },
+          },
+          {
+            $project: {
+              'filter.value': '$_id.brand',
+              'filter.count': { $size: '$products' },
+            },
+          },
+          {
+            $group: {
+              _id: '$_id.name',
+              filters: { $push: '$filter' },
+            },
+          },
+        ],
+
+        category: [
+          {
+            $group: {
+              _id: { name: 'Category', category: '$category' },
+              products: {
+                $addToSet: '$_id',
+              },
+            },
+          },
+          {
+            $project: {
+              '_id.name': 1,
+              '_id.category.title': 1,
+              products: 1,
+            },
+          },
+          {
+            $unwind: {
+              path: '$_id.category',
+            },
+          },
+          {
+            $project: {
+              'filter.value': '$_id.category.title',
+              'filter.count': { $size: '$products' },
+            },
+          },
+          {
+            $group: {
+              _id: '$_id.name',
+              filters: { $push: '$filter' },
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        results: {
+          $concatArrays: ['$result', '$brand', '$category'],
+        },
+      },
+    },
+  ]);
+  return products[0];
+};
+
 module.exports = {
   createProduct,
   createManyProducts,
@@ -278,4 +411,5 @@ module.exports = {
   updateProductById,
   deleteProductById,
   getAllSizeByColorWithSku,
+  filterProductMenu,
 };

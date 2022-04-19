@@ -16,7 +16,7 @@ const createWishlist = async (wishlistBody) => {
 };
 
 const addToWishlist = async (user, product, country) => {
-  if (!(await Product.findById(product))) {
+  if (!(await Product.isProductExistById(product))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Product not found');
   }
   const wishlist = await Wishlist.findOne({ user, country });
@@ -66,7 +66,7 @@ const queryWishlists = async (filter, options) => {
  * @returns {Promise<Wishlist>}
  */
 const getWishlistById = async (wishlistId) => {
-  return Wishlist.findById(wishlistId);
+  return Wishlist.findById(wishlistId).populate('products');
 };
 
 /**
@@ -75,7 +75,8 @@ const getWishlistById = async (wishlistId) => {
  * @returns {Promise<Wishlist>}
  */
 const getWishlistByUser = async (user, country) => {
-  return await Wishlist.findOne({ user, country }) ?? { user, products: [], country };
+  return await Wishlist.findOne({ user, country }).populate('products','title price brand seotitle thumbnail') 
+    ?? { user, products: [], country };
 };
 
 /**

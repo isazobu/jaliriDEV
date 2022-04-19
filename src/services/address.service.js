@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 const httpStatus = require('http-status');
-const { Address, Country } = require('../models');
+const { Country, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -7,49 +8,22 @@ const ApiError = require('../utils/ApiError');
  * @param {Object} addressBody
  * @returns {Promise<Address>}
  */
-const createAddress = async (addressBody) => {
-  // if (!(await Address.isAddressExist(addressBody.title, addressBody.user))) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Address title already exist');
-  // }
+const createAddress = async (userId, addressBody) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  if (user.addresses.some((address) => address.title === addressBody.title)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Address title already exists');
+  }
   const country = await Country.getCountryByCode(addressBody.country);
   if (!country) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Country not found');
   }
   addressBody.country = country._id;
-  return Address.create(addressBody);
-};
-
-/**
- * Query for Addresses
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @returns {Promise<QueryResult>}
- */
-const queryAddresses = async (filter, options) => {
-  const addresses = await Address.paginate(filter, options);
-  return addresses;
-};
-
-// me address
-const getMeAddress = async (userId) => {
-  const address = await Address.getMeAddress(userId);
-  return address;
-};
-
-/**
- * Get address by id
- * @param {ObjectId} id
- * @returns {Promise<Address>}
- */
-const getAddressByIdandMe = async (addressId, userId) => {
-  const address = await Address.findById(addressId);
-
-  if (address && address.user.toString() !== userId) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You can only operate your own address');
-  }
-  return address;
+  user.addresses.push(addressBody);
+  await user.save();
+  return user.addresses.find((address) => address.title === addressBody.title);
 };
 
 /**
@@ -57,28 +31,40 @@ const getAddressByIdandMe = async (addressId, userId) => {
  * @param {string} title
  * @returns {Promise<Address>}
  */
-const getAddressByTitle = async (title) => {
-  return Address.findOne({ title });
+const getAddressByTitle = async (addresses, title) => {
+  return addresses.find((address) => address.title === title);
 };
 
 /**
+ *
+ * @param {Array} addresses
+ * @param {ObjectId} id
+ * @returns
+ */
+const getAddressById = async (addresses, id) => {
+  return addresses.find((address) => address.id === id);
+};
+
+const getAddresses = async (addresses) => {
+  return addresses;
+};
+
+
+/**
  * Update address by id
+ * @param {ObjectId} userId
  * @param {ObjectId} addressId
  * @param {Object} updateBody
  * @returns {Promise<Address>}
  */
-
-const updateAddressById = async (addressId, updateBody) => {
-  const address = await getAddressByIdandMe(addressId, updateBody.user.toString());
-
+const updateAddressByUserId = async (userId, updateBody, addressId) => {
+  const user = await User.findById(userId);
+  const address = user.addresses.find((addr) => addr.id === addressId);
   if (!address) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Address not found');
   }
-  // if (updateBody.title && (await Address.isAddressExist(updateBody.title, addressId))) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Address already taken');
-  // }
   Object.assign(address, updateBody);
-  await address.save();
+  await user.save();
   return address;
 };
 
@@ -88,21 +74,21 @@ const updateAddressById = async (addressId, updateBody) => {
  * @returns {Promise<Address>}
  */
 const deleteAddressById = async (addressId, userId) => {
-  const address = await getAddressByIdandMe(addressId, userId);
+  const user = await User.findById(userId);
+  const address = user.addresses.find((addr) => addr.id === addressId);
   if (!address) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Address not found');
   }
-
-  await address.remove();
+  user.addresses = user.addresses.filter((addr) => addr.id !== addressId);
+  await user.save();
   return address;
 };
 
 module.exports = {
   createAddress,
-  getMeAddress,
-  queryAddresses,
-  getAddressById: getAddressByIdandMe,
+  getAddresses,
+  getAddressById,
   getAddressByTitle,
-  updateAddressById,
+  updateAddressByUserId,
   deleteAddressById,
 };
