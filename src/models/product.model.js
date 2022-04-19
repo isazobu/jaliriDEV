@@ -87,6 +87,11 @@ productSchema.statics.isProductExist = async function (title) {
   return !!product;
 };
 
+productSchema.statics.isProductExistById = async function (_id) {
+  const product = await this.findOne({ _id });
+  return !!product;
+};
+
 productSchema.statics.isProductExistByProductId = async function (productId) {
   const product = await this.findOne({ productId });
   return !!product;
