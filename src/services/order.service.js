@@ -39,8 +39,6 @@ const createOrder = async (userId, orderBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Address not found');
   }
 
-  const { addressId, ...other } = orderBody;
-
   //   const addressId = this.createOrReadAdress(address);
   const itemCount = user.cart.items.reduce((acc, item) => {
     return acc + item.quantity;
