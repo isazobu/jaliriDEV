@@ -75,7 +75,8 @@ const getWishlistById = async (wishlistId) => {
  * @returns {Promise<Wishlist>}
  */
 const getWishlistByUser = async (user, country) => {
-  return await Wishlist.findOne({ user, country }) ?? { user, products: [], country };
+  return await Wishlist.findOne({ user, country }).populate('products','title brand seotitle thumbnail') 
+    ?? { user, products: [], country };
 };
 
 /**
