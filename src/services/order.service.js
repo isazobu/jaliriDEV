@@ -56,7 +56,6 @@ const createOrder = async (userId, orderBody) => {
   Object.assign(order.cart, user.cart);
   // Object.assign(order.address, address);
 
-
   order = await order.save();
 
   await user.cart.items.forEach(async (item) => {
