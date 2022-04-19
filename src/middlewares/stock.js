@@ -30,6 +30,7 @@ const createOrder = (req, res, next) => {
   }
   const { items } = req.user.cart;
   const skus = items.map((item) => item.sku);
+
   Variant.find({
     sku: { $in: skus },
   })

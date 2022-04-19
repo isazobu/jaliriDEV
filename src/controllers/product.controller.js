@@ -38,7 +38,17 @@ const getProductBySku = catchAsync(async (req, res) => {
 });
 
 const getProducts = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['productId', 'title', 'discountExist', 'price', 'category', 'brand', 'size', 'color']);
+  const filter = pick(req.query, [
+    'q', // search query key
+    'productId',
+    'title',
+    'discountExist',
+    'price',
+    'category',
+    'brand',
+    'size',
+    'color',
+  ]);
   // append filter array from header country
   if (req.headers.country) {
     const country = await countryService.getCountryByCode(req.headers.country);
@@ -80,6 +90,11 @@ const getManySku = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(products);
 });
 
+const filterProductMenu = catchAsync(async (req, res) => {
+  const result = await productService.filterProductMenu();
+  res.status(httpStatus.OK).send(result);
+});
+
 module.exports = {
   createProduct,
   createManyProducts,
@@ -91,4 +106,5 @@ module.exports = {
   getManySku,
   deleteProduct,
   getAllSizeByColorWithSku,
+  filterProductMenu,
 };

@@ -32,10 +32,13 @@ const createOrder = async (userId, orderBody) => {
   if (!user) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
   }
-  const address = await Address.findById(orderBody.address);
-  if (!address || address.user.toString() !== userId.toString()) {
+  const { address: addressId, ...other } = orderBody;
+
+  const address = user.addresses.find((addr) => addr.id === addressId);
+  if (!address) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Address not found');
   }
+
   const { addressId, ...other } = orderBody;
 
   //   const addressId = this.createOrReadAdress(address);
@@ -45,7 +48,7 @@ const createOrder = async (userId, orderBody) => {
 
   let order = new Order({
     cart: newCart(),
-    address: mongoose.Types.ObjectId(orderBody.addressId),
+    address,
     user: mongoose.Types.ObjectId(userId),
     message: `${itemCount} items pending for delivery`,
     summary: `${itemCount} items`,
@@ -53,8 +56,10 @@ const createOrder = async (userId, orderBody) => {
   });
 
   Object.assign(order.cart, user.cart);
+  // Object.assign(order.address, address);
 
-  order = order.save();
+
+  order = await order.save();
 
   await user.cart.items.forEach(async (item) => {
     await Variant.updateOne({ sku: item.sku }, { $inc: { totalStock: -item.quantity } });

@@ -111,7 +111,7 @@ const productFiltering = (schema) => {
       criterias.push({ productId: filter.productId });
     }
 
-    const resultDoc = this.aggregate([
+    let pipeline = [
       {
         $lookup: {
           from: 'categories',
@@ -138,10 +138,6 @@ const productFiltering = (schema) => {
           as: 'country',
         },
       },
-
-      // {
-      //   $match: countryCriteria,
-      // },
       {
         $match: {
           $and: criterias,
@@ -149,7 +145,25 @@ const productFiltering = (schema) => {
       },
       { $limit: skip + limit },
       { $skip: skip },
-    ])
+    ];
+    // search q query will be first stage in pipeline
+    if (filter.q) {
+      const query = {
+        $search: {
+          index: 'autocomplete',
+          autocomplete: {
+            query: filter.q,
+            path: 'title',
+            fuzzy: {
+              maxEdits: 2,
+            },
+          },
+        },
+      };
+      pipeline = [query].concat(pipeline);
+    }
+
+    const resultDoc = this.aggregate(pipeline)
       .sort(sort)
 
       .exec();

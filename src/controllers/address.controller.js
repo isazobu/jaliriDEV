@@ -1,38 +1,32 @@
 const httpStatus = require('http-status');
-const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { addressService } = require('../services');
 
 const createAddress = catchAsync(async (req, res) => {
   req.body.user = req.user.id; // address.user auto
-  const address = await addressService.createAddress(req.body);
+  const address = await addressService.createAddress(req.user._id, req.body);
   res.status(httpStatus.CREATED).send(address);
 });
 
-const getAddresses = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['fullName', 'title', 'country', 'city', 'phone', 'user', 'email']);
-  const options = pick(req.query, ['sortBy', 'limit']);
-  const result = await addressService.queryAddresses(filter, options);
-  res.status(httpStatus.OK).send(result);
-});
-
 // get me address
-const getMeAddress = catchAsync(async (req, res) => {
-  const address = await addressService.getMeAddress(req.user.id);
-  res.status(httpStatus.OK).send(address);
+const getAddresses = catchAsync(async (req, res) => {
+  const addresses = await addressService.getAddresses(req.user.addresses);
+  res.status(httpStatus.OK).send(addresses);
 });
 
-const getAddress = catchAsync(async (req, res) => {
-  const address = await addressService.getAddressById(req.params.addressId, req.user.id);
+const getAddressByTitle = catchAsync(async (req, res) => {
+  const { addresses } = req.user;
+  const address = await addressService.getAddressByTitle(addresses, req.params.addressTitle);
   if (!address) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Address not found');
   }
   res.status(httpStatus.OK).send(address);
 });
 
-const getAddressByTitle = catchAsync(async (req, res) => {
-  const address = await addressService.getAddressByTitle(req.params.addressTitle);
+const getAddressById = catchAsync(async (req, res) => {
+  const { addresses } = req.user;
+  const address = await addressService.getAddressById(addresses, req.params.addressId);
   if (!address) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Address not found');
   }
@@ -40,8 +34,7 @@ const getAddressByTitle = catchAsync(async (req, res) => {
 });
 
 const updateAddress = catchAsync(async (req, res) => {
-  req.body.user = req.user.id;
-  const address = await addressService.updateAddressById(req.params.addressId, req.body);
+  const address = await addressService.updateAddressByUserId(req.user._id, req.body, req.params.addressId);
   res.send(address);
 });
 
@@ -53,9 +46,8 @@ const deleteAddress = catchAsync(async (req, res) => {
 module.exports = {
   createAddress,
   getAddresses,
-  getAddress,
-  getMeAddress,
   getAddressByTitle,
+  getAddressById,
   updateAddress,
   deleteAddress,
 };
