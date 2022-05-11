@@ -8,12 +8,14 @@ const getCart = {
 
 const addToCart = {
   body: Joi.object().keys({
-    items: Joi.array().items(
-      Joi.object().keys({
-        sku: Joi.string().required(),
-        quantity: Joi.number().required().integer().min(1),
-      })
-    ),
+    items: Joi.array()
+      .min(1)
+      .items(
+        Joi.object().keys({
+          sku: Joi.string().required(),
+          quantity: Joi.number().required().integer().min(1),
+        })
+      ),
   }),
 };
 

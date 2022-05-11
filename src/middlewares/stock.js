@@ -64,12 +64,12 @@ const addToCart = (req, res, next) => {
     .select('variants')
     .then((products) => {
       if (!products || products.length === 0) {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Product not found');
+        throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
       }
       const variantStocks = products.map((product) => {
         const variant = product.variants.find((item) => skus.includes(item.sku));
         if (!variant) {
-          throw new ApiError(httpStatus.BAD_REQUEST, 'Variant not found');
+          throw new ApiError(httpStatus.NOT_FOUND, 'Variant not found');
         }
         return {
           sku: variant.sku,
