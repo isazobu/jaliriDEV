@@ -152,6 +152,20 @@ const deleteMyOrderById = async (orderId, userId) => {
   return order;
 };
 
+/**
+ * Get orders by status(es)
+ * @param {Object} options - object containing query options
+ * @param {Object} fields - (optional) object of required fields, e.g. { cart: 1, dateOrdered: 1, id: 0 }
+ * @returns {Promise<QueryResult>} - array of matched orders
+ */
+const getOrdersByStatus = async (options, fields = {}) => {
+  const orders = await Order.find(options, fields);
+  if (orders.length <= 0) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'No Orders with the specified status');
+  }
+  return orders;
+};
+
 const newCart = () => {
   return {
     cart: [],
@@ -170,4 +184,5 @@ module.exports = {
   updateOrderById,
   deleteOrderById,
   deleteMyOrderById,
+  getOrdersByStatus,
 };
