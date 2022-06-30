@@ -121,18 +121,18 @@ const getProductSales = catchAsync(async (req, res) => {
   for (let i = 0; i < lastYearOrders.length; i += 1) {
     if (i < lastMonthOrders.length) {
       /** Calculate monthly sales */
-      const matchedProduct = lastMonthOrders.cart.find((item) => item._id.toString() === productId.toString());
+      const matchedProduct = lastMonthOrders[i].cart.find((item) => item._id.toString() === productId.toString());
       productMonthlySales += matchedProduct.quantity;
     }
 
     if (i < yesterdayOrders.length) {
       /** Calculate daily sales */
-      const matchedProduct = yesterdayOrders.cart.find((item) => item._id.toString() === productId.toString());
+      const matchedProduct = yesterdayOrders[i].cart.find((item) => item._id.toString() === productId.toString());
       productDailySales += matchedProduct.quantity;
     }
 
     /** Calculate yearly sales */
-    const matchedProduct = lastYearOrders.cart.find((item) => item._id.toString() === productId.toString());
+    const matchedProduct = lastYearOrders[i].cart.find((item) => item._id.toString() === productId.toString());
     productYearlySales += matchedProduct.quantity;
   }
 
