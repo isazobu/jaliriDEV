@@ -4,7 +4,7 @@ const auth = require('../../middlewares/auth');
 // const validate = require('../../middlewares/validate');
 // const productValidation = require('../../validations/product.validation');
 const productController = require('../../controllers/product.controller');
-const { get } = require('../../models/schemas/orderCart.schema');
+// const { get } = require('../../models/schemas/orderCart.schema');
 
 const router = express.Router();
 
@@ -19,6 +19,8 @@ router.route('/many').post(auth('manageProducts'), productController.createManyP
 router.route('/skus').post(productController.getManySku);
 
 router.route('/filters').get(productController.filterProductMenu);
+
+router.route('/:productId/statistics').get(productController.getProductSales);
 
 router
   .route('/:productId')
