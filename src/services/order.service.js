@@ -161,7 +161,7 @@ const deleteMyOrderById = async (orderId, userId) => {
 const getOrdersByStatus = async (options, fields = {}) => {
   const orders = await Order.find(options, fields);
   if (orders.length <= 0) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'No Orders with the specified status');
+    throw new ApiError(httpStatus.NOT_FOUND, 'No Orders in the last year for the specified product');
   }
   return orders;
 };
