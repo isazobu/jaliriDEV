@@ -1,0 +1,1023 @@
+{
+    "category": "Men",
+    "title": "Nike Sport Black Shoes",
+    "description": "esse cillum sit id cupidatat ipsum nulla elit magna mollit ad officia tempor commodo nulla cupidatat anim cupidatat in",
+    "thumbnail": "https://picsum.photos/200/300",
+    "brand": "Jaliri",
+    "warrantyMonth": "24",
+    "country": "SA",
+    "tags": [
+        "qui eiusm",
+        "do",
+        "commodo es"
+    ],
+    "variants": [
+        {
+            "sku": 438108,
+            "barcode": 194885,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "41",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Black",
+                    "isActive": true
+                }
+            ],
+            "kg": 1,
+            "dimension": {
+                "width": 5,
+                "height": 39,
+                "depth": 25
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": false,
+            "price": {
+                "currency": "NIO",
+                "sellingPrice": {
+                    "value": 57
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 16
+                },
+                "originalPrice": {
+                    "value": 97
+                },
+                "discountAmount": {
+                    "value": 97
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 94
+                }
+            },
+            "freeShipping": true,
+            "hasStock": true,
+            "totalStock": 48
+        },
+        {
+            "sku": 375045,
+            "barcode": 236929,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "42",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Black",
+                    "isActive": true
+                }
+            ],
+            "kg": 2,
+            "dimension": {
+                "width": 76,
+                "height": 31,
+                "depth": 66
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "BTN",
+                "sellingPrice": {
+                    "value": 9
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 69
+                },
+                "originalPrice": {
+                    "value": 99
+                },
+                "discountAmount": {
+                    "value": 74
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 90
+                }
+            },
+            "freeShipping": true,
+            "hasStock": true,
+            "totalStock": 71
+        },
+        {
+            "sku": 247697,
+            "barcode": 126987,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "40",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Brown",
+                    "isActive": true
+                }
+            ],
+            "kg": 1,
+            "dimension": {
+                "width": 40,
+                "height": 94,
+                "depth": 89
+            },
+            "image": [
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "NAD",
+                "sellingPrice": {
+                    "value": 30
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 7
+                },
+                "originalPrice": {
+                    "value": 79
+                },
+                "discountAmount": {
+                    "value": 98
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 40
+                }
+            },
+            "freeShipping": false,
+            "hasStock": true,
+            "totalStock": 74
+        },
+        {
+            "sku": 132240,
+            "barcode": 341373,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "45",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Black",
+                    "isActive": true
+                }
+            ],
+            "kg": 1,
+            "dimension": {
+                "width": 67,
+                "height": 52,
+                "depth": 63
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": false,
+            "price": {
+                "currency": "INR",
+                "sellingPrice": {
+                    "value": 92
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 14
+                },
+                "originalPrice": {
+                    "value": 42
+                },
+                "discountAmount": {
+                    "value": 62
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 51
+                }
+            },
+            "freeShipping": false,
+            "hasStock": true,
+            "totalStock": 26
+        },
+        {
+            "sku": 327228,
+            "barcode": 115716,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "38",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Black",
+                    "isActive": true
+                }
+            ],
+            "kg": 1,
+            "dimension": {
+                "width": 88,
+                "height": 65,
+                "depth": 79
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "COP",
+                "sellingPrice": {
+                    "value": 47
+                },
+                "discountExist": false,
+                "discountedPrice": {
+                    "value": 91
+                },
+                "originalPrice": {
+                    "value": 9
+                },
+                "discountAmount": {
+                    "value": 10
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 89
+                }
+            },
+            "freeShipping": true,
+            "hasStock": false,
+            "totalStock": 71
+        },
+        {
+            "sku": 333618,
+            "barcode": 219629,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "41",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Brown",
+                    "isActive": true
+                }
+            ],
+            "kg": 2,
+            "dimension": {
+                "width": 24,
+                "height": 66,
+                "depth": 49
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "KYD",
+                "sellingPrice": {
+                    "value": 5
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 37
+                },
+                "originalPrice": {
+                    "value": 67
+                },
+                "discountAmount": {
+                    "value": 85
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 41
+                }
+            },
+            "freeShipping": false,
+            "hasStock": true,
+            "totalStock": 52
+        },
+        {
+            "sku": 318132,
+            "barcode": 400344,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "42",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Brown",
+                    "isActive": true
+                }
+            ],
+            "kg": 3,
+            "dimension": {
+                "width": 94,
+                "height": 68,
+                "depth": 88
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "TWD",
+                "sellingPrice": {
+                    "value": 12
+                },
+                "discountExist": false,
+                "discountedPrice": {
+                    "value": 51
+                },
+                "originalPrice": {
+                    "value": 52
+                },
+                "discountAmount": {
+                    "value": 63
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 6
+                }
+            },
+            "freeShipping": false,
+            "hasStock": true,
+            "totalStock": 38
+        },
+        {
+            "sku": 289783,
+            "barcode": 168658,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "43",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Brown",
+                    "isActive": true
+                }
+            ],
+            "kg": 3,
+            "dimension": {
+                "width": 67,
+                "height": 23,
+                "depth": 90
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": false,
+            "price": {
+                "currency": "PHP",
+                "sellingPrice": {
+                    "value": 49
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 46
+                },
+                "originalPrice": {
+                    "value": 83
+                },
+                "discountAmount": {
+                    "value": 31
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 3
+                }
+            },
+            "freeShipping": true,
+            "hasStock": false,
+            "totalStock": 79
+        },
+        {
+            "sku": 477519,
+            "barcode": 196042,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "44",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Brown",
+                    "isActive": true
+                }
+            ],
+            "kg": 2,
+            "dimension": {
+                "width": 34,
+                "height": 10,
+                "depth": 95
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "MYR",
+                "sellingPrice": {
+                    "value": 60
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 24
+                },
+                "originalPrice": {
+                    "value": 90
+                },
+                "discountAmount": {
+                    "value": 29
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 43
+                }
+            },
+            "freeShipping": false,
+            "hasStock": true,
+            "totalStock": 39
+        },
+        {
+            "sku": 275040,
+            "barcode": 498699,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "36",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Brown",
+                    "isActive": true
+                }
+            ],
+            "kg": 1,
+            "dimension": {
+                "width": 32,
+                "height": 70,
+                "depth": 24
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "NOK",
+                "sellingPrice": {
+                    "value": 41
+                },
+                "discountExist": false,
+                "discountedPrice": {
+                    "value": 58
+                },
+                "originalPrice": {
+                    "value": 20
+                },
+                "discountAmount": {
+                    "value": 87
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 66
+                }
+            },
+            "freeShipping": false,
+            "hasStock": true,
+            "totalStock": 85
+        },
+        {
+            "sku": 359090,
+            "barcode": 301755,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "39",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Brown",
+                    "isActive": true
+                }
+            ],
+            "kg": 1,
+            "dimension": {
+                "width": 96,
+                "height": 21,
+                "depth": 64
+            },
+            "image": [
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "AOA",
+                "sellingPrice": {
+                    "value": 12
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 83
+                },
+                "originalPrice": {
+                    "value": 73
+                },
+                "discountAmount": {
+                    "value": 88
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 79
+                }
+            },
+            "freeShipping": true,
+            "hasStock": false,
+            "totalStock": 36
+        },
+        {
+            "sku": 101150,
+            "barcode": 389263,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "41",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Red",
+                    "isActive": true
+                }
+            ],
+            "kg": 1,
+            "dimension": {
+                "width": 46,
+                "height": 10,
+                "depth": 12
+            },
+            "image": [
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "MKD",
+                "sellingPrice": {
+                    "value": 14
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 44
+                },
+                "originalPrice": {
+                    "value": 42
+                },
+                "discountAmount": {
+                    "value": 81
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 58
+                }
+            },
+            "freeShipping": true,
+            "hasStock": true,
+            "totalStock": 86
+        },
+        {
+            "sku": 269529,
+            "barcode": 492372,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "36",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Red",
+                    "isActive": true
+                }
+            ],
+            "kg": 1,
+            "dimension": {
+                "width": 79,
+                "height": 47,
+                "depth": 64
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "WST",
+                "sellingPrice": {
+                    "value": 18
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 3
+                },
+                "originalPrice": {
+                    "value": 63
+                },
+                "discountAmount": {
+                    "value": 66
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 67
+                }
+            },
+            "freeShipping": true,
+            "hasStock": true,
+            "totalStock": 26
+        },
+        {
+            "sku": 257838,
+            "barcode": 420135,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "37",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Red",
+                    "isActive": true
+                }
+            ],
+            "kg": 2,
+            "dimension": {
+                "width": 96,
+                "height": 19,
+                "depth": 45
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "VND",
+                "sellingPrice": {
+                    "value": 99
+                },
+                "discountExist": false,
+                "discountedPrice": {
+                    "value": 75
+                },
+                "originalPrice": {
+                    "value": 86
+                },
+                "discountAmount": {
+                    "value": 33
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 75
+                }
+            },
+            "freeShipping": true,
+            "hasStock": false,
+            "totalStock": 65
+        },
+        {
+            "sku": 216784,
+            "barcode": 343525,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "38",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Red",
+                    "isActive": true
+                }
+            ],
+            "kg": 3,
+            "dimension": {
+                "width": 59,
+                "height": 4,
+                "depth": 46
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "DZD",
+                "sellingPrice": {
+                    "value": 18
+                },
+                "discountExist": false,
+                "discountedPrice": {
+                    "value": 31
+                },
+                "originalPrice": {
+                    "value": 97
+                },
+                "discountAmount": {
+                    "value": 58
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 60
+                }
+            },
+            "freeShipping": true,
+            "hasStock": true,
+            "totalStock": 46
+        },
+        {
+            "sku": 164779,
+            "barcode": 480356,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "39",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Red",
+                    "isActive": true
+                }
+            ],
+            "kg": 2,
+            "dimension": {
+                "width": 11,
+                "height": 53,
+                "depth": 17
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "UAH",
+                "sellingPrice": {
+                    "value": 4
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 81
+                },
+                "originalPrice": {
+                    "value": 70
+                },
+                "discountAmount": {
+                    "value": 34
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 67
+                }
+            },
+            "freeShipping": false,
+            "hasStock": true,
+            "totalStock": 22
+        },
+        {
+            "sku": 210326,
+            "barcode": 253449,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "40",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Red",
+                    "isActive": true
+                }
+            ],
+            "kg": 2,
+            "dimension": {
+                "width": 95,
+                "height": 53,
+                "depth": 93
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "LVL",
+                "sellingPrice": {
+                    "value": 6
+                },
+                "discountExist": false,
+                "discountedPrice": {
+                    "value": 46
+                },
+                "originalPrice": {
+                    "value": 93
+                },
+                "discountAmount": {
+                    "value": 74
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 30
+                }
+            },
+            "freeShipping": true,
+            "hasStock": false,
+            "totalStock": 50
+        },
+        {
+            "sku": 433658,
+            "barcode": 497637,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "43",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Red",
+                    "isActive": true
+                }
+            ],
+            "kg": 3,
+            "dimension": {
+                "width": 65,
+                "height": 49,
+                "depth": 69
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "ETB",
+                "sellingPrice": {
+                    "value": 20
+                },
+                "discountExist": true,
+                "discountedPrice": {
+                    "value": 50
+                },
+                "originalPrice": {
+                    "value": 66
+                },
+                "discountAmount": {
+                    "value": 38
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 62
+                }
+            },
+            "freeShipping": false,
+            "hasStock": false,
+            "totalStock": 56
+        },
+        {
+            "sku": 281937,
+            "barcode": 359782,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "44",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Red",
+                    "isActive": true
+                }
+            ],
+            "kg": 3,
+            "dimension": {
+                "width": 13,
+                "height": 73,
+                "depth": 66
+            },
+            "image": [
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": false,
+            "price": {
+                "currency": "CNY",
+                "sellingPrice": {
+                    "value": 53
+                },
+                "discountExist": false,
+                "discountedPrice": {
+                    "value": 40
+                },
+                "originalPrice": {
+                    "value": 65
+                },
+                "discountAmount": {
+                    "value": 79
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 80
+                }
+            },
+            "freeShipping": false,
+            "hasStock": true,
+            "totalStock": 62
+        },
+        {
+            "sku": 437796,
+            "barcode": 472443,
+            "attributes": [
+                {
+                    "name": "Size",
+                    "value": "49",
+                    "isActive": true
+                },
+                {
+                    "name": "Color",
+                    "value": "Red",
+                    "isActive": true
+                }
+            ],
+            "kg": 2,
+            "dimension": {
+                "width": 77,
+                "height": 86,
+                "depth": 9
+            },
+            "image": [
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300",
+                "https://picsum.photos/200/300"
+            ],
+            "isActive": true,
+            "price": {
+                "currency": "$",
+                "sellingPrice": {
+                    "value": 69
+                },
+                "discountExist": false,
+                "discountedPrice": {
+                    "value": 80
+                },
+                "originalPrice": {
+                    "value": 90
+                },
+                "discountAmount": {
+                    "value": 26
+                },
+                "discountedType": "fixed",
+                "shippingPrice": {
+                    "value": 85
+                }
+            },
+            "freeShipping": false,
+            "hasStock": true,
+            "totalStock": 57
+        }
+    ]
+}

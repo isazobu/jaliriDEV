@@ -63,7 +63,7 @@ const productFiltering = (schema) => {
     }
 
     if (filter.country) {
-      filterObj.$or.push({ 'country.code': filter.country });
+      filterObj.$or.push({ country: filter.country });
       criterias.push(filterObj);
       filterObj = { $or: [] };
       delete filter.country;
@@ -125,19 +125,7 @@ const productFiltering = (schema) => {
           as: 'category',
         },
       },
-      {
-        $lookup: {
-          from: 'countries',
-          localField: 'country',
-          foreignField: '_id',
-          pipeline: [
-            {
-              $project: { name: 1, currencySymbol: 1, code: 1 },
-            },
-          ],
-          as: 'country',
-        },
-      },
+
       {
         $match: {
           $and: criterias,

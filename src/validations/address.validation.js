@@ -12,6 +12,7 @@ const createAddress = {
     area: Joi.string().required(),
     phone: Joi.string().required(),
     email: Joi.string().required().email(),
+    houseNo: Joi.string(),
   }),
 };
 

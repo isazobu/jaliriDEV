@@ -3,4 +3,4 @@ version: '3'
 services:
   jaliri:
     container_name: jaliri-dev
-    command: yarn dev -L
+    command: yarn start -L

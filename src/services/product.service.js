@@ -14,11 +14,10 @@ const ApiError = require('../utils/ApiError');
 const createProduct = async (productBody) => {
   const productCountry = await Country.getCountryByCode(productBody.country);
 
-  if (productCountry) {
-    productBody.country = productCountry._id;
-  } else {
+  if (!productCountry) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Country not found');
   }
+
   const productCategory = await Category.findOne({ title: productBody.category });
   if (productCategory) {
     productBody.category = productCategory._id;
@@ -26,10 +25,8 @@ const createProduct = async (productBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Category not found');
   }
 
-  // if (await Product.isProductExist(productBody.title)) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Product already exist');
-  if (await Product.isProductExistByProductId(productBody.productId)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Product Id already exist');
+  if (await Product.isProductExist(productBody.title, productBody.country)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Product already exist');
   }
 
   return Product.create(productBody);
@@ -302,7 +299,7 @@ const filterProductMenu = async () => {
           },
           {
             $group: {
-              _id: '$_id.name',
+              _id: { $toLower: '$_id.name' },
               filters: { $push: '$filter' },
             },
           },
@@ -315,7 +312,7 @@ const filterProductMenu = async () => {
         brand: [
           {
             $group: {
-              _id: { name: 'Brand', brand: '$brand' },
+              _id: { name: 'brand', brand: '$brand' },
               products: {
                 $addToSet: '$_id',
               },
@@ -338,7 +335,7 @@ const filterProductMenu = async () => {
         category: [
           {
             $group: {
-              _id: { name: 'Category', category: '$category' },
+              _id: { name: 'category', category: '$category' },
               products: {
                 $addToSet: '$_id',
               },
