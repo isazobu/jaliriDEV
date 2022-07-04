@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 // const validator = require('validator');
-const { toJSON, paginate } = require('./plugins');
 const { customAlphabet } = require('nanoid');
+const { toJSON, paginate } = require('./plugins');
 const { orderCartSchema, addressSchema } = require('./schemas');
 
 const uniqueOrderNo = customAlphabet('1234567890', 11);

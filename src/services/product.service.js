@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
 const mongoose = require('mongoose');
+const orderService = require('./order.service');
 
 const { Product, Category, Country } = require('../models');
 
@@ -379,6 +380,61 @@ const filterProductMenu = async () => {
   return products[0];
 };
 
+/**
+ * Get orders by status(es)
+ * @param {ObjectId} productId - queried product id
+ * @returns {Object} - Object of product statistics
+ */
+const getProductSales = async (productId) => {
+  const product = await getProductById(productId);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+  let productDailySales = 0;
+  let productMonthlySales = 0;
+  let productYearlySales = 0;
+
+  const lastYearDate = new Date().setFullYear(new Date().getFullYear() - 1);
+  const lastYearDateIso = new Date(lastYearDate).toISOString(); // last year in iso format
+  const lastMonthDate = new Date().setMonth(new Date().getMonth() - 1);
+  const yesterday = new Date().setDate(new Date().getDate() - 1);
+  const queryOptions = {
+    'cart.items.product': mongoose.Types.ObjectId(productId),
+    status: { $in: ['Processing', 'Shipped', 'Delivered'] },
+    dateOrdered: { $gte: lastYearDateIso },
+  };
+  const filter = { cart: 1, dateOrdered: 1 };
+
+  const lastYearOrders = await orderService.getOrdersByStatus(queryOptions, filter);
+  const lastMonthOrders = await lastYearOrders.filter((order) => order.dateOrdered >= lastMonthDate);
+  const yesterdayOrders = await lastYearOrders.filter((order) => order.dateOrdered >= yesterday);
+
+  for (let i = 0; i < lastYearOrders.length; i += 1) {
+    if (i < lastMonthOrders.length) {
+      /** Calculate monthly sales */
+      const matchedProduct = lastMonthOrders[i].cart.items.find((item) => item.product.toString() === productId.toString());
+      productMonthlySales += matchedProduct.quantity;
+    }
+
+    if (i < yesterdayOrders.length) {
+      /** Calculate daily sales */
+      const matchedProduct = yesterdayOrders[i].cart.items.find((item) => item.product.toString() === productId.toString());
+      productDailySales += matchedProduct.quantity;
+    }
+
+    /** Calculate yearly sales */
+    const matchedProduct = lastYearOrders[i].cart.items.find((item) => item.product.toString() === productId.toString());
+    productYearlySales += matchedProduct.quantity;
+  }
+  const productSales = {
+    productDailySales,
+    productMonthlySales,
+    productYearlySales,
+  };
+
+  return productSales;
+};
+
 module.exports = {
   createProduct,
   createManyProducts,
@@ -392,4 +448,5 @@ module.exports = {
   deleteProductById,
   getAllSizeByColorWithSku,
   filterProductMenu,
+  getProductSales,
 };

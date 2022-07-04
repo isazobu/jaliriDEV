@@ -85,7 +85,7 @@ const deleteProduct = catchAsync(async (req, res) => {
 });
 
 const getManySku = catchAsync(async (req, res) => {
-  const skuIds = req.body.skuIds;
+  const { skuIds } = req.body;
   const products = await productService.getManySku(skuIds);
   res.status(httpStatus.OK).send(products);
 });
@@ -93,6 +93,12 @@ const getManySku = catchAsync(async (req, res) => {
 const filterProductMenu = catchAsync(async (req, res) => {
   const result = await productService.filterProductMenu();
   res.status(httpStatus.OK).send(result);
+});
+
+const getProductSales = catchAsync(async (req, res) => {
+  const { productId } = req.params;
+  const productSales = await productService.getProductSales(productId);
+  res.json(productSales);
 });
 
 module.exports = {
@@ -107,4 +113,5 @@ module.exports = {
   deleteProduct,
   getAllSizeByColorWithSku,
   filterProductMenu,
+  getProductSales,
 };
